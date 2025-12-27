@@ -1,0 +1,25 @@
+import 'package:ecommerce_shop_app/core/common/app/cache_helper.dart';
+import 'package:ecommerce_shop_app/src/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:ecommerce_shop_app/src/auth/data/repositories/auth_repository_implementation.dart';
+import 'package:ecommerce_shop_app/src/auth/domain/repositories/auth_repository.dart';
+import 'package:ecommerce_shop_app/src/auth/domain/usecases/forgot_password.dart';
+import 'package:ecommerce_shop_app/src/auth/domain/usecases/login.dart';
+import 'package:ecommerce_shop_app/src/auth/domain/usecases/register.dart';
+import 'package:ecommerce_shop_app/src/auth/domain/usecases/reset_password.dart';
+import 'package:ecommerce_shop_app/src/auth/domain/usecases/verify_o_t_p.dart';
+import 'package:ecommerce_shop_app/src/auth/domain/usecases/verify_token.dart';
+import 'package:ecommerce_shop_app/src/auth/presentation/app/adapter/auth_cubit.dart';
+import 'package:ecommerce_shop_app/src/user/app/adapter/auth_user_cubit.dart';
+import 'package:ecommerce_shop_app/src/user/data/datasources/user_remote_data_source.dart';
+import 'package:ecommerce_shop_app/src/user/data/repositories/user_repository_implementation.dart';
+import 'package:ecommerce_shop_app/src/user/domain/repositories/user_repository.dart';
+import 'package:ecommerce_shop_app/src/user/domain/usecases/get_user.dart';
+import 'package:ecommerce_shop_app/src/user/domain/usecases/get_user_payment_profile.dart';
+import 'package:ecommerce_shop_app/src/user/domain/usecases/update_user.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+import '../common/app/providers/user_provider.dart';
+
+part 'injection_container.main.dart';
