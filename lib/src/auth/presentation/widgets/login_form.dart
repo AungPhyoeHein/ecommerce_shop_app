@@ -3,10 +3,13 @@ import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
 import 'package:ecommerce_shop_app/core/extensions/widget_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
+import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
 import 'package:ecommerce_shop_app/core/widgets/rounded_button.dart';
 import 'package:ecommerce_shop_app/core/widgets/vertical_label_field.dart';
+import 'package:ecommerce_shop_app/src/auth/presentation/app/adapter/auth_cubit.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/views/forgot_password_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -33,76 +36,94 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          VerticalLabelField(
-            'Email',
-            controller: emailController,
-            hintText: 'Enter your email',
-            keyboardType: TextInputType.emailAddress,
-            defaultValidation: false,
-            validator: (value) {
-              if (value == null || value == '' || value.isEmpty) {
-                return "Required Field.";
-              }
-              if (!value.isValidateEmail) {
-                return "Invalid Email";
-              }
-              return null;
-            },
-          ),
-          const Gap(20),
-          ValueListenableBuilder(
-            valueListenable: obsecurePasswordNotifier,
-            builder: (context, obscurePassword, child) {
-              return VerticalLabelField(
-                'Password',
-                controller: passwordController,
-                hintText: 'Enter your password',
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: obscurePassword,
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    obsecurePasswordNotifier.value =
-                        !obsecurePasswordNotifier.value;
-                  },
-                  child: Icon(
-                    obscurePassword
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    color: MyColors.lightThemePrimaryTint,
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state case AuthError(:final message)) {
+          CoreUtils.showSnackBar(context, message: message);
+        } else if (state is LoggedIn) {
+          context.go('/');
+        }
+      },
+      builder: (context, state) {
+        return Form(
+          key: formKey,
+          child: Column(
+            children: [
+              VerticalLabelField(
+                'Email',
+                controller: emailController,
+                hintText: 'Enter your email',
+                keyboardType: TextInputType.emailAddress,
+                defaultValidation: false,
+                validator: (value) {
+                  if (value == null || value == '' || value.isEmpty) {
+                    return "Required Field.";
+                  }
+                  if (!value.isValidateEmail) {
+                    return "Invalid Email";
+                  }
+                  return null;
+                },
+              ),
+              const Gap(20),
+              ValueListenableBuilder(
+                valueListenable: obsecurePasswordNotifier,
+                builder: (context, obscurePassword, child) {
+                  return VerticalLabelField(
+                    'Password',
+                    controller: passwordController,
+                    hintText: 'Enter your password',
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: obscurePassword,
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        obsecurePasswordNotifier.value =
+                            !obsecurePasswordNotifier.value;
+                      },
+                      child: Icon(
+                        obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: MyColors.lightThemePrimaryTint,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              SizedBox(
+                width: double.maxFinite,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      context.push(ForgotPasswordScreen.path);
+                    },
+                    child: Text(
+                      'ForgotPassword?',
+                      style: TextStyles.paragraphSubTextRegular1.primary,
+                    ),
                   ),
                 ),
-              );
-            },
-          ),
-          const Gap(20),
-          SizedBox(
-            width: double.maxFinite,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () {
-                  context.push(ForgotPasswordScreen.path);
-                },
-                child: Text(
-                  'ForgotPassword?',
-                  style: TextStyles.paragraphSubTextRegular1.primary,
-                ),
               ),
-            ),
+              const Gap(40),
+              RoundedButton(
+                text: 'Sign In',
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    final email = emailController.text.trim();
+                    final password = passwordController.text.trim();
+                    context.read<AuthCubit>().login(
+                      email: email,
+                      password: password,
+                    );
+                  }
+                },
+              ).loading(state is AuthLoading),
+            ],
           ),
-          const Gap(40),
-          RoundedButton(
-            text: 'Sign In',
-            onPressed: () {
-              if (formKey.currentState!.validate()) {}
-            },
-          ).loading(false),
-        ],
-      ),
+        );
+      },
     );
   }
 }

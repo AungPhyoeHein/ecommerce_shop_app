@@ -55,7 +55,7 @@ Future<void> _authInit() async {
       () => AuthRemoteDataSourceImplementation(sl()),
     )
     ..registerLazySingleton(() => UserProvider.instance)
-    ..registerLazySingleton(() => http.Client.new);
+    ..registerLazySingleton(() => http.Client());
 }
 
 Future<void> _cacheInit() async {

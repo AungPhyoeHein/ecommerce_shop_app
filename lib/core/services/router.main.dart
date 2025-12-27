@@ -40,7 +40,13 @@ final router = GoRouter(
         );
       },
     ),
-    GoRoute(path: LoginScreen.path, builder: (_, __) => const LoginScreen()),
+    GoRoute(
+      path: LoginScreen.path,
+      builder: (_, __) => BlocProvider(
+        create: (context) => sl<AuthCubit>(),
+        child: const LoginScreen(),
+      ),
+    ),
     GoRoute(
       path: RegistrationScreen.path,
       builder: (_, __) => const RegistrationScreen(),

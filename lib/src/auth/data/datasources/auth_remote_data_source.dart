@@ -37,12 +37,12 @@ abstract class AuthRemoteDataSource {
   Future<bool> verifyToken();
 }
 
-const REGISTER_ENDPOINT = '/register';
-const LOGIN_ENDPOINT = '/login';
-const FORGOT_PASSWORD_ENDPOINT = '/forgot-password';
-const VERIFY_OTP_ENDPOINT = '/verify-otp';
-const RESET_PASSWORD_ENDPOINT = '/reset-password';
-const VERITY_TOKEN_ENDPOINT = '/verify-token';
+const REGISTER_ENDPOINT = '/auth/register';
+const LOGIN_ENDPOINT = '/auth/login';
+const FORGOT_PASSWORD_ENDPOINT = '/auth/forgot-password';
+const VERIFY_OTP_ENDPOINT = '/auth/verify-otp';
+const RESET_PASSWORD_ENDPOINT = '/auth/reset-password';
+const VERITY_TOKEN_ENDPOINT = '/auth/verify-token';
 
 class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
   const AuthRemoteDataSourceImplementation(this._client);

@@ -29,13 +29,18 @@ class ResetPasswordScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 30,
+                  ),
                   children: [
                     Text(
-                      'Reset Your Password',
+                      'Change Password',
                       style: TextStyles.headingBold3.adaptiveColor(context),
                     ),
                     Text(
-                      'Reset your account password with new one.',
+                      'Change an account password with new one.',
                       style: TextStyles.paragraphSubTextRegular1.grey,
                     ),
                     const Gap(40),

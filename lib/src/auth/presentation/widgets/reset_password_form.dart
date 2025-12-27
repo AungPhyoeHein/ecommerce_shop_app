@@ -23,6 +23,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: formKey,
       child: Column(
         children: [
           ValueListenableBuilder(
@@ -60,7 +61,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
                 keyboardType: TextInputType.visiblePassword,
                 obscureText: obscureConfirmPassword,
                 validator: (value) {
-                  if (value! != newPasswordController.text.trim()) {
+                  if (value != newPasswordController.text.trim()) {
                     return 'Passwords do not match';
                   }
                   return null;
