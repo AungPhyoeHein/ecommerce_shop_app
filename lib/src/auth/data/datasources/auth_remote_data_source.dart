@@ -127,15 +127,15 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
     required String phone,
   }) async {
     try {
-      final uri = Uri.parse('${NetworkConstants.baseUrl}/$REGISTER_ENDPOINT');
+      final uri = Uri.parse('${NetworkConstants.baseUrl}$REGISTER_ENDPOINT');
       final response = await _client.post(
         uri,
-        body: {
+        body: jsonEncode({
           'name': name,
           'password': password,
           'email': email,
           'phone': phone,
-        },
+        }),
         headers: NetworkConstants.headers,
       );
 
@@ -167,7 +167,7 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
   }) async {
     try {
       final uri = Uri.parse(
-        '${NetworkConstants.baseUrl}/$RESET_PASSWORD_ENDPOINT',
+        '${NetworkConstants.baseUrl}$RESET_PASSWORD_ENDPOINT',
       );
       final response = await _client.post(
         uri,
@@ -198,7 +198,7 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
   @override
   Future<void> verifyOTP({required String email, required String otp}) async {
     try {
-      final uri = Uri.parse('${NetworkConstants.baseUrl}/$VERIFY_OTP_ENDPOINT');
+      final uri = Uri.parse('${NetworkConstants.baseUrl}$VERIFY_OTP_ENDPOINT');
       final response = await _client.post(
         uri,
         body: {'email': email, 'otp': otp},
@@ -230,7 +230,7 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
   Future<bool> verifyToken() async {
     try {
       final uri = Uri.parse(
-        '${NetworkConstants.baseUrl}/$VERITY_TOKEN_ENDPOINT',
+        '${NetworkConstants.baseUrl}$VERITY_TOKEN_ENDPOINT',
       );
       final response = await _client.post(
         uri,

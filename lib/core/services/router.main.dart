@@ -49,7 +49,10 @@ final router = GoRouter(
     ),
     GoRoute(
       path: RegistrationScreen.path,
-      builder: (_, __) => const RegistrationScreen(),
+      builder: (_, __) => BlocProvider(
+        create: (context) => sl<AuthCubit>(),
+        child: const RegistrationScreen(),
+      ),
     ),
     GoRoute(
       path: ForgotPasswordScreen.path,
