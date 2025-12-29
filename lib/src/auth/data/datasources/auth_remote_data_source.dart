@@ -77,7 +77,6 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
         statusCode: 500,
       );
     }
-    ;
   }
 
   @override
@@ -101,6 +100,7 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
           statusCode: response.statusCode,
         );
       }
+
       await sl<CacheHelper>().cacheSessionToken(payload['accessToken']);
 
       final user = UserModel.fromMap(payload);
@@ -171,7 +171,7 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
       );
       final response = await _client.post(
         uri,
-        body: {'email': email, 'newPassword': newPassword},
+        body: jsonEncode({'email': email, 'newPassword': newPassword}),
         headers: NetworkConstants.headers,
       );
       final payload = jsonDecode(response.body) as DataMap;
@@ -201,8 +201,8 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
       final uri = Uri.parse('${NetworkConstants.baseUrl}$VERIFY_OTP_ENDPOINT');
       final response = await _client.post(
         uri,
-        body: {'email': email, 'otp': otp},
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        body: jsonEncode({'email': email, 'otp': int.tryParse(otp)}),
+        headers: NetworkConstants.headers,
       );
 
       final payload = jsonDecode(response.body) as DataMap;

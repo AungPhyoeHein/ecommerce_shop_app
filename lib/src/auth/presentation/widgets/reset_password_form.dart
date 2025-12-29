@@ -1,8 +1,13 @@
+import 'package:ecommerce_shop_app/core/extensions/widget_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
+import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
 import 'package:ecommerce_shop_app/core/widgets/rounded_button.dart';
 import 'package:ecommerce_shop_app/core/widgets/vertical_label_field.dart';
+import 'package:ecommerce_shop_app/src/auth/presentation/app/adapter/auth_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class ResetPasswordForm extends StatefulWidget {
   const ResetPasswordForm({super.key, required this.email});
@@ -22,74 +27,92 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          ValueListenableBuilder(
-            valueListenable: obsecureNewPasswordNotifier,
-            builder: (context, obscurePassword, child) {
-              return VerticalLabelField(
-                'Change Password',
-                controller: newPasswordController,
-                hintText: 'Pick your new secure password',
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: obscurePassword,
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    obsecureNewPasswordNotifier.value =
-                        !obsecureNewPasswordNotifier.value;
-                  },
-                  child: Icon(
-                    obscurePassword
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    color: MyColors.lightThemePrimaryTint,
-                  ),
-                ),
-              );
-            },
-          ),
-          const Gap(20),
-          ValueListenableBuilder(
-            valueListenable: obsecureConfirmPasswordNotifier,
-            builder: (context, obscureConfirmPassword, child) {
-              return VerticalLabelField(
-                'Confirm Password',
-                controller: confirmPasswordController,
-                hintText: 'Re-enter your password.',
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: obscureConfirmPassword,
-                validator: (value) {
-                  if (value != newPasswordController.text.trim()) {
-                    return 'Passwords do not match';
-                  }
-                  return null;
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state case AuthError(:final message)) {
+          CoreUtils.showSnackBar(context, message: message);
+        } else if (state is PasswordReset) {
+          context.go('/');
+        }
+      },
+      builder: (context, state) {
+        return Form(
+          key: formKey,
+          child: Column(
+            children: [
+              ValueListenableBuilder(
+                valueListenable: obsecureNewPasswordNotifier,
+                builder: (context, obscurePassword, child) {
+                  return VerticalLabelField(
+                    'Change Password',
+                    controller: newPasswordController,
+                    hintText: 'Pick your new secure password',
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: obscurePassword,
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        obsecureNewPasswordNotifier.value =
+                            !obsecureNewPasswordNotifier.value;
+                      },
+                      child: Icon(
+                        obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: MyColors.lightThemePrimaryTint,
+                      ),
+                    ),
+                  );
                 },
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    obsecureConfirmPasswordNotifier.value =
-                        !obsecureConfirmPasswordNotifier.value;
-                  },
-                  child: Icon(
-                    obscureConfirmPassword
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    color: MyColors.lightThemePrimaryTint,
-                  ),
-                ),
-              );
-            },
+              ),
+              const Gap(20),
+              ValueListenableBuilder(
+                valueListenable: obsecureConfirmPasswordNotifier,
+                builder: (context, obscureConfirmPassword, child) {
+                  return VerticalLabelField(
+                    'Confirm Password',
+                    controller: confirmPasswordController,
+                    hintText: 'Re-enter your password.',
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: obscureConfirmPassword,
+                    validator: (value) {
+                      if (value != newPasswordController.text.trim()) {
+                        return 'Passwords don\'t match';
+                      }
+                      return null;
+                    },
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        obsecureConfirmPasswordNotifier.value =
+                            !obsecureConfirmPasswordNotifier.value;
+                      },
+                      child: Icon(
+                        obscureConfirmPassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: MyColors.lightThemePrimaryTint,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              Gap(40),
+              RoundedButton(
+                text: "Submit",
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    final email = widget.email.trim();
+                    final newPassword = newPasswordController.text.trim();
+                    context.read<AuthCubit>().resetPassword(
+                      email: email,
+                      newPassword: newPassword,
+                    );
+                  }
+                },
+              ).loading(state is AuthLoading),
+            ],
           ),
-          Gap(40),
-          RoundedButton(
-            text: "Submit",
-            onPressed: () {
-              if (formKey.currentState!.validate()) {}
-            },
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

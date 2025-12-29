@@ -74,7 +74,7 @@ class AuthCubit extends Cubit<AuthState> {
     final result = await _forgotPassword.call(email);
     result.fold(
       (failure) => emit(AuthError(failure.errorMessage)),
-      (_) => OTPSent(),
+      (_) => emit(const OTPSent()),
     );
   }
 

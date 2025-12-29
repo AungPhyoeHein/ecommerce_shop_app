@@ -41,7 +41,7 @@ class _LoginFormState extends State<LoginForm> {
         if (state case AuthError(:final message)) {
           CoreUtils.showSnackBar(context, message: message);
         } else if (state is LoggedIn) {
-          context.go('/');
+          context.go('/', extra: 'home');
         }
       },
       builder: (context, state) {

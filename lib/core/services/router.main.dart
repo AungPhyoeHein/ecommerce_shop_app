@@ -13,6 +13,8 @@ final router = GoRouter(
         final cacheHelper = sl<CacheHelper>()
           ..getSessionToken()
           ..getUserId();
+
+        debugPrint(Cache.instance.sessionToken);
         if ((Cache.instance.sessionToken == null ||
                 Cache.instance.userId == null) &&
             !cacheHelper.isFirstTime()) {
@@ -56,15 +58,24 @@ final router = GoRouter(
     ),
     GoRoute(
       path: ForgotPasswordScreen.path,
-      builder: (_, __) => const ForgotPasswordScreen(),
+      builder: (_, __) => BlocProvider(
+        create: (context) => sl<AuthCubit>(),
+        child: const ForgotPasswordScreen(),
+      ),
     ),
     GoRoute(
       path: VerifyOTPScreen.path,
-      builder: (_, state) => VerifyOTPScreen(email: state.extra as String),
+      builder: (_, state) => BlocProvider(
+        create: (_) => sl<AuthCubit>(),
+        child: VerifyOTPScreen(email: state.extra as String),
+      ),
     ),
     GoRoute(
       path: ResetPasswordScreen.path,
-      builder: (_, state) => ResetPasswordScreen(email: state.extra as String),
+      builder: (_, state) => BlocProvider(
+        create: (_) => sl<AuthCubit>(),
+        child: ResetPasswordScreen(email: state.extra as String),
+      ),
     ),
 
     ShellRoute(
