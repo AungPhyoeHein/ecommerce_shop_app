@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:ecommerce_shop_app/core/common/app/cache_helper.dart';
-import 'package:ecommerce_shop_app/core/common/singletons/cache.dart';
 import 'package:ecommerce_shop_app/core/errors/exception.dart';
 import 'package:ecommerce_shop_app/core/extensions/string_extensions.dart';
 import 'package:ecommerce_shop_app/core/model/user_model.dart';
@@ -234,7 +233,7 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
       );
       final response = await _client.post(
         uri,
-        headers: NetworkConstants.headers,
+        headers: CacheHelper(sl()).getSessionToken().toString().toAuthHeaders,
       );
       final payload = jsonDecode(response.body);
       await NetworkUtils.renewToken(response);

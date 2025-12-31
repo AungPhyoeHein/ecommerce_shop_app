@@ -8,6 +8,7 @@ import 'package:ecommerce_shop_app/src/auth/domain/usecases/reset_password.dart'
 import 'package:ecommerce_shop_app/src/auth/domain/usecases/verify_o_t_p.dart';
 import 'package:ecommerce_shop_app/src/auth/domain/usecases/verify_token.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 part 'auth_state.dart';
 

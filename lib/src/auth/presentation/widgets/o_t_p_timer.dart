@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
+import 'package:ecommerce_shop_app/src/auth/presentation/app/adapter/auth_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OTPTimer extends StatefulWidget {
   const OTPTimer({super.key, required this.email});
@@ -60,45 +62,43 @@ class _OTPTimerState extends State<OTPTimer> {
   Widget build(BuildContext context) {
     final minutes = _duration ~/ 60;
     final seconds = _duration.remainder(60);
-    return Center(
-      child: canResend
-          ? resending
-                ? CircularProgressIndicator.adaptive(
-                    backgroundColor: MyColors.lightThemePrimaryColor,
-                  )
-                : TextButton(
-                    onPressed: () async {
-                      setState(() {
-                        resending = true;
-                      });
-                      //TODO(Resend-OTP): Implement OTP resend
-                      setState(() {
-                        resending = false;
-                      });
-                      _startTimer();
-                      setState(() {
-                        canResend = false;
-                      });
-                    },
-                    child: Text(
-                      'Resend Code',
-                      style: TextStyles.headingMedium4.primary,
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) => Center(
+        child: canResend
+            ? state is AuthLoading
+                  ? CircularProgressIndicator.adaptive(
+                      backgroundColor: MyColors.lightThemePrimaryColor,
+                    )
+                  : TextButton(
+                      onPressed: () async {
+                        context.read<AuthCubit>().forgotPassword(
+                          email: widget.email,
+                        );
+                        _startTimer();
+                        setState(() {
+                          canResend = false;
+                        });
+                      },
+                      child: Text(
+                        'Resend Code',
+                        style: TextStyles.headingMedium4.primary,
+                      ),
+                    )
+            : RichText(
+                text: TextSpan(
+                  text: 'Resend code in ',
+                  style: TextStyles.headingMedium4.grey,
+                  children: [
+                    TextSpan(
+                      text: '$minutes: ${seconds.toString().padLeft(2, '0')}',
+                      style: const TextStyle(
+                        color: MyColors.lightThemePrimaryColor,
+                      ),
                     ),
-                  )
-          : RichText(
-              text: TextSpan(
-                text: 'Resend code in ',
-                style: TextStyles.headingMedium4.grey,
-                children: [
-                  TextSpan(
-                    text: '$minutes: ${seconds.toString().padLeft(2, '0')}',
-                    style: const TextStyle(
-                      color: MyColors.lightThemePrimaryColor,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+      ),
     );
   }
 }

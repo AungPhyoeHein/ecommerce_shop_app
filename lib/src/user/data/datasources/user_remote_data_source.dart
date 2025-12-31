@@ -39,7 +39,7 @@ class UserRemoteDataSourceImplementation implements UserRemoteDataSource {
       final uri = Uri.parse(
         '${NetworkConstants.baseUrl}$USERS_ENDPOINT/$userId',
       );
-      final response = await _client.post(
+      final response = await _client.get(
         uri,
         headers: Cache.instance.sessionToken!.toAuthHeaders,
       );

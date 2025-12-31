@@ -2,6 +2,7 @@ import 'package:ecommerce_shop_app/core/extensions/context_extension.dart';
 import 'package:ecommerce_shop_app/core/extensions/string_extensions.dart';
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
 import 'package:ecommerce_shop_app/core/extensions/widget_extension.dart';
+import 'package:ecommerce_shop_app/core/services/injection_container.dart';
 import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
 import 'package:ecommerce_shop_app/core/widgets/app_bar_bottom.dart';
 import 'package:ecommerce_shop_app/core/widgets/rounded_button.dart';
@@ -54,9 +55,9 @@ class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
                     if (state case AuthError(:final message)) {
                       CoreUtils.showSnackBar(context, message: message);
                     } else if (state is OTPVerified) {
-                      context.push(
+                      context.pushReplacement(
                         ResetPasswordScreen.path,
-                        extra: widget.email,
+                        extra: widget.email.trim(),
                       );
                     }
                   },
@@ -79,7 +80,10 @@ class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
                         const Gap(20),
                         OTPField(controller: _otpController),
                         const Gap(30),
-                        OTPTimer(email: widget.email),
+                        BlocProvider(
+                          create: (context) => sl<AuthCubit>(),
+                          child: OTPTimer(email: widget.email),
+                        ),
                         const Gap(20),
                         RoundedButton(
                           text: 'Verify',
