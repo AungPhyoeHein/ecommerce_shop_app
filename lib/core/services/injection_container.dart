@@ -9,6 +9,11 @@ import 'package:ecommerce_shop_app/src/auth/domain/usecases/reset_password.dart'
 import 'package:ecommerce_shop_app/src/auth/domain/usecases/verify_o_t_p.dart';
 import 'package:ecommerce_shop_app/src/auth/domain/usecases/verify_token.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/app/adapter/auth_cubit.dart';
+import 'package:ecommerce_shop_app/src/category/data/datasources/category_remote_data_source.dart';
+import 'package:ecommerce_shop_app/src/category/data/repositories/category_repository_implementation.dart';
+import 'package:ecommerce_shop_app/src/category/domain/repositories/category_repository.dart';
+import 'package:ecommerce_shop_app/src/category/domain/usecases/get_categories.dart';
+import 'package:ecommerce_shop_app/src/category/presentation/app/category_cubit.dart';
 import 'package:ecommerce_shop_app/src/user/app/adapter/auth_user_cubit.dart';
 import 'package:ecommerce_shop_app/src/user/data/datasources/user_remote_data_source.dart';
 import 'package:ecommerce_shop_app/src/user/data/repositories/user_repository_implementation.dart';

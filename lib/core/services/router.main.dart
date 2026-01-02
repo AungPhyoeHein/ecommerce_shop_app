@@ -84,7 +84,12 @@ final router = GoRouter(
       routes: [
         GoRoute(
           path: HomeScreen.path,
-          builder: (context, state) => const HomeScreen(),
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider<CategoryCubit>(create: (_) => sl<CategoryCubit>()),
+            ],
+            child: HomeScreen(),
+          ),
         ),
       ],
     ),

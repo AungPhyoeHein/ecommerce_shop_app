@@ -32,7 +32,7 @@ abstract class MyColors {
   static Color classicAdaptiveTextColor(BuildContext context) =>
       CoreUtils.adaptiveColor(
         context,
-        lightModeColor: lightThemeWhiteColor,
-        darkModeColor: lightThemePrimaryTextColor,
+        lightModeColor: lightThemePrimaryTextColor,
+        darkModeColor: lightThemeWhiteColor,
       );
 }

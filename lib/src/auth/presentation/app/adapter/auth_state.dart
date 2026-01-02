@@ -5,12 +5,11 @@ sealed class AuthState extends Equatable {
   @override
   List<Object> get props => [];
 }
+
 // THE INITIAL STATE
 final class AuthInitial extends AuthState {
- const AuthInitial();
+  const AuthInitial();
 }
-
-
 
 // THE LOADING STATESS
 final class AuthLoading extends AuthState {

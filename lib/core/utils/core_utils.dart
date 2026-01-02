@@ -28,8 +28,8 @@ abstract class CoreUtils {
     required Color lightModeColor,
     required Color darkModeColor,
   }) {
-    return MediaQuery.platformBrightnessOf(context) == Brightness.dark
-        ? lightModeColor
-        : darkModeColor;
+    return Theme.of(context).brightness == Brightness.dark
+        ? darkModeColor
+        : lightModeColor;
   }
 }

@@ -25,6 +25,7 @@ class InputField extends StatelessWidget {
     this.prefix,
     this.contentPadding,
     this.prefixIcon,
+    this.prefixIconStyle,
     this.focusNode,
     this.onTap,
   });
@@ -46,6 +47,7 @@ class InputField extends StatelessWidget {
   final VoidCallback? onTap;
   final bool expendable;
   final BoxConstraints? suffixIconConstraints;
+  final TextStyle? prefixIconStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -69,24 +71,30 @@ class InputField extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(color: context.theme.primaryColor),
         ),
-        hintText:hintText,
+        hintText: hintText,
         suffixIcon: suffixIcon,
         suffixIconConstraints: suffixIconConstraints,
         hintStyle: TextStyles.paragraphSubTextRegular3.grey,
         suffixIconColor: MyColors.lightThemeSecondaryColor,
         prefix: prefix,
         prefixIcon: prefixIcon,
-        contentPadding: contentPadding ?? const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
+        prefixStyle: prefixIconStyle,
+        contentPadding:
+            contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
         filled: true,
-        fillColor: CoreUtils.adaptiveColor(context, lightModeColor: MyColors.darkThemeDarkSharpColor, darkModeColor: MyColors.lightThemeStockColor)
+        fillColor: CoreUtils.adaptiveColor(
+          context,
+          lightModeColor: MyColors.lightThemeStockColor,
+          darkModeColor: MyColors.darkThemeDarkSharpColor,
+        ),
       ),
       inputFormatters: inputFormatter,
-      validator: defaultValidation ? (value){
-        if(value == null || value.isEmpty) return 'Required Field';
-        return validator?.call(value);
-      } : validator,
+      validator: defaultValidation
+          ? (value) {
+              if (value == null || value.isEmpty) return 'Required Field';
+              return validator?.call(value);
+            }
+          : validator,
     );
   }
 }

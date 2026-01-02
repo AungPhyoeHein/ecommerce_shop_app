@@ -66,22 +66,4 @@ class UserModel extends User {
       phone: map['phone'] as String?,
     );
   }
-  // @override
-  // User copyWith({
-  //   String? id,
-  //   String? name,
-  //   String? email,
-  //   bool? isAdmin,
-  //   List<WishlistProduct>? wishList,
-  //   Address? address,
-  //   String? phone,
-  // }) {
-  //   return User(
-  //     id: id ?? this.id,
-  //     name: name ?? this.name,
-  //     email: email ?? this.email,
-  //     isAdmin: isAdmin ?? this.isAdmin,
-  //     wishList: wishList ?? this.wishList,
-  //   );
-  // }
 }

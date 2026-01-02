@@ -13,15 +13,6 @@ class User extends Equatable {
     this.phone,
   });
 
-  const User.empty()
-    : id = 'Test String',
-      name = "Test String",
-      email = "Test String",
-      isAdmin = true,
-      wishList = const [],
-      address = null,
-      phone = null;
-
   User copyWith({
     String? id,
     String? name,
@@ -37,6 +28,8 @@ class User extends Equatable {
       email: email ?? this.email,
       isAdmin: isAdmin ?? this.isAdmin,
       wishList: wishList ?? this.wishList,
+      address: address ?? this.address,
+      phone: phone ?? this.phone,
     );
   }
 

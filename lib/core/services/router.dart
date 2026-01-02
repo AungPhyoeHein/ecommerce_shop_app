@@ -8,6 +8,7 @@ import 'package:ecommerce_shop_app/src/auth/presentation/views/registration_scre
 import 'package:ecommerce_shop_app/src/auth/presentation/views/reset_password_screen.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/views/splash_screen.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/views/verify_o_t_p_screen.dart';
+import 'package:ecommerce_shop_app/src/category/presentation/app/category_cubit.dart';
 import 'package:ecommerce_shop_app/src/dashboard/presentation/views/dashboard_screen.dart';
 import 'package:ecommerce_shop_app/src/home/presentation/views/home_screen.dart';
 import 'package:ecommerce_shop_app/src/on_boarding/presentation/views/on_boarding_screen.dart';

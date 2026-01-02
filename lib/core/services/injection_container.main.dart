@@ -6,6 +6,7 @@ Future<void> init() async {
   await _cacheInit();
   await _authInit();
   await _userInit();
+  await _categoryInit();
 }
 
 Future<void> _userInit() async {
@@ -64,4 +65,16 @@ Future<void> _cacheInit() async {
   sl
     ..registerLazySingleton(() => (CacheHelper(sl())))
     ..registerLazySingleton(() => prefs);
+}
+
+Future<void> _categoryInit() async {
+  sl
+    ..registerFactory(() => CategoryCubit(getCategories: sl()))
+    ..registerLazySingleton(() => GetCategories(sl()))
+    ..registerLazySingleton<CategoryRepository>(
+      () => CategoryRepositoryImplementation(sl()),
+    )
+    ..registerLazySingleton<CategoryRemoteDataSource>(
+      () => CategoryRemoteDataSourceImplementation(sl()),
+    );
 }

@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
         backgroundColor: MyColors.lightThemeTintStockColour,
         foregroundColor: MyColors.lightThemePrimaryTextColor,
       ),
+      brightness: Brightness.light,
     );
 
     final darkTheme = theme.copyWith(
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         backgroundColor: MyColors.darkThemeBGDark,
         foregroundColor: MyColors.lightThemeWhiteColor,
       ),
+      brightness: Brightness.dark,
     );
     return MaterialApp.router(
       title: 'ECOMI',

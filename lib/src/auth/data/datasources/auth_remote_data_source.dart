@@ -222,7 +222,6 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
         statusCode: 500,
       );
     }
-    ;
   }
 
   @override
