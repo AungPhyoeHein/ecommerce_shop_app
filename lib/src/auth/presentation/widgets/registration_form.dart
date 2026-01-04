@@ -40,8 +40,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
       countryListTheme: CountryListThemeData(
         backgroundColor: CoreUtils.adaptiveColor(
           context,
-          lightModeColor: MyColors.darkThemeDarkSharpColor,
-          darkModeColor: MyColors.lightThemeTintStockColour,
+          lightModeColor: MyColors.lightThemeTintStockColour,
+          darkModeColor: MyColors.darkThemeDarkSharpColor,
         ),
         textStyle: TextStyle(color: MyColors.classicAdaptiveTextColor(context)),
         searchTextStyle: TextStyle(
