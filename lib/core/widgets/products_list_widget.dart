@@ -1,3 +1,4 @@
+import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
 import 'package:ecommerce_shop_app/core/widgets/product/product_card.dart';
 import 'package:ecommerce_shop_app/core/widgets/product/product_not_found_widget.dart';
 import 'package:ecommerce_shop_app/core/widgets/product/product_shimmer_card.dart';
@@ -13,24 +14,10 @@ class ProductsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProductCubit, ProductState>(
+    return BlocConsumer<ProductCubit, ProductState>(
       builder: (context, state) {
         if (state is ProductLoading) {
-          return GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            itemCount: 4,
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 250,
-              mainAxisSpacing: 5,
-              crossAxisSpacing: 5,
-              childAspectRatio: 9 / 14,
-            ),
-            itemBuilder: (context, index) {
-              return const ProductShimmerCard();
-            },
-          );
+          return _productList(null);
         }
         if (state is GotProducts) {
           if (state.products.isEmpty) {
@@ -38,7 +25,13 @@ class ProductsListWidget extends StatelessWidget {
           }
           return _productList(state);
         }
+
         return SizedBox(height: 300, child: SomethingWasWrongWidget());
+      },
+      listener: (BuildContext context, ProductState state) {
+        if (state is ProductError) {
+          CoreUtils.showSnackBar(context, message: state.message);
+        }
       },
     );
   }
