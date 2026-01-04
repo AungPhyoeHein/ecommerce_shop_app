@@ -7,6 +7,7 @@ Future<void> init() async {
   await _authInit();
   await _userInit();
   await _categoryInit();
+  await _productInit();
 }
 
 Future<void> _userInit() async {
@@ -76,5 +77,25 @@ Future<void> _categoryInit() async {
     )
     ..registerLazySingleton<CategoryRemoteDataSource>(
       () => CategoryRemoteDataSourceImplementation(sl()),
+    );
+}
+
+Future<void> _productInit() async {
+  sl
+    ..registerFactory(
+      () => ProductCubit(
+        getProducts: sl(),
+        getProductById: sl(),
+        searchProducts: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => GetProducts(sl()))
+    ..registerLazySingleton(() => GetProductById(sl()))
+    ..registerLazySingleton(() => SearchProducts(sl()))
+    ..registerLazySingleton<ProductRepository>(
+      () => ProductRepositoryImplementation(sl()),
+    )
+    ..registerLazySingleton<ProductDataSource>(
+      () => ProductDataSourceImplementation(sl()),
     );
 }

@@ -34,4 +34,16 @@ extension StringExt on String {
     }
     return true;
   }
+
+  Color get toColorCode {
+    String hexString = replaceAll("#", "");
+    if (hexString.length == 6) {
+      hexString = "FF$hexString";
+    }
+    if (hexString.length == 8) {
+      return Color(int.parse(hexString, radix: 16));
+    } else {
+      throw FormatException("Invalid hex string format: $this");
+    }
+  }
 }

@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SvgIcon extends StatelessWidget {
-  const SvgIcon(this.title, {super.key, this.size = 20, this.color});
+  const SvgIcon(this.path, {super.key, this.size = 20, this.color});
 
-  final String title;
+  final String path;
   final double size;
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return SvgPicture.asset(
-      'assets/icons/$title.svg',
+      path,
       width: size,
       height: size,
       colorFilter: ColorFilter.mode(

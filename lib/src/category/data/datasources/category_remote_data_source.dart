@@ -33,18 +33,16 @@ class CategoryRemoteDataSourceImplementation
       );
 
       await NetworkUtils.renewToken(response);
-
+      final payload = jsonDecode(response.body);
       if (response.statusCode != 200) {
-        final payload = jsonDecode(response.body) as DataMap;
-
-        final errorResponse = ErrorResponse.fromMap(payload);
+        final errorResponse = ErrorResponse.fromMap(payload as DataMap);
         throw ServerException(
           message: errorResponse.errorMessage,
           statusCode: response.statusCode,
         );
       }
 
-      final List<dynamic> data = jsonDecode(response.body) as List<dynamic>;
+      final List<dynamic> data = payload as List<dynamic>;
 
       return data
           .map((category) => CategoryModel.fromMap(category as DataMap))

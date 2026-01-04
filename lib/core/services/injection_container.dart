@@ -13,7 +13,14 @@ import 'package:ecommerce_shop_app/src/category/data/datasources/category_remote
 import 'package:ecommerce_shop_app/src/category/data/repositories/category_repository_implementation.dart';
 import 'package:ecommerce_shop_app/src/category/domain/repositories/category_repository.dart';
 import 'package:ecommerce_shop_app/src/category/domain/usecases/get_categories.dart';
-import 'package:ecommerce_shop_app/src/category/presentation/app/category_cubit.dart';
+import 'package:ecommerce_shop_app/src/category/presentation/app/adapter/category_cubit.dart';
+import 'package:ecommerce_shop_app/src/product/data/datasource/product_data_source.dart';
+import 'package:ecommerce_shop_app/src/product/data/repositories/product_repository_implementation.dart';
+import 'package:ecommerce_shop_app/src/product/domain/repositories/product_repository.dart';
+import 'package:ecommerce_shop_app/src/product/domain/usecases/get_product_by_id.dart';
+import 'package:ecommerce_shop_app/src/product/domain/usecases/get_products.dart';
+import 'package:ecommerce_shop_app/src/product/domain/usecases/search_products.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_cubit.dart';
 import 'package:ecommerce_shop_app/src/user/app/adapter/auth_user_cubit.dart';
 import 'package:ecommerce_shop_app/src/user/data/datasources/user_remote_data_source.dart';
 import 'package:ecommerce_shop_app/src/user/data/repositories/user_repository_implementation.dart';

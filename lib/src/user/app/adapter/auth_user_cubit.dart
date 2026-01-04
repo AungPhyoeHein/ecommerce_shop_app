@@ -14,11 +14,10 @@ class AuthUserCubit extends Cubit<AuthUserState> {
     required GetUser getUser,
     required GetUserPaymentProfile getUserPaymentProfile,
     required UpdateUser updateUser,
-    required UserProvider userProvider,
+    required this.userProvider,
   }) : _getUser = getUser,
        _getUserPaymentProfile = getUserPaymentProfile,
        _updateUser = updateUser,
-       userProvider = userProvider,
        super(const AuthUserInitial());
 
   final GetUser _getUser;

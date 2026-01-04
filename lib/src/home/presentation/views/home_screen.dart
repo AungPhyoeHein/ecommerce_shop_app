@@ -1,20 +1,24 @@
-import 'package:ecommerce_shop_app/core/extensions/context_extension.dart';
+import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
+import 'package:ecommerce_shop_app/core/utils/constants/icon_constants.dart';
+import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
 import 'package:ecommerce_shop_app/core/widgets/app_bar_bottom.dart';
 import 'package:ecommerce_shop_app/core/widgets/ecomi_logo.dart';
-import 'package:ecommerce_shop_app/core/widgets/product_card.dart';
+import 'package:ecommerce_shop_app/core/widgets/products_list_widget.dart';
 import 'package:ecommerce_shop_app/core/widgets/svg_icon.dart';
-import 'package:ecommerce_shop_app/src/category/presentation/app/category_cubit.dart';
-import 'package:ecommerce_shop_app/src/home/presentation/widgets/category_widget.dart';
-import 'package:ecommerce_shop_app/src/home/presentation/widgets/news_page_view.dart';
+import 'package:ecommerce_shop_app/src/category/presentation/app/adapter/category_cubit.dart';
+import 'package:ecommerce_shop_app/src/home/presentation/widgets/category_list_widget.dart';
+import 'package:ecommerce_shop_app/src/home/presentation/widgets/banner_images_widget.dart';
 import 'package:ecommerce_shop_app/src/home/presentation/widgets/search_input_widget.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   static const path = '/home';
 
@@ -24,11 +28,29 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ScrollController _scrollController = ScrollController();
+
+  Future<void> _loadInitialData() async {
+    context.read<CategoryCubit>().getCategory();
+    context.read<ProductCubit>().getProducts(page: 1, criteria: "popular");
+  }
 
   @override
   void initState() {
     super.initState();
-    context.read<CategoryCubit>().getCategory();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadInitialData();
+    });
+  }
+
+  Future<void> _refreshData() async {
+    await _loadInitialData();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -38,57 +60,67 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: EcomiLogo(style: TextStyles.headingBold1),
         leading: IconButton(
-          icon: SvgIcon('menu'),
+          icon: SvgIcon(IconConstants.menu),
           onPressed: () {
             _scaffoldKey.currentState?.openDrawer();
           },
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: SvgIcon('shopping-cart')),
-          IconButton(onPressed: () {}, icon: SvgIcon('qr-scan')),
+          IconButton(
+            onPressed: () {},
+            icon: SvgIcon(IconConstants.shoppingCart),
+          ),
+          IconButton(onPressed: () {}, icon: SvgIcon(IconConstants.qrScan)),
         ],
         bottom: AppBarBottom(),
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(),
-          child: ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-            children: [
-              SearchInputWidget(),
-              const Gap(20),
-              NewsPageView(),
-              const Gap(20),
-              CategoryWidget(),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: 10,
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 220,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 0.7,
+      body: LiquidPullToRefresh(
+        onRefresh: _refreshData,
+        height: 100,
+        springAnimationDurationInMilliseconds: 1000,
+
+        color: CoreUtils.adaptiveColor(
+          context,
+          lightModeColor: MyColors.lightThemeStockColor,
+          darkModeColor: MyColors.darkThemeDarkNavBarColor,
+        ),
+        child: ListView(
+          controller: _scrollController,
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 30),
+
+          children: [
+            SearchInputWidget(),
+            const Gap(20),
+            BannerImagesWidget(),
+            const Gap(20),
+            CategoryListWidget(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Popular Products',
+                  style: TextStyles.headingBold1.adaptiveColor(context),
                 ),
-                itemBuilder: (context, index) {
-                  return ProductCard(
-                    name: 'IPHONE 15 Prox Max',
-                    description:
-                        'This is IPhone 15 prox max offical version && brand new.',
-                    image:
-                        'https://www.imagineonline.store/cdn/shop/files/iPhone_15_Pro_Max_Blue_Titanium_PDP_Image_Position-1__en-IN.jpg',
-                    price: 799.98,
-                    colors: [Colors.black, Colors.white],
-                  ); // သင့်ရဲ့ Product Card Widget
-                },
-              ),
-            ],
-          ),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    'View All',
+                    style: TextStyles.paragraphSubTextRegular3,
+                  ),
+                ),
+              ],
+            ),
+            ProductsListWidget(),
+          ],
         ),
       ),
-      drawer: Drawer(backgroundColor: MyColors.darkThemeDarkNavBarColor),
+      drawer: Drawer(
+        backgroundColor: CoreUtils.adaptiveColor(
+          context,
+          lightModeColor: MyColors.lightThemeStockColor,
+          darkModeColor: MyColors.darkThemeDarkNavBarColor,
+        ),
+      ),
     );
   }
 }

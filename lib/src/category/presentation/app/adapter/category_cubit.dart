@@ -15,9 +15,10 @@ class CategoryCubit extends Cubit<CategoryState> {
   Future<void> getCategory() async {
     emit(CategoryLoading());
     final result = await _getCategories.call();
-    result.fold((failure) {
-      emit(CartegoryError(failure.errorMessage));
-      print('Category Error');
-    }, (categories) => emit(GotCategories(categories)));
+    result.fold((failure) => emit(CartegoryError(failure.errorMessage)), (
+      categories,
+    ) async {
+      emit(GotCategories(categories));
+    });
   }
 }
