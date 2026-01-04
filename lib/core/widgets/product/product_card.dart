@@ -20,9 +20,7 @@ class ProductCard extends StatelessWidget {
 
         final imageHeight = cardWidth;
         final gapSize = cardWidth * 0.02;
-        final ratingIconSize = cardWidth < 170 ? 14.0 : 20.0;
-        print(cardWidth);
-
+        final ratingIconSize = cardWidth < 170 ? 20.0 : 20.0;
         return Card(
           color: CoreUtils.adaptiveColor(
             context,
