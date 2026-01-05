@@ -27,6 +27,7 @@ class ProductCardInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(cardWidth);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -43,7 +44,11 @@ class ProductCardInfo extends StatelessWidget {
         ),
         Text(
           product.description,
-          maxLines: cardWidth < 170 ? 1 : 2,
+          maxLines: cardWidth < 170
+              ? 1
+              : cardWidth > 200
+              ? 3
+              : 2,
           overflow: TextOverflow.ellipsis,
           style: descStyle.adaptiveColor(context),
         ),
