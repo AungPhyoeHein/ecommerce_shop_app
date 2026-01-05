@@ -24,9 +24,7 @@ class CategoryListWidget extends StatelessWidget {
                 child: Center(
                   child: Text(
                     "Category is Empty.",
-                    style: TextStyles.paragraphSubTextRegular.adaptiveColor(
-                      context,
-                    ),
+                    style: TextStyles.paragraphRegular.adaptiveColor(context),
                   ),
                 ),
               ),
@@ -43,8 +41,8 @@ class CategoryListWidget extends StatelessWidget {
           height: _height,
           child: Center(
             child: Text(
-              "Error When Featch",
-              style: TextStyles.headingBold3.adaptiveColor(context),
+              "Unknown Error",
+              style: TextStyles.paragraphRegular.adaptiveColor(context),
             ),
           ),
         );
