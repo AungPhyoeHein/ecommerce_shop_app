@@ -92,6 +92,28 @@ final router = GoRouter(
             child: HomeScreen(),
           ),
         ),
+        GoRoute(
+          path: ProductScreen.path,
+          builder: (context, state) => BlocProvider<ProductCubit>(
+            create: (_) => sl<ProductCubit>(),
+            child: const ProductScreen(),
+          ),
+        ),
+        GoRoute(
+          path: ChatScreen.path,
+          builder: (context, state) => const ChatScreen(),
+        ),
+        GoRoute(
+          path: WishlistScreen.path,
+          builder: (context, state) => const WishlistScreen(),
+        ),
+        GoRoute(
+          path: ProfileScreen.path,
+          builder: (context, state) => BlocProvider<AuthUserCubit>(
+            create: (_) => sl<AuthUserCubit>(),
+            child: const ProfileScreen(),
+          ),
+        ),
       ],
     ),
   ],

@@ -9,11 +9,15 @@ import 'package:ecommerce_shop_app/src/auth/presentation/views/reset_password_sc
 import 'package:ecommerce_shop_app/src/auth/presentation/views/splash_screen.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/views/verify_o_t_p_screen.dart';
 import 'package:ecommerce_shop_app/src/category/presentation/app/adapter/category_cubit.dart';
+import 'package:ecommerce_shop_app/src/chat/presentation/views/chat_screen.dart';
 import 'package:ecommerce_shop_app/src/dashboard/presentation/views/dashboard_screen.dart';
 import 'package:ecommerce_shop_app/src/home/presentation/views/home_screen.dart';
 import 'package:ecommerce_shop_app/src/on_boarding/presentation/views/on_boarding_screen.dart';
 import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_cubit.dart';
-import 'package:ecommerce_shop_app/src/user/app/adapter/auth_user_cubit.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/views/product_screen.dart';
+import 'package:ecommerce_shop_app/src/user/presentation/app/adapter/auth_user_cubit.dart';
+import 'package:ecommerce_shop_app/src/user/presentation/views/profile_screen.dart';
+import 'package:ecommerce_shop_app/src/wishlist/presentation/views/wishlist_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

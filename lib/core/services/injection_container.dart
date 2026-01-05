@@ -21,7 +21,7 @@ import 'package:ecommerce_shop_app/src/product/domain/usecases/get_product_by_id
 import 'package:ecommerce_shop_app/src/product/domain/usecases/get_products.dart';
 import 'package:ecommerce_shop_app/src/product/domain/usecases/search_products.dart';
 import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_cubit.dart';
-import 'package:ecommerce_shop_app/src/user/app/adapter/auth_user_cubit.dart';
+import 'package:ecommerce_shop_app/src/user/presentation/app/adapter/auth_user_cubit.dart';
 import 'package:ecommerce_shop_app/src/user/data/datasources/user_remote_data_source.dart';
 import 'package:ecommerce_shop_app/src/user/data/repositories/user_repository_implementation.dart';
 import 'package:ecommerce_shop_app/src/user/domain/repositories/user_repository.dart';

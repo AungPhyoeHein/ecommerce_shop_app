@@ -4,7 +4,7 @@ import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/services/injection_container.dart';
 import 'package:ecommerce_shop_app/core/widgets/ecomi_logo.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/app/adapter/auth_cubit.dart';
-import 'package:ecommerce_shop_app/src/user/app/adapter/auth_user_cubit.dart';
+import 'package:ecommerce_shop_app/src/user/presentation/app/adapter/auth_user_cubit.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
