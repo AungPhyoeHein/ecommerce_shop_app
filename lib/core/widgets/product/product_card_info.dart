@@ -27,7 +27,6 @@ class ProductCardInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(cardWidth);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
