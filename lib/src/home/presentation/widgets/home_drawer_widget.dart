@@ -14,114 +14,135 @@ class HomeDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final adaptiveTextColor = MyColors.classicAdaptiveTextColor(context);
+    final drawerBgColor = CoreUtils.adaptiveColor(
+      context,
+      lightModeColor: MyColors.lightThemeStockColor,
+      darkModeColor: MyColors.darkThemeDarkNavBarColor,
+    );
+
     return Drawer(
-      backgroundColor: CoreUtils.adaptiveColor(
-        context,
-        lightModeColor: MyColors.lightThemeStockColor,
-        darkModeColor: MyColors.darkThemeDarkNavBarColor,
-      ),
+      backgroundColor: drawerBgColor,
       child: Column(
         children: [
-          UserAccountsDrawerHeader(
-            decoration: BoxDecoration(
-              color: CoreUtils.adaptiveColor(
-                context,
-                lightModeColor: MyColors.lightThemeStockColor,
-                darkModeColor: MyColors.darkThemeDarkNavBarColor,
-              ),
-            ),
-            currentAccountPicture: CircleAvatar(
-              radius: 20,
-              backgroundColor: MyColors.lightThemePrimaryTint,
-              child: Text(user.name[0], style: TextStyles.appLogo),
-            ),
-            accountName: Text(
-              user.name,
-              style: TextStyles.headingMedium3.adaptiveColor(context),
-            ),
-            accountEmail: Text(
-              user.email,
-              style: TextStyles.paragraphSubTextRegular.adaptiveColor(context),
-            ),
-          ),
+          _UserHeader(user: user, bgColor: drawerBgColor),
+
           Expanded(
             child: ListView(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               children: [
-                ListTile(
-                  onTap: () {},
-                  title: Text(
-                    'Profile',
-                    style: TextStyles.headingMedium3.adaptiveColor(context),
-                  ),
-                  leading: Icon(
-                    HugeIconsStroke.profile02,
-                    color: MyColors.classicAdaptiveTextColor(context),
-                  ),
+                _DrawerItem(
+                  title: 'Profile',
+                  icon: HugeIconsStroke.profile02,
+                  color: adaptiveTextColor,
+                  onTap: () {
+                    // Navigate to Profile
+                  },
                 ),
-                ListTile(
+                _DrawerItem(
+                  title: 'Edit Profile',
+                  icon: HugeIconsStroke.edit01,
+                  color: adaptiveTextColor,
                   onTap: () {},
-                  title: Text(
-                    'Edit',
-                    style: TextStyles.headingMedium3.adaptiveColor(context),
-                  ),
-                  leading: Icon(
-                    HugeIconsStroke.edit01,
-                    color: MyColors.classicAdaptiveTextColor(context),
-                  ),
                 ),
-                ListTile(
+                _DrawerItem(
+                  title: 'Wishlist',
+                  icon: HugeIconsStroke.favourite,
+                  color: adaptiveTextColor,
                   onTap: () {},
-                  title: Text(
-                    'Wishlist',
-                    style: TextStyles.headingMedium3.adaptiveColor(context),
-                  ),
-                  leading: Icon(
-                    HugeIconsStroke.favourite,
-                    color: MyColors.classicAdaptiveTextColor(context),
-                  ),
                 ),
-                ListTile(
+                _DrawerItem(
+                  title: 'Orders History',
+                  icon: HugeIconsStroke.transactionHistory,
+                  color: adaptiveTextColor,
                   onTap: () {},
-                  title: Text(
-                    'Orders History',
-                    style: TextStyles.headingMedium3.adaptiveColor(context),
-                  ),
-                  leading: Icon(
-                    HugeIconsStroke.transactionHistory,
-                    color: MyColors.classicAdaptiveTextColor(context),
-                  ),
                 ),
-                ListTile(
+                _DrawerItem(
+                  title: 'Privacy Policy',
+                  icon: HugeIconsStroke.securityCheck,
+                  color: adaptiveTextColor,
                   onTap: () {},
-                  title: Text(
-                    'Privacy Policy',
-                    style: TextStyles.headingMedium3.adaptiveColor(context),
-                  ),
-                  leading: Icon(
-                    HugeIconsStroke.securityCheck,
-                    color: MyColors.classicAdaptiveTextColor(context),
-                  ),
                 ),
-                ListTile(
+                _DrawerItem(
+                  title: 'Terms & Conditions',
+                  icon: HugeIconsStroke.documentValidation,
+                  color: adaptiveTextColor,
                   onTap: () {},
-                  title: Text(
-                    'Terms & Conditions',
-                    style: TextStyles.headingMedium3.adaptiveColor(context),
-                  ),
-                  leading: Icon(
-                    HugeIconsStroke.documentValidation,
-                    color: MyColors.classicAdaptiveTextColor(context),
-                  ),
                 ),
               ],
             ),
           ),
+
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: RoundedButton(text: "Logout", backgroundColor: Colors.red),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: RoundedButton(
+              text: "Logout",
+              backgroundColor: Colors.red,
+              onPressed: () {
+                // Logout Logic
+              },
+            ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ၁။ Header အတွက် သီးသန့် Widget ခွဲထုတ်ခြင်း
+class _UserHeader extends StatelessWidget {
+  const _UserHeader({required this.user, required this.bgColor});
+
+  final User user;
+  final Color bgColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return UserAccountsDrawerHeader(
+      margin: EdgeInsets.zero,
+      decoration: BoxDecoration(color: bgColor),
+      currentAccountPicture: CircleAvatar(
+        radius: 20,
+        backgroundColor: MyColors.lightThemePrimaryTint,
+        child: Text(user.name[0], style: TextStyles.appLogo),
+      ),
+      accountName: Text(
+        user.name,
+        style: TextStyles.headingMedium3.adaptiveColor(context),
+      ),
+      accountEmail: Text(
+        user.email,
+        style: TextStyles.paragraphSubTextRegular.adaptiveColor(context),
+      ),
+    );
+  }
+}
+
+// ၂။ Menu Item တစ်ခုချင်းစီအတွက် Widget ခွဲထုတ်ခြင်း
+class _DrawerItem extends StatelessWidget {
+  const _DrawerItem({
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
+
+  final String title;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: () {
+        Navigator.pop(context);
+        onTap();
+      },
+      leading: Icon(icon, color: color, size: 24),
+      title: Text(
+        title,
+        style: TextStyles.headingMedium3.adaptiveColor(context),
       ),
     );
   }
