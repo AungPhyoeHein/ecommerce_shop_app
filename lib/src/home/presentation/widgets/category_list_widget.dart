@@ -24,7 +24,9 @@ class CategoryListWidget extends StatelessWidget {
                 child: Center(
                   child: Text(
                     "Category is Empty.",
-                    style: TextStyles.paragraphRegular.adaptiveColor(context),
+                    style: TextStyles.paragraphSubTextRegular.adaptiveColor(
+                      context,
+                    ),
                   ),
                 ),
               ),
