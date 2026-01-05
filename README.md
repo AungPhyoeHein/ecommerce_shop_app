@@ -1,14 +1,18 @@
 # Ecommerce Shop App
 
-A professional Flutter e-commerce application built with clean architecture && bloc pattern.
+A professional Flutter e-commerce application built with **Clean Architecture** & **BLoC/Cubit pattern**.
+
+## 🚀 Current Progress (Features)
+- [+] Persistent User Login (Session management)
+- [+] Home Screen UI 
+- [+] State Management with Cubit
+- [+] Responsive Drawer Navigation
+- [+] Error Handling with Custom Snackbars
+- [-] Other Features (Coming Soon)
 
 
-## 🛠 Tech Stack
-* **Framework:** [Flutter](https://flutter.dev)
-* **State Management:** Bloc/Cubit
-* **Storage:** SharedPreferences (for session persistence)
-
-## ⚙️ Installation
-1. Clone the repo: `git clone https://github.com/AungPhyoeHein/ecommerce_shop_app`
-2. Install packages: `flutter pub get`
-3. Run the app: `flutter run`
+## 🏗 Project Structure
+This project follows Clean Architecture:
+- `lib/core`: Reusable widgets, themes, and utilities.
+- `lib/src`: Feature-based modules (Login, Home, Product).
+- `lib/logic`: Cubits for state management.
