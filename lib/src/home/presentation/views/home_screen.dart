@@ -13,7 +13,7 @@ import 'package:ecommerce_shop_app/core/widgets/svg_icon.dart';
 import 'package:ecommerce_shop_app/src/category/presentation/app/adapter/category_cubit.dart';
 import 'package:ecommerce_shop_app/src/home/presentation/widgets/category_list_widget.dart';
 import 'package:ecommerce_shop_app/src/home/presentation/widgets/banner_images_widget.dart';
-import 'package:ecommerce_shop_app/src/home/presentation/widgets/drawer_widget.dart';
+import 'package:ecommerce_shop_app/core/widgets/drawer_widget.dart';
 import 'package:ecommerce_shop_app/src/home/presentation/widgets/search_input_widget.dart';
 import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_cubit.dart';
 import 'package:flutter/material.dart';
