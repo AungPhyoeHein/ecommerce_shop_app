@@ -8,6 +8,7 @@ A professional Flutter e-commerce application built with **Clean Architecture** 
 - [x] State Management with Cubit
 - [x] Responsive Drawer Navigation
 - [x] Error Handling with Custom Snackbars
+- [x] Caching logics
 - [ ] Other Features (Coming Soon)
 
 
@@ -15,4 +16,3 @@ A professional Flutter e-commerce application built with **Clean Architecture** 
 This project follows Clean Architecture:
 - `lib/core`: Reusable widgets, themes, and utilities.
 - `lib/src`: Feature-based modules (Login, Home, Product).
-- `lib/logic`: Cubits for state management.
