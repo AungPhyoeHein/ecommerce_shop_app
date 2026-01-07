@@ -1,13 +1,29 @@
+import 'package:ecommerce_shop_app/core/common/app/providers/popular_product_provider.dart';
+import 'package:ecommerce_shop_app/core/common/app/providers/user_provider.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/services/injection_container.dart';
 // import 'package:ecommerce_shop_app/core/res/styles/text.dart';
 import 'package:ecommerce_shop_app/core/services/router.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await init();
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<PopularProductProvider>.value(
+          value: PopularProductProvider.instance,
+        ),
+        // တခြား Provider များ (ဥပမာ UserProvider)
+        ChangeNotifierProvider<UserProvider>.value(
+          value: UserProvider.instance,
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

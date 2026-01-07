@@ -1,6 +1,8 @@
+import 'package:ecommerce_shop_app/core/common/app/providers/popular_product_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/user_provider.dart';
 import 'package:ecommerce_shop_app/core/entities/user.dart';
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
+import 'package:ecommerce_shop_app/core/extensions/widget_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
 import 'package:ecommerce_shop_app/core/utils/constants/icon_constants.dart';
@@ -19,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,6 +35,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
+  final _popularProductProvider = PopularProductProvider.instance;
 
   Future<void> _loadInitialData() async {
     context.read<CategoryCubit>().getCategory();
@@ -44,9 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadInitialData();
     });
+    _scrollController.addListener(_onScroll);
   }
 
   Future<void> _refreshData() async {
+    _popularProductProvider.clearPopularProductList();
     await _loadInitialData();
   }
 
@@ -54,6 +60,21 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent) {
+      final state = context.read<ProductCubit>().state;
+      print(_popularProductProvider.isEnd);
+
+      if (state is! ProductLoading && !_popularProductProvider.isEnd) {
+        context.read<ProductCubit>().getProducts(
+          page: _popularProductProvider.currentPage,
+          criteria: "popular",
+        );
+      }
+    }
   }
 
   @override
@@ -90,8 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: ListView(
           controller: _scrollController,
+          physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-
           children: [
             SearchInputWidget(),
             const Gap(20),
@@ -115,6 +136,22 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             ProductsListWidget(),
+            Selector<PopularProductProvider, bool>(
+              selector: (context, provider) => provider.isEnd,
+              builder: (context, isEnd, child) {
+                if (isEnd) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(vertical: 40),
+                    alignment: Alignment.center,
+                    child: Text(
+                      "There is no more popular product",
+                      style: TextStyles.paragraphSubTextRegular3.grey,
+                    ),
+                  );
+                }
+                return SizedBox(height: 50);
+              },
+            ),
           ],
         ),
       ),
