@@ -7,8 +7,8 @@ import 'package:ecommerce_shop_app/core/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 
-class HomeDrawerWidget extends StatelessWidget {
-  const HomeDrawerWidget(this.user, {super.key});
+class DrawerWidget extends StatelessWidget {
+  const DrawerWidget(this.user, {super.key});
 
   final User user;
 
