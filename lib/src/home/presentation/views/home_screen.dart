@@ -2,13 +2,12 @@ import 'package:ecommerce_shop_app/core/common/app/providers/popular_product_pro
 import 'package:ecommerce_shop_app/core/common/app/providers/user_provider.dart';
 import 'package:ecommerce_shop_app/core/entities/user.dart';
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
-import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
 import 'package:ecommerce_shop_app/core/utils/constants/icon_constants.dart';
-import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
 import 'package:ecommerce_shop_app/core/widgets/app_bar_bottom.dart';
 import 'package:ecommerce_shop_app/core/widgets/ecomi_logo.dart';
 import 'package:ecommerce_shop_app/core/widgets/products_list_widget.dart';
+import 'package:ecommerce_shop_app/core/widgets/pull_refresh_widget.dart';
 import 'package:ecommerce_shop_app/core/widgets/svg_icon.dart';
 import 'package:ecommerce_shop_app/src/category/presentation/app/adapter/category_cubit.dart';
 import 'package:ecommerce_shop_app/src/home/presentation/widgets/category_list_widget.dart';
@@ -18,7 +17,6 @@ import 'package:ecommerce_shop_app/src/home/presentation/widgets/search_input_wi
 import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -96,16 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         bottom: AppBarBottom(),
       ),
-      body: LiquidPullToRefresh(
+      body: PullRefreshWidget(
         onRefresh: _refreshData,
-        height: 100,
-        springAnimationDurationInMilliseconds: 1000,
-
-        color: CoreUtils.adaptiveColor(
-          context,
-          lightModeColor: MyColors.lightThemeStockColor,
-          darkModeColor: MyColors.darkThemeDarkNavBarColor,
-        ),
         child: ListView(
           controller: _scrollController,
           physics: AlwaysScrollableScrollPhysics(),
