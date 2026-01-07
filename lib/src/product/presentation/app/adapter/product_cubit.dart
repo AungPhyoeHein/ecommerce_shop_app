@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/popular_product_provider.dart';
+import 'package:ecommerce_shop_app/core/common/app/providers/products_provider.dart';
 import 'package:ecommerce_shop_app/core/entities/product.dart';
 import 'package:ecommerce_shop_app/src/product/domain/usecases/get_product_by_id.dart';
 import 'package:ecommerce_shop_app/src/product/domain/usecases/get_products.dart';
@@ -24,6 +25,7 @@ class ProductCubit extends Cubit<ProductState> {
 
   List<Product> allProducts = [];
   List<Product> searchedProducts = [];
+  final _productsProvider = ProductsProvider.instance;
   final _popularProductProvider = PopularProductProvider.instance;
 
   Future<void> getProducts({
@@ -37,10 +39,26 @@ class ProductCubit extends Cubit<ProductState> {
           _popularProductProvider.popularProduct!.isNotEmpty) {
         emit(GotProducts(List.from(_popularProductProvider.popularProduct!)));
         return;
-      } else {
-        allProducts.clear();
+      } else if (category == null &&
+          criteria == null &&
+          _productsProvider.products != null &&
+          _productsProvider.products!.isNotEmpty) {
+        emit(GotProducts(List.from(_productsProvider.products!)));
+        return;
       }
+
+      allProducts.clear();
       emit(const ProductLoading());
+    }
+
+    if (_productsProvider.currentPage == page) {
+      if (category == null &&
+          criteria == null &&
+          _productsProvider.products != null &&
+          _productsProvider.products!.isNotEmpty) {
+        emit(GotProducts(List.from(_productsProvider.products!)));
+        return;
+      }
     }
 
     final result = await _getProducts.call(
@@ -49,19 +67,19 @@ class ProductCubit extends Cubit<ProductState> {
 
     result.fold((failure) => emit(ProductError(failure.errorMessage)), (
       newProducts,
-    ) async {
+    ) {
       if (criteria == "popular") {
-        if (criteria == "popular") {
-          _popularProductProvider.addPopularProductList(newProducts);
-          return emit(
-            GotProducts(
-              List.from(_popularProductProvider.popularProduct ?? []),
-            ),
-          );
-        }
+        _popularProductProvider.addPopularProductList(newProducts);
+        emit(
+          GotProducts(List.from(_popularProductProvider.popularProduct ?? [])),
+        );
+      } else if (category == null && criteria == null) {
+        _productsProvider.addProductList(newProducts);
+        emit(GotProducts(List.from(_productsProvider.products ?? [])));
+      } else {
+        allProducts.addAll(newProducts);
+        emit(GotProducts(List.from(allProducts)));
       }
-      allProducts.addAll(newProducts);
-      emit(GotProducts(List.from(allProducts)));
     });
   }
 
