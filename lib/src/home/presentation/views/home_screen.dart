@@ -2,7 +2,6 @@ import 'package:ecommerce_shop_app/core/common/app/providers/popular_product_pro
 import 'package:ecommerce_shop_app/core/common/app/providers/user_provider.dart';
 import 'package:ecommerce_shop_app/core/entities/user.dart';
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
-import 'package:ecommerce_shop_app/core/extensions/widget_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
 import 'package:ecommerce_shop_app/core/utils/constants/icon_constants.dart';
@@ -18,7 +17,6 @@ import 'package:ecommerce_shop_app/src/home/presentation/widgets/home_drawer_wid
 import 'package:ecommerce_shop_app/src/home/presentation/widgets/search_input_widget.dart';
 import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent) {
       final state = context.read<ProductCubit>().state;
-      print(_popularProductProvider.isEnd);
 
       if (state is! ProductLoading && !_popularProductProvider.isEnd) {
         context.read<ProductCubit>().getProducts(

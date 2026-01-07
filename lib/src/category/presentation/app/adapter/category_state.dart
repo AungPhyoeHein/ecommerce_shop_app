@@ -21,8 +21,8 @@ final class GotCategories extends CategoryState {
 }
 
 //Error State
-final class CartegoryError extends CategoryState {
-  const CartegoryError(this.message);
+final class CategoryError extends CategoryState {
+  const CategoryError(this.message);
 
   final String message;
 
