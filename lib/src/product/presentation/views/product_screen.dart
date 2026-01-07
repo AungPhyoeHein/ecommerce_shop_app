@@ -68,6 +68,7 @@ class _ProductScreenState extends State<ProductScreen> {
         child: ListView(
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 30),
           children: [ProductsListWidget()],
         ),
       ),
