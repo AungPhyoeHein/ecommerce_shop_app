@@ -24,11 +24,13 @@ class ProductsProvider extends ChangeNotifier {
 
     if (products.length < NetworkConstants.pageSize) {
       _isEnd = true;
-    } else {
-      _currentPage++;
     }
 
     notifyListeners();
+  }
+
+  void nextPage() {
+    _currentPage++;
   }
 
   void clearProductList() {

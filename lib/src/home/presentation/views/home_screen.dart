@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (state is! ProductLoading && !_popularProductProvider.isEnd) {
         context.read<ProductCubit>().getProducts(
-          page: _popularProductProvider.currentPage,
+          page: _popularProductProvider.currentPage + 1,
           criteria: "popular",
         );
       }

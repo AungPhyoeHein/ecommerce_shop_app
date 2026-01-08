@@ -24,8 +24,6 @@ class ProductCubit extends Cubit<ProductState> {
   final GetProductById _getProductById;
   final SearchProducts _searchProducts;
 
-  List<Product> allProducts = [];
-  List<Product> searchedProducts = [];
   final _productsProvider = ProductsProvider.instance;
   final _popularProductProvider = PopularProductProvider.instance;
   final _filterProductProvider = FilterProductProvider.instance;
@@ -36,28 +34,22 @@ class ProductCubit extends Cubit<ProductState> {
     String? criteria,
   }) async {
     if (page == 1) {
+      if (criteria == "popular" &&
+          (_popularProductProvider.popularProduct?.isNotEmpty ?? false)) {
+        // Cache ရှိနေရင် Loading မပြတော့ဘဲ ရှိပြီးသား data ကိုပဲ emit လုပ်ပေးပါ
+        emit(GotProducts(List.from(_popularProductProvider.popularProduct!)));
+        return; // API ထပ်မခေါ်တော့ဘဲ ဒီမှာတင် ရပ်လိုက်ပါ
+      }
+
       if (category == null &&
           criteria == null &&
-          _productsProvider.products != null &&
-          _productsProvider.products!.isNotEmpty) {
+          (_productsProvider.products?.isNotEmpty ?? false)) {
         emit(GotProducts(List.from(_productsProvider.products!)));
         return;
       }
 
-      allProducts.clear();
       emit(const ProductLoading());
     }
-
-    if (_productsProvider.currentPage == page) {
-      if (category == null &&
-          criteria == null &&
-          _productsProvider.products != null &&
-          _productsProvider.products!.isNotEmpty) {
-        emit(GotProducts(List.from(_productsProvider.products!)));
-        return;
-      }
-    }
-
     final result = await _getProducts.call(
       GetProductsParams(page: page, category: category, criteria: criteria),
     );
@@ -66,17 +58,21 @@ class ProductCubit extends Cubit<ProductState> {
       newProducts,
     ) {
       if (criteria == "popular") {
+        if (page > 1) {
+          _popularProductProvider.nextPage();
+        }
         _popularProductProvider.addPopularProductList(newProducts);
         emit(
           GotProducts(List.from(_popularProductProvider.popularProduct ?? [])),
         );
       } else if (category == null && criteria == null) {
         _productsProvider.addProductList(newProducts);
+        if (page > 1) {
+          _productsProvider.nextPage();
+        }
         emit(GotProducts(List.from(_productsProvider.products ?? [])));
-      } else {
-        allProducts.addAll(newProducts);
-        emit(GotProducts(List.from(allProducts)));
       }
+      if (newProducts.isEmpty) {}
     });
   }
 
@@ -102,9 +98,6 @@ class ProductCubit extends Cubit<ProductState> {
         return;
       }
       _filterProductProvider.clearFilterProductList();
-      _filterProductProvider.nextPage();
-
-      allProducts.clear();
       emit(const ProductLoading());
     }
 
@@ -120,15 +113,15 @@ class ProductCubit extends Cubit<ProductState> {
       newProducts,
     ) {
       if (category != null) {
+        if (page != 1) {
+          _filterProductProvider.nextPage();
+        }
+
         _filterProductProvider.addFilterProduct(newProducts, category);
-        emit(
+        return emit(
           GotProducts(List.from(_filterProductProvider.filterProduct ?? [])),
         );
-
-        return;
       }
-      searchedProducts.addAll(newProducts);
-      emit(GotProducts(List.from(searchedProducts)));
     });
   }
 }
