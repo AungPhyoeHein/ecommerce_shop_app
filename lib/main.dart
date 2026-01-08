@@ -1,5 +1,7 @@
 import 'package:ecommerce_shop_app/core/common/app/providers/category_provider.dart';
+import 'package:ecommerce_shop_app/core/common/app/providers/filter_product_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/popular_product_provider.dart';
+import 'package:ecommerce_shop_app/core/common/app/providers/products_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/user_provider.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/services/injection_container.dart';
@@ -21,6 +23,12 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider<CategoryProvider>.value(
           value: CategoryProvider.instance,
+        ),
+        ChangeNotifierProvider<ProductsProvider>.value(
+          value: ProductsProvider.instance,
+        ),
+        ChangeNotifierProvider<FilterProductProvider>.value(
+          value: FilterProductProvider.instance,
         ),
       ],
       child: const MyApp(),

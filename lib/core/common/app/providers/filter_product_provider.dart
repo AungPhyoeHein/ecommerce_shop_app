@@ -1,4 +1,3 @@
-import 'package:ecommerce_shop_app/core/entities/category.dart';
 import 'package:ecommerce_shop_app/core/entities/product.dart';
 import 'package:ecommerce_shop_app/core/utils/constants/network_constants.dart';
 import 'package:flutter/material.dart';
@@ -9,15 +8,15 @@ class FilterProductProvider extends ChangeNotifier {
   static final instance = FilterProductProvider._internal();
   int _currentPage = 1;
   bool _isEnd = false;
-  Category? _selectedCategory;
+  String? _selectedCategory;
   List<Product>? _filterProduct;
 
   List<Product>? get filterProduct => _filterProduct;
   bool get isEnd => _isEnd;
   int get currentPage => _currentPage;
-  Category? get category => _selectedCategory;
+  String? get category => _selectedCategory;
 
-  void addFilterProduct(List<Product> products, Category category) {
+  void addFilterProduct(List<Product> products, String category) {
     _selectedCategory = category;
     if (_filterProduct == null || _filterProduct!.isEmpty) {
       _filterProduct = products;
@@ -27,17 +26,20 @@ class FilterProductProvider extends ChangeNotifier {
 
     if (products.length < NetworkConstants.pageSize) {
       _isEnd = true;
-    } else {
-      _currentPage++;
     }
 
     notifyListeners();
   }
 
-  void clearPopularProductList() {
+  void nextPage() {
+    _currentPage++;
+  }
+
+  void clearFilterProductList() {
     _currentPage = 1;
     _isEnd = false;
-    _filterProduct = [];
+    _filterProduct = null;
+    _selectedCategory = null;
     notifyListeners();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:ecommerce_shop_app/core/common/app/providers/filter_product_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/popular_product_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/products_provider.dart';
 import 'package:ecommerce_shop_app/core/entities/product.dart';
@@ -27,6 +28,7 @@ class ProductCubit extends Cubit<ProductState> {
   List<Product> searchedProducts = [];
   final _productsProvider = ProductsProvider.instance;
   final _popularProductProvider = PopularProductProvider.instance;
+  final _filterProductProvider = FilterProductProvider.instance;
 
   Future<void> getProducts({
     required int page,
@@ -34,12 +36,7 @@ class ProductCubit extends Cubit<ProductState> {
     String? criteria,
   }) async {
     if (page == 1) {
-      if (criteria == "popular" &&
-          _popularProductProvider.popularProduct != null &&
-          _popularProductProvider.popularProduct!.isNotEmpty) {
-        emit(GotProducts(List.from(_popularProductProvider.popularProduct!)));
-        return;
-      } else if (category == null &&
+      if (category == null &&
           criteria == null &&
           _productsProvider.products != null &&
           _productsProvider.products!.isNotEmpty) {
@@ -98,8 +95,16 @@ class ProductCubit extends Cubit<ProductState> {
     String? searchKey,
     String? category,
   }) async {
-    if (page == 1) {
-      searchedProducts.clear();
+    if (page == 1 || page == _filterProductProvider.currentPage) {
+      if (_filterProductProvider.category != null &&
+          category == _filterProductProvider.category) {
+        emit(GotProducts(List.from(_filterProductProvider.filterProduct!)));
+        return;
+      }
+      _filterProductProvider.clearFilterProductList();
+      _filterProductProvider.nextPage();
+
+      allProducts.clear();
       emit(const ProductLoading());
     }
 
@@ -114,6 +119,14 @@ class ProductCubit extends Cubit<ProductState> {
     result.fold((failure) => emit(ProductError(failure.errorMessage)), (
       newProducts,
     ) {
+      if (category != null) {
+        _filterProductProvider.addFilterProduct(newProducts, category);
+        emit(
+          GotProducts(List.from(_filterProductProvider.filterProduct ?? [])),
+        );
+
+        return;
+      }
       searchedProducts.addAll(newProducts);
       emit(GotProducts(List.from(searchedProducts)));
     });
