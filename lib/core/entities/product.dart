@@ -1,5 +1,4 @@
 import 'package:ecommerce_shop_app/core/entities/category.dart';
-import 'package:ecommerce_shop_app/core/entities/review.dart';
 import 'package:equatable/equatable.dart';
 
 class Product extends Equatable {
@@ -30,7 +29,7 @@ class Product extends Equatable {
   final List<String> colors;
   final String image;
   final List<String> images;
-  final List<Review> reviews;
+  final List<String> reviews;
   final int numberOfReview;
   final List<String> sizes;
   final Category category;
