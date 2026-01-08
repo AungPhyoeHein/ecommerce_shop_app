@@ -1,10 +1,14 @@
+import 'package:ecommerce_shop_app/core/common/app/providers/category_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/products_provider.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
 import 'package:ecommerce_shop_app/core/widgets/products_list_widget.dart';
 import 'package:ecommerce_shop_app/core/widgets/pull_refresh_widget.dart';
+import 'package:ecommerce_shop_app/src/category/presentation/app/adapter/category_cubit.dart';
 import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_cubit.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/widgets/categories_select_button_group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -18,8 +22,10 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   final ScrollController _scrollController = ScrollController();
   final _productProvider = ProductsProvider.instance;
+  final _categoryProvider = CategoryProvider.instance;
 
   Future<void> _loadInitialData() async {
+    context.read<CategoryCubit>().getCategory();
     context.read<ProductCubit>().getProducts(page: 1);
   }
 
@@ -33,6 +39,7 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   Future<void> _refreshData() async {
+    _categoryProvider.clearCategories();
     _productProvider.clearProductList();
     await _loadInitialData();
   }
@@ -69,7 +76,11 @@ class _ProductScreenState extends State<ProductScreen> {
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-          children: [ProductsListWidget()],
+          children: [
+            CategoriesSelectButtonGroup(),
+            Gap(20),
+            ProductsListWidget(),
+          ],
         ),
       ),
     );

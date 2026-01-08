@@ -94,8 +94,11 @@ final router = GoRouter(
         ),
         GoRoute(
           path: ProductScreen.path,
-          builder: (context, state) => BlocProvider<ProductCubit>(
-            create: (_) => sl<ProductCubit>(),
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider<ProductCubit>(create: (_) => sl<ProductCubit>()),
+              BlocProvider<CategoryCubit>(create: (_) => sl<CategoryCubit>()),
+            ],
             child: const ProductScreen(),
           ),
         ),
