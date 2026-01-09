@@ -79,28 +79,26 @@ final router = GoRouter(
     ),
 
     ShellRoute(
-      builder: (context, state, child) =>
-          DashboardScreen(state: state, child: child),
+      builder: (context, state, child) {
+        // Cubit တွေကို ဒီ ShellRoute မှာ တစ်ခါတည်း ပတ်လိုက်မယ်
+        // ဒါဆိုရင် Dashboard အောက်က ဘယ် Screen ကိုသွားသွား Cubit က တစ်ခုတည်းပဲ ဖြစ်နေမယ်
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<CategoryCubit>(create: (_) => sl<CategoryCubit>()),
+            BlocProvider<ProductCubit>(create: (_) => sl<ProductCubit>()),
+            BlocProvider<AuthUserCubit>(create: (_) => sl<AuthUserCubit>()),
+          ],
+          child: DashboardScreen(state: state, child: child),
+        );
+      },
       routes: [
         GoRoute(
           path: HomeScreen.path,
-          builder: (context, state) => MultiBlocProvider(
-            providers: [
-              BlocProvider<CategoryCubit>(create: (_) => sl<CategoryCubit>()),
-              BlocProvider<ProductCubit>(create: (_) => sl<ProductCubit>()),
-            ],
-            child: HomeScreen(),
-          ),
+          builder: (context, state) => HomeScreen(),
         ),
         GoRoute(
           path: ProductScreen.path,
-          builder: (context, state) => MultiBlocProvider(
-            providers: [
-              BlocProvider<ProductCubit>(create: (_) => sl<ProductCubit>()),
-              BlocProvider<CategoryCubit>(create: (_) => sl<CategoryCubit>()),
-            ],
-            child: const ProductScreen(),
-          ),
+          builder: (context, state) => const ProductScreen(),
         ),
         GoRoute(
           path: ChatScreen.path,

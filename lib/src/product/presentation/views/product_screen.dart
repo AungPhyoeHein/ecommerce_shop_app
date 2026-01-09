@@ -1,4 +1,3 @@
-import 'package:ecommerce_shop_app/core/common/app/providers/category_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/filter_product_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/products_provider.dart';
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
@@ -25,11 +24,10 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   final ScrollController _scrollController = ScrollController();
   final _productProvider = ProductsProvider.instance;
-  final _categoryProvider = CategoryProvider.instance;
   final _filterProductProvider = FilterProductProvider.instance;
 
-  Future<void> _loadInitialData() async {
-    context.read<CategoryCubit>().getCategory();
+  Future<void> _loadInitialData({bool isRefresh = false}) async {
+    context.read<CategoryCubit>().getCategory(isRefresh: isRefresh);
     if (_filterProductProvider.category == null) {
       context.read<ProductCubit>().getProducts(page: 1);
     } else {
@@ -50,10 +48,7 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   Future<void> _refreshData() async {
-    _categoryProvider.clearCategories();
-    _productProvider.clearProductList();
-    _filterProductProvider.clearFilterProductList();
-    await _loadInitialData();
+    await _loadInitialData(isRefresh: true);
   }
 
   @override

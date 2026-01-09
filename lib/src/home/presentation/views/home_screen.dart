@@ -1,3 +1,4 @@
+// import 'package:ecommerce_shop_app/core/common/app/providers/category_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/popular_product_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/user_provider.dart';
 import 'package:ecommerce_shop_app/core/entities/user.dart';
@@ -33,8 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   final _popularProductProvider = PopularProductProvider.instance;
 
-  Future<void> _loadInitialData() async {
-    context.read<CategoryCubit>().getCategory();
+  Future<void> _loadInitialData({bool isRefresh = false}) async {
+    context.read<CategoryCubit>().getCategory(isRefresh: isRefresh);
     context.read<ProductCubit>().getProducts(page: 1, criteria: "popular");
   }
 
@@ -48,8 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _refreshData() async {
-    _popularProductProvider.clearPopularProductList();
-    await _loadInitialData();
+    await _loadInitialData(isRefresh: true);
   }
 
   @override

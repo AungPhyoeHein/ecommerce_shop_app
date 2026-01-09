@@ -45,6 +45,16 @@ class _CategoriesSelectButtonGroupState
                 ),
               ),
             );
+          } else if (state is CategoryLoading) {
+            return SizedBox(
+              height: _height,
+              child: Center(
+                child: Text(
+                  "Loading Categories...",
+                  style: TextStyles.paragraphRegular.adaptiveColor(context),
+                ),
+              ),
+            );
           }
           return GroupButton(
             controller: GroupButtonController(

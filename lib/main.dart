@@ -1,4 +1,3 @@
-import 'package:ecommerce_shop_app/core/common/app/providers/category_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/filter_product_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/popular_product_provider.dart';
 import 'package:ecommerce_shop_app/core/common/app/providers/products_provider.dart';
@@ -20,9 +19,6 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider<UserProvider>.value(
           value: UserProvider.instance,
-        ),
-        ChangeNotifierProvider<CategoryProvider>.value(
-          value: CategoryProvider.instance,
         ),
         ChangeNotifierProvider<ProductsProvider>.value(
           value: ProductsProvider.instance,

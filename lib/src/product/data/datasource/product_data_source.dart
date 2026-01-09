@@ -39,7 +39,7 @@ class ProductDataSourceImplementation implements ProductDataSource {
   final http.Client _client;
 
   @override
-  Future<Product> getProductById(String id) async {
+  Future<ProductModel> getProductById(String id) async {
     try {
       final uri = Uri.parse("${NetworkConstants.baseUrl}$GET_PRODUCTS/$id");
 
@@ -72,7 +72,7 @@ class ProductDataSourceImplementation implements ProductDataSource {
   }
 
   @override
-  Future<List<Product>> getProducts({
+  Future<List<ProductModel>> getProducts({
     required int page,
     String? category,
     String? criteria,
@@ -121,7 +121,7 @@ class ProductDataSourceImplementation implements ProductDataSource {
   }
 
   @override
-  Future<List<Product>> searchProducts({
+  Future<List<ProductModel>> searchProducts({
     required int page,
     String? searchKey,
     String? category,
