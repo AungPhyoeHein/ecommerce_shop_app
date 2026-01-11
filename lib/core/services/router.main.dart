@@ -78,42 +78,70 @@ final router = GoRouter(
       ),
     ),
 
-    ShellRoute(
-      builder: (context, state, child) {
-        // Cubit တွေကို ဒီ ShellRoute မှာ တစ်ခါတည်း ပတ်လိုက်မယ်
-        // ဒါဆိုရင် Dashboard အောက်က ဘယ် Screen ကိုသွားသွား Cubit က တစ်ခုတည်းပဲ ဖြစ်နေမယ်
+    GoRoute(
+      path: "${ProductDetailScreen.path}:id",
+      builder: (_, state) => BlocProvider(
+        create: (_) => sl<ProductCubit>(),
+        child: ProductDetailScreen(data: state.extra as DataMap),
+      ),
+    ),
+
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) {
         return MultiBlocProvider(
           providers: [
             BlocProvider<CategoryCubit>(create: (_) => sl<CategoryCubit>()),
-            BlocProvider<ProductCubit>(create: (_) => sl<ProductCubit>()),
             BlocProvider<AuthUserCubit>(create: (_) => sl<AuthUserCubit>()),
           ],
-          child: DashboardScreen(state: state, child: child),
+          child: DashboardScreen(navigationShell: navigationShell),
         );
       },
-      routes: [
-        GoRoute(
-          path: HomeScreen.path,
-          builder: (context, state) => HomeScreen(),
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: HomeScreen.path,
+              builder: (_, __) => BlocProvider(
+                create: (_) => sl<ProductCubit>(),
+                child: const HomeScreen(),
+              ),
+            ),
+          ],
         ),
-        GoRoute(
-          path: ProductScreen.path,
-          builder: (context, state) => const ProductScreen(),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: ProductsScreen.path,
+              builder: (_, __) => BlocProvider(
+                create: (_) => sl<ProductCubit>(),
+                child: const ProductsScreen(),
+              ),
+            ),
+          ],
         ),
-        GoRoute(
-          path: ChatScreen.path,
-          builder: (context, state) => const ChatScreen(),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: ChatScreen.path,
+              builder: (_, __) => const ChatScreen(),
+            ),
+          ],
         ),
-        GoRoute(
-          path: WishlistScreen.path,
-          builder: (context, state) => const WishlistScreen(),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: WishlistScreen.path,
+              builder: (_, __) => const WishlistScreen(),
+            ),
+          ],
         ),
-        GoRoute(
-          path: ProfileScreen.path,
-          builder: (context, state) => BlocProvider<AuthUserCubit>(
-            create: (_) => sl<AuthUserCubit>(),
-            child: const ProfileScreen(),
-          ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: ProfileScreen.path,
+              builder: (_, __) => const ProfileScreen(),
+            ),
+          ],
         ),
       ],
     ),

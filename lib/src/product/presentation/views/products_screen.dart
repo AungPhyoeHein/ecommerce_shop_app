@@ -1,5 +1,3 @@
-import 'package:ecommerce_shop_app/core/common/app/providers/filter_product_provider.dart';
-import 'package:ecommerce_shop_app/core/common/app/providers/products_provider.dart';
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
 import 'package:ecommerce_shop_app/core/widgets/products_list_widget.dart';
@@ -10,40 +8,27 @@ import 'package:ecommerce_shop_app/src/product/presentation/widgets/categories_s
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:provider/provider.dart';
 
-class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key});
+class ProductsScreen extends StatefulWidget {
+  const ProductsScreen({super.key});
 
   static const path = "/products";
 
   @override
-  State<ProductScreen> createState() => _ProductScreenState();
+  State<ProductsScreen> createState() => _ProductsScreenState();
 }
 
-class _ProductScreenState extends State<ProductScreen> {
+class _ProductsScreenState extends State<ProductsScreen> {
   final ScrollController _scrollController = ScrollController();
-  final _productProvider = ProductsProvider.instance;
-  final _filterProductProvider = FilterProductProvider.instance;
 
   Future<void> _loadInitialData({bool isRefresh = false}) async {
     context.read<CategoryCubit>().getCategory(isRefresh: isRefresh);
-    if (_filterProductProvider.category == null) {
-      context.read<ProductCubit>().getProducts(page: 1);
-    } else {
-      context.read<ProductCubit>().searchProducts(
-        page: _filterProductProvider.currentPage,
-        category: _filterProductProvider.category,
-      );
-    }
+    context.read<ProductCubit>().getProducts(page: 1, isRefresh: isRefresh);
   }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadInitialData();
-    });
     _scrollController.addListener(_onScroll);
   }
 
@@ -53,28 +38,26 @@ class _ProductScreenState extends State<ProductScreen> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _scrollController.removeListener(_onScroll);
     super.dispose();
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent) {
-      final state = context.read<ProductCubit>().state;
+    final state = context.read<ProductCubit>().state;
 
-      if (state is ProductLoading) return;
-
-      if (_filterProductProvider.category == null) {
-        if (!_productProvider.isEnd) {
+    if (state is! ProductLoading && state is! NextProductsLoading) {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent * 0.9) {
+        if (state is GotFilteredProducts && !state.isEnd) {
           context.read<ProductCubit>().getProducts(
-            page: _productProvider.currentPage + 1,
+            page: state.page + 1,
+            category: state.selectedCategory,
+            isRefresh: false,
           );
-        }
-      } else {
-        if (!_filterProductProvider.isEnd) {
-          context.read<ProductCubit>().searchProducts(
-            page: _filterProductProvider.currentPage + 1,
-            category: _filterProductProvider.category!,
+        } else if (state is GotProducts && !state.isEnd) {
+          context.read<ProductCubit>().getProducts(
+            page: state.page + 1,
+            isRefresh: false,
           );
         }
       }
@@ -83,6 +66,8 @@ class _ProductScreenState extends State<ProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _loadInitialData();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -91,14 +76,16 @@ class _ProductScreenState extends State<ProductScreen> {
       body: PullRefreshWidget(
         onRefresh: _refreshData,
         child: ListView(
+          key: const PageStorageKey('discover_product_list_key'),
           controller: _scrollController,
+          cacheExtent: 1500,
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
           children: [
-            CategoriesSelectButtonGroup(),
-            Gap(20),
-            ProductsListWidget(),
-            _PaginationStatus(),
+            const CategoriesSelectButtonGroup(),
+            const Gap(20),
+            const ProductsListWidget(),
+            const _PaginationStatus(),
           ],
         ),
       ),
@@ -111,22 +98,13 @@ class _PaginationStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filterProvider = context.watch<FilterProductProvider>();
-    final productProvider = context.watch<ProductsProvider>();
-
-    final bool isFiltered = filterProvider.category != null;
-    final bool isEnd = isFiltered
-        ? filterProvider.isEnd
-        : productProvider.isEnd;
-
-    if (isEnd) {
-      return endOfProduct();
-    }
-
     return BlocBuilder<ProductCubit, ProductState>(
       builder: (context, state) {
         if (state is ProductLoading) {
           return loadingOfProduct();
+        }
+        if (state is GotProducts && state.isEnd && state.products.isNotEmpty) {
+          return endOfProduct();
         }
         return const SizedBox(height: 50);
       },

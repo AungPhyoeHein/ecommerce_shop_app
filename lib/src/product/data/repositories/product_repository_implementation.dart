@@ -24,6 +24,7 @@ class ProductRepositoryImplementation implements ProductRepository {
   @override
   ResultFuture<List<Product>> getProducts({
     required int page,
+    required bool isRefresh,
     String? category,
     String? criteria,
   }) async {
@@ -32,6 +33,7 @@ class ProductRepositoryImplementation implements ProductRepository {
         page: page,
         category: category,
         criteria: criteria,
+        isRefresh: isRefresh,
       );
 
       return Right(result);

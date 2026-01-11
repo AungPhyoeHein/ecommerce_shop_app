@@ -6,31 +6,33 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 
-class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key, required this.state, required this.child});
+class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({super.key, required this.navigationShell});
 
-  final GoRouterState state;
-  final Widget child;
+  final StatefulNavigationShell navigationShell;
 
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
   final selectedIconColor = MyColors.lightThemeWhiteColor;
+
   final unSelectedIconColor = MyColors.lightThemeSecondaryTextColor;
 
-  int _calculateSelectedIndex(String location) {
-    if (location.startsWith('/home')) return 0;
-    if (location.startsWith('/products')) return 1;
-    if (location.startsWith('/chat')) return 2;
-    if (location.startsWith('/wishlist')) return 3;
-    if (location.startsWith('/profile')) return 4;
-    return 0;
-  }
+  // Future<void> _loadProductInitialData() async {
+  //   context.read<CategoryCubit>().getCategory(isRefresh: false);
+
+  //   context.read<ProductCubit>().getProducts(page: 1, isRefresh: false);
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final int currentIndex = _calculateSelectedIndex(state.uri.path);
+    final int currentIndex = widget.navigationShell.currentIndex;
 
     return Scaffold(
       key: DashboardUtils.scaffoldKey,
-      body: child,
+      body: widget.navigationShell,
       bottomNavigationBar: CurvedNavigationBar(
         index: currentIndex,
         backgroundColor: CoreUtils.adaptiveColor(
@@ -46,23 +48,10 @@ class DashboardScreen extends StatelessWidget {
         ),
         animationDuration: const Duration(milliseconds: 300),
         onTap: (index) {
-          switch (index) {
-            case 0:
-              context.go('/home');
-              break;
-            case 1:
-              context.go('/products');
-              break;
-            case 2:
-              context.go('/chat');
-              break;
-            case 3:
-              context.go('/wishlist');
-              break;
-            case 4:
-              context.go('/profile');
-              break;
-          }
+          widget.navigationShell.goBranch(
+            index,
+            initialLocation: index == widget.navigationShell.currentIndex,
+          );
         },
         items: [
           _buildIcon(

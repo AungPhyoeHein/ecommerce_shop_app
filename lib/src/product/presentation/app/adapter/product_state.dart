@@ -1,28 +1,41 @@
 part of 'product_cubit.dart';
 
-sealed class ProductState extends Equatable {
+abstract class ProductState extends Equatable {
   const ProductState();
-
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-//Initial State
-final class ProductInitial extends ProductState {}
+class ProductInitial extends ProductState {
+  const ProductInitial();
 
-//Loading State
-final class ProductLoading extends ProductState {
+  @override
+  List<Object?> get props => [];
+}
+
+class ProductLoading extends ProductState {
   const ProductLoading();
-}
-
-//Success State
-final class GotProducts extends ProductState {
-  const GotProducts(this.products);
-
-  final List<Product> products;
 
   @override
-  List<Object> get props => [products];
+  List<Object?> get props => [];
+}
+
+class NextProductsLoading extends GotProducts {
+  const NextProductsLoading({
+    required super.products,
+    required super.page,
+    required super.isEnd,
+  });
+
+  @override
+  List<Object?> get props => [];
+}
+
+class ProductError extends ProductState {
+  final String message;
+  const ProductError(this.message);
+  @override
+  List<Object?> get props => [message];
 }
 
 final class GotProduct extends ProductState {
@@ -34,12 +47,38 @@ final class GotProduct extends ProductState {
   List<Object> get props => [product];
 }
 
-//Error State
-final class ProductError extends ProductState {
-  const ProductError(this.message);
+class GotProducts extends ProductState {
+  final List<Product> products;
+  final int page;
+  final bool isEnd;
 
-  final String message;
+  const GotProducts({
+    required this.products,
+    required this.page,
+    required this.isEnd,
+  });
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [products, page, isEnd];
+}
+
+class GotPopularProducts extends GotProducts {
+  const GotPopularProducts({
+    required super.products,
+    required super.page,
+    required super.isEnd,
+  });
+}
+
+class GotFilteredProducts extends GotProducts {
+  final String? selectedCategory;
+  const GotFilteredProducts({
+    required super.products,
+    required super.page,
+    required super.isEnd,
+    required this.selectedCategory,
+  });
+
+  @override
+  List<Object?> get props => [products, page, isEnd, selectedCategory];
 }

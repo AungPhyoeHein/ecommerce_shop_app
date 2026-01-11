@@ -7,6 +7,7 @@ abstract class ProductRepository {
 
   ResultFuture<List<Product>> getProducts({
     required int page,
+    required bool isRefresh,
     String? category,
     String? criteria,
   });

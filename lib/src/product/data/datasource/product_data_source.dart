@@ -17,6 +17,7 @@ abstract class ProductDataSource {
 
   Future<List<Product>> getProducts({
     required int page,
+    required bool isRefresh,
     String? category,
     String? criteria,
   });
@@ -34,7 +35,12 @@ const GET_PRODUCTS = "/products";
 const SEARCH_PRODUCTS = "/products/search";
 
 class ProductDataSourceImplementation implements ProductDataSource {
-  const ProductDataSourceImplementation(this._client);
+  ProductDataSourceImplementation(this._client);
+
+  String? _lastCategory;
+  final List<ProductModel> _filteredProducts = [];
+  final List<ProductModel> _products = [];
+  final List<ProductModel> _popularProducts = [];
 
   final http.Client _client;
 
@@ -74,10 +80,23 @@ class ProductDataSourceImplementation implements ProductDataSource {
   @override
   Future<List<ProductModel>> getProducts({
     required int page,
+    required bool isRefresh,
     String? category,
     String? criteria,
   }) async {
     try {
+      if (page == 1 && !isRefresh) {
+        if (criteria == "popular" && _popularProducts.isNotEmpty) {
+          return _popularProducts;
+        }
+        if (category != null && _filteredProducts.isNotEmpty) {
+          return _filteredProducts;
+        }
+        if (category == null && criteria == null && _products.isNotEmpty) {
+          return _products;
+        }
+      }
+
       final uri = Uri.parse("${NetworkConstants.baseUrl}$GET_PRODUCTS").replace(
         queryParameters: {
           'page': page.toString(),
@@ -105,9 +124,15 @@ class ProductDataSourceImplementation implements ProductDataSource {
 
       final data = payload as List;
 
-      return data
-          .map((product) => ProductModel.fromMap(product as DataMap))
-          .toList();
+      return _checkAndReturnProduct(
+        products: data
+            .map((product) => ProductModel.fromMap(product as DataMap))
+            .toList(),
+        isRefresh: isRefresh,
+        page: page,
+        criteria: criteria,
+        category: category,
+      );
     } on ServerException {
       rethrow;
     } catch (e, s) {
@@ -127,6 +152,15 @@ class ProductDataSourceImplementation implements ProductDataSource {
     String? category,
   }) async {
     try {
+      if (page == 1) {
+        if (category != null ||
+            (_lastCategory != null && _lastCategory == category)) {
+          return _filteredProducts;
+        }
+        if (category == null) {
+          return _products;
+        }
+      }
       final uri = Uri.parse("${NetworkConstants.baseUrl}$SEARCH_PRODUCTS")
           .replace(
             queryParameters: {
@@ -153,9 +187,13 @@ class ProductDataSourceImplementation implements ProductDataSource {
 
       final data = payload as List;
 
-      return data
-          .map((product) => ProductModel.fromMap(product as DataMap))
-          .toList();
+      return _checkAndReturnProduct(
+        products: data
+            .map((product) => ProductModel.fromMap(product as DataMap))
+            .toList(),
+        isRefresh: false,
+        page: page,
+      );
     } on ServerException {
       rethrow;
     } catch (e, s) {
@@ -166,5 +204,36 @@ class ProductDataSourceImplementation implements ProductDataSource {
         statusCode: 500,
       );
     }
+  }
+
+  List<ProductModel> _checkAndReturnProduct({
+    required int page,
+    required bool isRefresh,
+    String? category,
+    String? criteria,
+    required List<ProductModel> products,
+  }) {
+    if (criteria == "popular") {
+      if (page == 1 && isRefresh) _popularProducts.clear();
+      _popularProducts.addAll(products);
+      return _popularProducts;
+    }
+
+    if (category != null) {
+      if (isRefresh || _lastCategory != category) {
+        _filteredProducts.clear();
+        _lastCategory = category;
+      }
+      _filteredProducts.addAll(products);
+      return _filteredProducts;
+    }
+
+    if (category == null && criteria == null) {
+      if (page == 1 || isRefresh) _products.clear();
+      _products.addAll(products);
+      return _products;
+    }
+
+    return products;
   }
 }

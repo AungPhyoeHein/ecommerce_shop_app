@@ -1,5 +1,3 @@
-import 'package:ecommerce_shop_app/core/common/app/providers/filter_product_provider.dart';
-import 'package:ecommerce_shop_app/core/common/app/providers/products_provider.dart';
 import 'package:ecommerce_shop_app/core/entities/category.dart';
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
@@ -21,16 +19,21 @@ class CategoriesSelectButtonGroup extends StatefulWidget {
 
 class _CategoriesSelectButtonGroupState
     extends State<CategoriesSelectButtonGroup> {
-  final _filterProductsProvider = FilterProductProvider.instance;
-  final _productsProvider = ProductsProvider.instance;
-
   void _onSelectedCategory(Category category) {
-    context.read<ProductCubit>().searchProducts(page: 1, category: category.id);
+    context.read<ProductCubit>().getProducts(
+      page: 1,
+      category: category.id,
+      isRefresh: true,
+    );
   }
+
+  int _selectedCategoryIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CategoryCubit, CategoryState>(
+    final productState = context.watch<ProductCubit>().state;
+
+    return BlocConsumer<CategoryCubit, CategoryState>(
       builder: (BuildContext context, state) {
         if (state is GotCategories) {
           if (state.categories.isEmpty) {
@@ -58,13 +61,15 @@ class _CategoriesSelectButtonGroupState
           }
           return GroupButton(
             controller: GroupButtonController(
-              selectedIndex: _filterProductsProvider.category != null
-                  ? state.categories.indexWhere(
-                          (category) =>
-                              category.id == _filterProductsProvider.category,
-                        ) +
-                        1
-                  : 0,
+              selectedIndex: () {
+                if (productState is GotFilteredProducts) {
+                  final index = state.categories.indexWhere(
+                    (category) => category.id == productState.selectedCategory,
+                  );
+                  return index != -1 ? index + 1 : 0;
+                }
+                return _selectedCategoryIndex;
+              }(),
             ),
             options: GroupButtonOptions(
               borderRadius: BorderRadius.circular(10),
@@ -73,18 +78,21 @@ class _CategoriesSelectButtonGroupState
 
             onSelected: (value, index, isSelected) {
               if (isSelected == true) {
-                if (index <= 0) {
-                  _filterProductsProvider.clearFilterProductList();
-                  return context.read<ProductCubit>().getProducts(
-                    page: _productsProvider.currentPage,
-                  );
+                _selectedCategoryIndex = index;
+                if (index == 0) {
+                  if (productState is GotProducts) {
+                    return context.read<ProductCubit>().getProducts(
+                      page: productState.page,
+                      isRefresh: false,
+                    );
+                  }
                 }
                 _onSelectedCategory(state.categories[index - 1]);
               }
             },
             buttons: [
               'All',
-              ...state.categories.map((category) => category.name).toList(),
+              ...state.categories.map((category) => category.name),
             ],
           );
         }
@@ -98,6 +106,11 @@ class _CategoriesSelectButtonGroupState
             ),
           ),
         );
+      },
+      listener: (BuildContext context, CategoryState state) {
+        if (state is CategoryLoading) {
+          _selectedCategoryIndex = 0;
+        }
       },
     );
   }

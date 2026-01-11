@@ -32,7 +32,10 @@ class ProductCardColors extends StatelessWidget {
           if (colors.length > 3)
             Text(
               " +${colors.length - 3}",
-              style: TextStyle(fontSize: radius, color: Colors.grey),
+              style: TextStyle(
+                fontSize: radius + 1.2,
+                color: MyColors.lightThemeSecondaryColor,
+              ),
             ),
         ],
       ),

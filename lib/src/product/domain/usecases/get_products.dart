@@ -15,16 +15,22 @@ class GetProducts extends UsecaseWithParams<List<Product>, GetProductsParams> {
         page: params.page,
         category: params.category,
         criteria: params.criteria,
+        isRefresh: params.isRefresh,
       );
 }
 
 class GetProductsParams extends Equatable {
-  const GetProductsParams({required this.page, this.category, this.criteria});
+  const GetProductsParams({
+    required this.page,
+    required this.isRefresh,
+    this.category,
+    this.criteria,
+  });
 
   final int page;
   final String? category;
   final String? criteria;
-
+  final bool isRefresh;
   @override
-  List<Object?> get props => [page, category, criteria];
+  List<Object?> get props => [page, category, criteria, isRefresh];
 }

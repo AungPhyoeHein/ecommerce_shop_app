@@ -1,6 +1,7 @@
 import 'package:ecommerce_shop_app/core/common/app/cache_helper.dart';
 import 'package:ecommerce_shop_app/core/common/singletons/cache.dart';
 import 'package:ecommerce_shop_app/core/services/injection_container.dart';
+import 'package:ecommerce_shop_app/core/utils/typedef.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/app/adapter/auth_cubit.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/views/forgot_password_screen.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/views/login_screen.dart';
@@ -14,7 +15,8 @@ import 'package:ecommerce_shop_app/src/dashboard/presentation/views/dashboard_sc
 import 'package:ecommerce_shop_app/src/home/presentation/views/home_screen.dart';
 import 'package:ecommerce_shop_app/src/on_boarding/presentation/views/on_boarding_screen.dart';
 import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_cubit.dart';
-import 'package:ecommerce_shop_app/src/product/presentation/views/product_screen.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/views/product_detail_screen.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/views/products_screen.dart';
 import 'package:ecommerce_shop_app/src/user/presentation/app/adapter/auth_user_cubit.dart';
 import 'package:ecommerce_shop_app/src/user/presentation/views/profile_screen.dart';
 import 'package:ecommerce_shop_app/src/wishlist/presentation/views/wishlist_screen.dart';

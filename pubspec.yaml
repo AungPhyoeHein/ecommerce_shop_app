@@ -58,6 +58,7 @@ dependencies:
   hugeicons_pro: ^0.0.2
   provider: ^6.1.5+1
   group_button: ^5.3.4
+  async: ^2.13.0
 
 dev_dependencies:
   flutter_test:

@@ -42,7 +42,11 @@ Widget _productList(GotProducts? state) {
     shrinkWrap: true,
     physics: const NeverScrollableScrollPhysics(),
     padding: const EdgeInsets.symmetric(horizontal: 0),
-    itemCount: state is GotProducts ? state.products.length : _shimmerItemCount,
+    itemCount: state is GotProducts
+        ? state is NextProductsLoading
+              ? state.products.length + 2
+              : state.products.length
+        : _shimmerItemCount,
     gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
       maxCrossAxisExtent: 250,
       mainAxisSpacing: 5,
@@ -50,6 +54,9 @@ Widget _productList(GotProducts? state) {
       childAspectRatio: 0.58,
     ),
     itemBuilder: (context, index) {
+      if (state is NextProductsLoading && state.products.length < index + 1) {
+        return ProductShimmerCard();
+      }
       return state is GotProducts
           ? ProductCard(state.products[index])
           : const ProductShimmerCard();
