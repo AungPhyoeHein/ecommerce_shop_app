@@ -1,19 +1,21 @@
+import 'package:ecommerce_shop_app/core/common/app/providers/user_provider.dart';
 import 'package:ecommerce_shop_app/core/entities/user.dart';
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
 import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
 import 'package:ecommerce_shop_app/core/widgets/rounded_button.dart';
+import 'package:ecommerce_shop_app/src/auth/presentation/app/adapter/auth_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 
 class DrawerWidget extends StatelessWidget {
-  const DrawerWidget(this.user, {super.key});
-
-  final User user;
+  const DrawerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final User user = UserProvider.instance.currentUser!;
     final adaptiveTextColor = MyColors.classicAdaptiveTextColor(context);
     final drawerBgColor = CoreUtils.adaptiveColor(
       context,
@@ -77,10 +79,9 @@ class DrawerWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: RoundedButton(
               text: "Logout",
+              height: 50,
               backgroundColor: Colors.red,
-              onPressed: () {
-                // Logout Logic
-              },
+              onPressed: () {},
             ),
           ),
         ],
@@ -89,7 +90,6 @@ class DrawerWidget extends StatelessWidget {
   }
 }
 
-// ၁။ Header အတွက် သီးသန့် Widget ခွဲထုတ်ခြင်း
 class _UserHeader extends StatelessWidget {
   const _UserHeader({required this.user, required this.bgColor});
 
@@ -118,7 +118,6 @@ class _UserHeader extends StatelessWidget {
   }
 }
 
-// ၂။ Menu Item တစ်ခုချင်းစီအတွက် Widget ခွဲထုတ်ခြင်း
 class _DrawerItem extends StatelessWidget {
   const _DrawerItem({
     required this.title,

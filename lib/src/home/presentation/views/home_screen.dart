@@ -1,5 +1,3 @@
-import 'package:ecommerce_shop_app/core/common/app/providers/user_provider.dart';
-import 'package:ecommerce_shop_app/core/entities/user.dart';
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
 import 'package:ecommerce_shop_app/core/utils/constants/icon_constants.dart';
@@ -79,7 +77,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = UserProvider.instance.currentUser!;
     _loadInitialData();
     return Scaffold(
       key: _scaffoldKey,
@@ -149,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      drawer: DrawerWidget(user),
+      drawer: DrawerWidget(),
     );
   }
 }

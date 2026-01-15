@@ -1,5 +1,6 @@
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
+import 'package:ecommerce_shop_app/core/widgets/drawer_widget.dart';
 import 'package:ecommerce_shop_app/core/widgets/products_list_widget.dart';
 import 'package:ecommerce_shop_app/core/widgets/pull_refresh_widget.dart';
 import 'package:ecommerce_shop_app/src/category/presentation/app/adapter/category_cubit.dart';
@@ -29,6 +30,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   void initState() {
     super.initState();
+    _loadInitialData();
     _scrollController.addListener(_onScroll);
   }
 
@@ -66,8 +68,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _loadInitialData();
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -89,6 +89,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
           ],
         ),
       ),
+      drawer: DrawerWidget(),
     );
   }
 }
