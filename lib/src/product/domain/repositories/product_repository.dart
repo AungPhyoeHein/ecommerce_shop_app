@@ -22,19 +22,25 @@ abstract class ProductRepository {
   });
 
   ResultFuture<Product> leaveReview({
-    String productId,
-    int rating,
-    String comment,
+    required String productId,
+    required int rating,
+    required String comment,
   });
 
-  ResultFuture<List<Review>> getProductReviews(String productId);
+  ResultFuture<List<Review>> getProductReviews({
+    required int page,
+    required String productId,
+  });
 
   ResultFuture<Review> editProductReview({
-    String productId,
-    String reviewId,
-    int rating,
-    String comment,
+    required String productId,
+    required String reviewId,
+    required int rating,
+    required String comment,
   });
 
-  ResultFuture<void> deleteProductReview({String productId, String reviewId});
+  ResultFuture<void> deleteProductReview({
+    required String productId,
+    required String reviewId,
+  });
 }
