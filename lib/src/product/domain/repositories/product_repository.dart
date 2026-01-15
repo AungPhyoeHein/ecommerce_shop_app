@@ -1,4 +1,5 @@
 import 'package:ecommerce_shop_app/core/entities/product.dart';
+import 'package:ecommerce_shop_app/core/entities/review.dart';
 // import 'package:ecommerce_shop_app/core/entities/review.dart';
 import 'package:ecommerce_shop_app/core/utils/typedef.dart';
 
@@ -20,22 +21,20 @@ abstract class ProductRepository {
     String? category,
   });
 
-  // ResultFuture<void> leaveReview({
-  //   required String productId,
-  //   required Review review,
-  // });
+  ResultFuture<Product> leaveReview({
+    String productId,
+    int rating,
+    String comment,
+  });
 
-  // ResultFuture<List<Review>> getProductReviews(String id);
+  ResultFuture<List<Review>> getProductReviews(String productId);
 
-  // ResultFuture<void> editReview({
-  //   required String productId,
-  //   required String reviewId,
-  //   required Review review,
-  // });
+  ResultFuture<Review> editProductReview({
+    String productId,
+    String reviewId,
+    int rating,
+    String comment,
+  });
 
-  // ResultFuture<void> deleteReview({
-  //   required String productId,
-  //   required String reviewId,
-  //   required Review review,
-  // });
+  ResultFuture<void> deleteProductReview({String productId, String reviewId});
 }
