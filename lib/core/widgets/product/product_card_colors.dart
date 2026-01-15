@@ -25,7 +25,7 @@ class ProductCardColors extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 2),
                   child: CircleAvatar(
                     radius: radius,
-                    backgroundColor: color.toColorCode,
+                    backgroundColor: color.toColor,
                   ),
                 ),
               ),

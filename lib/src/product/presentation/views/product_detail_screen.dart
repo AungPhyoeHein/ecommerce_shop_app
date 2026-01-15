@@ -1,17 +1,24 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
-import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
-import 'package:ecommerce_shop_app/core/utils/typedef.dart';
-import 'package:ecommerce_shop_app/src/product/presentation/widgets/image_indicator_widget.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:ecommerce_shop_app/core/entities/product.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_cubit.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/widgets/product_detail_bottom_bar.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/widgets/product_detail_image_header.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/widgets/product_detail_info_container.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/widgets/product_detail_shimmer.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/widgets/product_detail_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({super.key, required this.data});
+  const ProductDetailScreen({
+    super.key,
+    required this.hero,
+    required this.product,
+    required this.productId,
+  });
 
-  final DataMap data;
+  final String hero;
+  final Product? product;
+  final String productId;
 
   static const path = "/products/";
 
@@ -20,112 +27,48 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  final CarouselSliderController _carouselSliderController =
-      CarouselSliderController();
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadInitialData();
+    });
+  }
 
-  int _currentIndex = 0;
+  Future<void> _loadInitialData() async {
+    context.read<ProductCubit>().getProductsById(widget.productId);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.red,
-      body: ListView(
-        shrinkWrap: true,
-        children: [
-          SizedBox(
-            height: 300,
-            child: Hero(
-              tag: widget.data['hero'],
-              child: widget.data['image'] != null
-                  ? Stack(
-                      children: [
-                        CarouselSlider.builder(
-                          itemCount: 4,
-                          carouselController: _carouselSliderController,
-                          itemBuilder: (context, index, realIndex) =>
-                              Image.network(
-                                widget.data['image'],
-                                width: double.infinity,
-                                height: double.infinity,
-                                fit: BoxFit.cover,
-                              ),
-                          options: CarouselOptions(
-                            height: double.infinity,
-                            viewportFraction: 1,
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                _currentIndex = index;
-                              });
-                            },
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 10,
-                          left: 50,
-                          right: 50,
-                          child: Container(
-                            height: 50,
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 4,
-                              itemBuilder: (context, index) => GestureDetector(
-                                onTap: () {
-                                  _carouselSliderController.animateToPage(
-                                    index,
-                                  );
-                                },
-                                child: ImageIndicatorWidget(
-                                  widget.data["image"],
-                                  isActive: _currentIndex == index,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 0,
-                          child: Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  context.pop();
-                                },
-                                icon: Icon(
-                                  CupertinoIcons.back,
-                                  color: MyColors.darkThemeDarkSharpColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  : Shimmer.fromColors(
-                      baseColor: CoreUtils.adaptiveColor(
-                        context,
-                        lightModeColor: Colors.grey.shade300,
-                        darkModeColor: Colors.grey.shade800,
-                      ),
-                      highlightColor: CoreUtils.adaptiveColor(
-                        context,
-                        lightModeColor: Colors.grey.shade100,
-                        darkModeColor: Colors.grey.shade500,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-
-                        children: [
-                          Expanded(child: Container(color: Colors.white)),
-                        ],
-                      ),
+    return BlocBuilder<ProductCubit, ProductState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    ProductDetailImageHeader(
+                      hero: widget.hero,
+                      images: state is GotProduct
+                          ? [state.product.image, ...state.product.images]
+                          : [widget.product!.image],
                     ),
-            ),
+                    ProductDetailInfoContainer(
+                      child: state is GotProduct
+                          ? ProductDetailWidget(product: state.product)
+                          : const ProductDetailShimmer(),
+                    ),
+                  ],
+                ),
+              ),
+              const ProductDetailBottomBar(),
+            ],
           ),
-          SizedBox(height: 2000),
-        ],
-      ),
+        );
+      },
     );
   }
 }

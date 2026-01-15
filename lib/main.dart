@@ -42,17 +42,6 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme,
       routerConfig: router,
       debugShowCheckedModeBanner: false,
-
-      // home: Scaffold(
-      //   body: Center(
-      //     child: Text(
-      //       'Hello World!',
-      //       style: TextStyles.headingRegular.copyWith(
-      //         color: MyColors.classicAdaptiveTextColor(context),
-      //       ),
-      //     ),
-      //   ),
-      // ),
     );
   }
 }

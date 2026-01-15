@@ -80,10 +80,21 @@ final router = GoRouter(
 
     GoRoute(
       path: "${ProductDetailScreen.path}:id",
-      builder: (_, state) => BlocProvider(
-        create: (_) => sl<ProductCubit>(),
-        child: ProductDetailScreen(data: state.extra as DataMap),
-      ),
+      builder: (_, state) {
+        final id = state.pathParameters['id'];
+        final extraData = state.extra as Map<String, dynamic>? ?? {};
+        final product = extraData['product'] as Product?;
+        final hero = extraData['hero'] as String? ?? '/product$id';
+
+        return BlocProvider(
+          create: (_) => sl<ProductCubit>(),
+          child: ProductDetailScreen(
+            productId: id.toString(),
+            product: product,
+            hero: hero,
+          ),
+        );
+      },
     ),
 
     StatefulShellRoute.indexedStack(

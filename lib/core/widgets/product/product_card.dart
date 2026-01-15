@@ -28,12 +28,7 @@ class ProductCard extends StatelessWidget {
           onTap: () {
             context.push(
               '${ProductDetailScreen.path}${product.id}',
-              extra: {
-                "id": product.id,
-                "name": product.name,
-                "image": product.image,
-                "hero": hero,
-              },
+              extra: {'product': product, 'hero': hero},
             );
           },
           child: Card(

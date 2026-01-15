@@ -1,7 +1,7 @@
 import 'package:ecommerce_shop_app/core/common/app/cache_helper.dart';
 import 'package:ecommerce_shop_app/core/common/singletons/cache.dart';
+import 'package:ecommerce_shop_app/core/entities/product.dart';
 import 'package:ecommerce_shop_app/core/services/injection_container.dart';
-import 'package:ecommerce_shop_app/core/utils/typedef.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/app/adapter/auth_cubit.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/views/forgot_password_screen.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/views/login_screen.dart';

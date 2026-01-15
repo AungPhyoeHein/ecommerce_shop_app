@@ -35,7 +35,7 @@ extension StringExt on String {
     return true;
   }
 
-  Color get toColorCode {
+  Color get toColor {
     String hexString = replaceAll("#", "");
     if (hexString.length == 6) {
       hexString = "FF$hexString";
