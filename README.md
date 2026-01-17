@@ -32,7 +32,9 @@ The project is organized following the separation of concerns principle:
 lib/
 ├── core/            # Reusable widgets, themes, constants, and network utilities.
 ├── src/             # Feature-based modules
+|   ├── dashboard/   # navigation handle logic
 │   ├── login/       # Authentication logic and UI
-│   ├── home/        # Dashboard and product listings
-│   └── product/     # Product details and review features
+│   ├── home/        # Home Screen logic and UI
+│   ├── product/     # Product Screen and Product details and review features
+|   └── others.../   # comming soon
 └── main.dart        # Entry point
