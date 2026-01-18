@@ -79,6 +79,7 @@ class InputField extends StatelessWidget {
         prefix: prefix,
         prefixIcon: prefixIcon,
         prefixStyle: prefixIconStyle,
+
         contentPadding:
             contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
         filled: true,
