@@ -13,8 +13,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text('Discover Product')),
-      body: Center(child: Text("Product Screen")),
+      appBar: AppBar(centerTitle: true, title: const Text('Discover Product')),
+      body: const Center(child: Text("Product Screen")),
     );
   }
 }

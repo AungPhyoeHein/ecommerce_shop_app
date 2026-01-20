@@ -18,7 +18,7 @@ class ReviewModel extends Review {
       id: (map['_id'] ?? map['id']) as String,
       userId: map['user'] as String,
       userName: map['userName'] as String,
-      rating: (map['rating'] as num).toDouble(),
+      rating: (map['rating'] as num).toInt(),
       comment: map['comment'] as String?,
       date: map['date'] != null ? DateTime.parse(map['date']) : null,
       createdAt: map['createdAt'] != null

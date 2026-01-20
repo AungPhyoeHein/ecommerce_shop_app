@@ -15,6 +15,7 @@ import 'package:ecommerce_shop_app/src/dashboard/presentation/views/dashboard_sc
 import 'package:ecommerce_shop_app/src/home/presentation/views/home_screen.dart';
 import 'package:ecommerce_shop_app/src/on_boarding/presentation/views/on_boarding_screen.dart';
 import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_cubit.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/review_cubit.dart';
 import 'package:ecommerce_shop_app/src/product/presentation/views/product_detail_screen.dart';
 import 'package:ecommerce_shop_app/src/product/presentation/views/products_screen.dart';
 import 'package:ecommerce_shop_app/src/user/presentation/app/adapter/auth_user_cubit.dart';

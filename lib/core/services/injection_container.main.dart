@@ -8,6 +8,7 @@ Future<void> init() async {
   await _userInit();
   await _categoryInit();
   await _productInit();
+  await _reviewInit();
 }
 
 Future<void> _userInit() async {
@@ -98,4 +99,21 @@ Future<void> _productInit() async {
     ..registerLazySingleton<ProductDataSource>(
       () => ProductDataSourceImplementation(sl()),
     );
+}
+
+Future<void> _reviewInit() async {
+  sl
+    ..registerFactory(
+      () => ReviewCubit(
+        leaveReview: sl(),
+        getProductReview: sl(),
+        editProductReview: sl(),
+        deleteProductReview: sl(),
+        productCubit: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => LeaveReview(sl()))
+    ..registerLazySingleton(() => GetProductReviews(sl()))
+    ..registerLazySingleton(() => EditProductReview(sl()))
+    ..registerLazySingleton(() => DeleteProductReview(sl()));
 }

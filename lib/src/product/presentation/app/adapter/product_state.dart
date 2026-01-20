@@ -26,9 +26,6 @@ class NextProductsLoading extends GotProducts {
     required super.page,
     required super.isEnd,
   });
-
-  @override
-  List<Object?> get props => [];
 }
 
 class ProductError extends ProductState {

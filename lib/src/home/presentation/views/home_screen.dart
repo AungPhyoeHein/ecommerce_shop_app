@@ -81,9 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: EcomiLogo(style: TextStyles.headingBold1),
+        title: const EcomiLogo(style: TextStyles.headingBold1),
         leading: IconButton(
-          icon: SvgIcon(IconConstants.menu),
+          icon: const SvgIcon(IconConstants.menu),
           onPressed: () {
             _scaffoldKey.currentState?.openDrawer();
           },
@@ -91,24 +91,27 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: SvgIcon(IconConstants.shoppingCart),
+            icon: const SvgIcon(IconConstants.shoppingCart),
           ),
-          IconButton(onPressed: () {}, icon: SvgIcon(IconConstants.qrScan)),
+          IconButton(
+            onPressed: () {},
+            icon: const SvgIcon(IconConstants.qrScan),
+          ),
         ],
-        bottom: AppBarBottom(),
+        bottom: const AppBarBottom(),
       ),
       body: PullRefreshWidget(
         onRefresh: _refreshData,
         child: ListView(
           controller: _scrollController,
-          physics: AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 30),
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
           children: [
-            SearchInputWidget(),
+            const SearchInputWidget(),
             const Gap(20),
-            BannerImagesWidget(),
+            const BannerImagesWidget(),
             const Gap(20),
-            CategoryListWidget(),
+            const CategoryListWidget(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -125,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            ProductsListWidget(),
+            const ProductsListWidget(),
             BlocBuilder<ProductCubit, ProductState>(
               builder: (context, state) {
                 if (state is GotProducts) {
@@ -140,13 +143,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }
                 }
-                return SizedBox(height: 50);
+                return const SizedBox(height: 50);
               },
             ),
           ],
         ),
       ),
-      drawer: DrawerWidget(),
+      drawer: const DrawerWidget(),
     );
   }
 }

@@ -86,8 +86,11 @@ final router = GoRouter(
         final product = extraData['product'] as Product?;
         final hero = extraData['hero'] as String? ?? '/product$id';
 
-        return BlocProvider(
-          create: (_) => sl<ProductCubit>(),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => sl<ProductCubit>()),
+            BlocProvider(create: (_) => sl<ReviewCubit>()),
+          ],
           child: ProductDetailScreen(
             productId: id.toString(),
             product: product,
