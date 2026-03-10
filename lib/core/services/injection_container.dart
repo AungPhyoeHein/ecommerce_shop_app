@@ -28,6 +28,14 @@ import 'package:ecommerce_shop_app/src/user/domain/repositories/user_repository.
 import 'package:ecommerce_shop_app/src/user/domain/usecases/get_user.dart';
 import 'package:ecommerce_shop_app/src/user/domain/usecases/get_user_payment_profile.dart';
 import 'package:ecommerce_shop_app/src/user/domain/usecases/update_user.dart';
+import 'package:ecommerce_shop_app/src/chat/data/datasources/chat_local_data_source.dart';
+import 'package:ecommerce_shop_app/src/chat/data/datasources/chat_remote_data_source.dart';
+import 'package:ecommerce_shop_app/src/chat/data/repositories/chat_repository_implementation.dart';
+import 'package:ecommerce_shop_app/src/chat/domain/repositories/chat_repository.dart';
+import 'package:ecommerce_shop_app/src/chat/domain/usecases/clear_cached_messages.dart';
+import 'package:ecommerce_shop_app/src/chat/domain/usecases/get_cached_messages.dart';
+import 'package:ecommerce_shop_app/src/chat/domain/usecases/send_message.dart';
+import 'package:ecommerce_shop_app/src/chat/presentation/app/adapter/chat_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;

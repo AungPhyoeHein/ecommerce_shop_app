@@ -134,7 +134,10 @@ final router = GoRouter(
           routes: [
             GoRoute(
               path: ChatScreen.path,
-              builder: (_, __) => const ChatScreen(),
+              builder: (_, __) => BlocProvider(
+                create: (_) => sl<ChatCubit>(),
+                child: const ChatScreen(),
+              ),
             ),
           ],
         ),

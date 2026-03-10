@@ -8,6 +8,7 @@ Future<void> init() async {
   await _userInit();
   await _categoryInit();
   await _productInit();
+  await _chatInit();
 }
 
 Future<void> _userInit() async {
@@ -97,5 +98,28 @@ Future<void> _productInit() async {
     )
     ..registerLazySingleton<ProductDataSource>(
       () => ProductDataSourceImplementation(sl()),
+    );
+}
+
+Future<void> _chatInit() async {
+  sl
+    ..registerFactory(
+      () => ChatCubit(
+        sendMessage: sl(),
+        getCachedMessages: sl(),
+        clearCachedMessages: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => SendMessage(sl()))
+    ..registerLazySingleton(() => GetCachedMessages(sl()))
+    ..registerLazySingleton(() => ClearCachedMessages(sl()))
+    ..registerLazySingleton<ChatRepository>(
+      () => ChatRepositoryImplementation(sl(), sl()),
+    )
+    ..registerLazySingleton<ChatRemoteDataSource>(
+      () => ChatRemoteDataSourceImplementation(sl()),
+    )
+    ..registerLazySingleton<ChatLocalDataSource>(
+      () => ChatLocalDataSourceImplementation(sl()),
     );
 }
