@@ -108,11 +108,13 @@ Future<void> _chatInit() async {
         sendMessage: sl(),
         getCachedMessages: sl(),
         clearCachedMessages: sl(),
+        deleteChatHistory: sl(),
       ),
     )
     ..registerLazySingleton(() => SendMessage(sl()))
     ..registerLazySingleton(() => GetCachedMessages(sl()))
     ..registerLazySingleton(() => ClearCachedMessages(sl()))
+    ..registerLazySingleton(() => DeleteChatHistory(sl()))
     ..registerLazySingleton<ChatRepository>(
       () => ChatRepositoryImplementation(sl(), sl()),
     )

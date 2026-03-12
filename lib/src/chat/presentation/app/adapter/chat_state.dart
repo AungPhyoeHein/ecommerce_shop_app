@@ -30,3 +30,7 @@ class ChatError extends ChatState {
   @override
   List<Object?> get props => [message];
 }
+
+class ChatHistoryDeleted extends ChatState {
+  const ChatHistoryDeleted();
+}

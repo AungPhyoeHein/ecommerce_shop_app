@@ -32,7 +32,7 @@ class ChatRepositoryImplementation implements ChatRepository {
       final result = await _localDataSource.getMessages();
       return Right(result);
     } catch (e) {
-      return Left(CacheFailure(message: e.toString(), statusCode: 500));
+      return Left(CacheFailure(message: e.toString()));
     }
   }
 
@@ -42,7 +42,20 @@ class ChatRepositoryImplementation implements ChatRepository {
       await _localDataSource.clearMessages();
       return const Right(null);
     } catch (e) {
-      return Left(CacheFailure(message: e.toString(), statusCode: 500));
+      return Left(CacheFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  ResultFuture<void> deleteChatHistory() async {
+    try {
+      await _remoteDataSource.deleteChatHistory();
+      await _localDataSource.clearMessages();
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    } catch (e) {
+      return Left(CacheFailure(message: e.toString()));
     }
   }
 }

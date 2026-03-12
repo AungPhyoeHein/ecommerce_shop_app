@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'package:ecommerce_shop_app/core/common/app/cache_helper.dart';
-import 'package:ecommerce_shop_app/src/chat/data/models/chat_message_model.dart';
+
 import 'package:ecommerce_shop_app/src/chat/domain/entities/chat_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,16 +21,6 @@ class ChatLocalDataSourceImplementation implements ChatLocalDataSource {
   @override
   Future<void> cacheMessages(List<ChatMessage> messages) async {
     final List<String> messagesJson = messages.map((m) {
-      final model = ChatMessageModel(
-        id: m.id,
-        message: m.message,
-        type: m.type,
-        responseType: m.responseType,
-        products: m.products?.cast(),
-        timestamp: m.timestamp,
-      );
-      // We need a toMap in ChatMessageModel for this.
-      // For now, let's just save a simplified version or implement toMap.
       return jsonEncode({
         'id': m.id,
         'message': m.message,

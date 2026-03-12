@@ -33,6 +33,7 @@ import 'package:ecommerce_shop_app/src/chat/data/datasources/chat_remote_data_so
 import 'package:ecommerce_shop_app/src/chat/data/repositories/chat_repository_implementation.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/repositories/chat_repository.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/usecases/clear_cached_messages.dart';
+import 'package:ecommerce_shop_app/src/chat/domain/usecases/delete_chat_history.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/usecases/get_cached_messages.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/usecases/send_message.dart';
 import 'package:ecommerce_shop_app/src/chat/presentation/app/adapter/chat_cubit.dart';

@@ -6,6 +6,36 @@ final router = GoRouter(
   navigatorKey: rootNavigatorKey,
   debugLogDiagnostics: true,
   initialLocation: '/',
+  redirect: (context, state) {
+    final cacheHelper = sl<CacheHelper>()
+      ..getSessionToken()
+      ..getUserId();
+
+    final path = state.uri.path;
+    final isFirstTime = cacheHelper.isFirstTime();
+    final isAuthed =
+        Cache.instance.sessionToken != null && Cache.instance.userId != null;
+
+    final isAuthRoute = path == LoginScreen.path ||
+        path == RegistrationScreen.path ||
+        path == ForgotPasswordScreen.path ||
+        path == VerifyOTPScreen.path ||
+        path == ResetPasswordScreen.path;
+
+    if (isFirstTime) {
+      return path == '/' ? null : '/';
+    }
+
+    if (!isAuthed && path != '/' && !isAuthRoute) {
+      return LoginScreen.path;
+    }
+
+    if (isAuthed && isAuthRoute) {
+      return HomeScreen.path;
+    }
+
+    return null;
+  },
   routes: [
     GoRoute(
       path: '/',
@@ -14,7 +44,6 @@ final router = GoRouter(
           ..getSessionToken()
           ..getUserId();
 
-        debugPrint(Cache.instance.sessionToken);
         if ((Cache.instance.sessionToken == null ||
                 Cache.instance.userId == null) &&
             !cacheHelper.isFirstTime()) {

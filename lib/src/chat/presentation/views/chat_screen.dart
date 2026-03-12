@@ -4,9 +4,9 @@ import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
 import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
 import 'package:ecommerce_shop_app/core/widgets/input_field.dart';
-import 'package:ecommerce_shop_app/core/widgets/product/product_card.dart';
-import 'package:ecommerce_shop_app/src/chat/domain/entities/chat_message.dart';
 import 'package:ecommerce_shop_app/src/chat/presentation/app/adapter/chat_cubit.dart';
+import 'package:ecommerce_shop_app/src/chat/presentation/widgets/chat_bubble.dart';
+import 'package:ecommerce_shop_app/src/chat/presentation/widgets/delete_chat_history_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,6 +35,16 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  void _showDeleteConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => BlocProvider.value(
+        value: context.read<ChatCubit>(),
+        child: const DeleteChatHistoryModal(),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -55,8 +65,29 @@ class _ChatScreenState extends State<ChatScreen> {
         centerTitle: true,
         title: Text(
           'AI Assistant',
-          style: TextStyles.heading4.adaptiveColor(context),
+          style: TextStyles.headingMedium3.adaptiveColor(context),
         ),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'delete') {
+                _showDeleteConfirmation(context);
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    Icon(Icons.delete_outline, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text('Delete Chat History', style: TextStyle(color: Colors.red)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -65,6 +96,9 @@ class _ChatScreenState extends State<ChatScreen> {
               listener: (context, state) {
                 if (state is ChatMessagesUpdated) {
                   _scrollToBottom();
+                }
+                if (state is ChatHistoryDeleted) {
+                  CoreUtils.showSnackBar(context, message: 'Chat history deleted successfully.');
                 }
                 if (state is ChatError) {
                   CoreUtils.showSnackBar(context, message: state.message);
@@ -100,7 +134,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       return _buildLoadingBubble();
                     }
                     final message = messages[index];
-                    return _ChatBubble(message: message);
+                    return ChatBubble(message: message);
                   },
                 );
               },
@@ -175,69 +209,6 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _ChatBubble extends StatelessWidget {
-  const _ChatBubble({required this.message});
-
-  final ChatMessage message;
-
-  @override
-  Widget build(BuildContext context) {
-    final isUser = message.type == ChatMessageType.user;
-    return Align(
-      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Column(
-        crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            padding: const EdgeInsets.all(12),
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.75,
-            ),
-            decoration: BoxDecoration(
-              color: isUser
-                  ? context.theme.primaryColor
-                  : CoreUtils.adaptiveColor(
-                      context,
-                      lightModeColor: MyColors.lightThemeStockColor,
-                      darkModeColor: MyColors.darkThemeDarkSharpColor,
-                    ),
-              borderRadius: BorderRadius.only(
-                topLeft: const Radius.circular(16),
-                topRight: const Radius.circular(16),
-                bottomLeft: Radius.circular(isUser ? 16 : 0),
-                bottomRight: Radius.circular(isUser ? 0 : 16),
-              ),
-            ),
-            child: Text(
-              message.message,
-              style: TextStyles.paragraphSubTextRegular3.copyWith(
-                color: isUser ? Colors.white : context.theme.textTheme.bodyMedium?.color,
-              ),
-            ),
-          ),
-          if (message.responseType == ChatResponseType.products && message.products != null)
-            SizedBox(
-              height: 250,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: message.products!.length,
-                itemBuilder: (context, index) {
-                  final product = message.products![index];
-                  return Container(
-                    width: 160,
-                    margin: const EdgeInsets.only(right: 12),
-                    child: ProductCard(product),
-                  );
-                },
-              ),
-            ),
-        ],
       ),
     );
   }

@@ -7,4 +7,5 @@ abstract class ChatRepository {
   ResultFuture<ChatMessage> sendMessage(String message);
   ResultFuture<List<ChatMessage>> getCachedMessages();
   ResultFuture<void> clearCachedMessages();
+  ResultFuture<void> deleteChatHistory();
 }

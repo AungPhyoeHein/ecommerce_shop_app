@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/entities/chat_message.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/usecases/clear_cached_messages.dart';
+import 'package:ecommerce_shop_app/src/chat/domain/usecases/delete_chat_history.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/usecases/get_cached_messages.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/usecases/send_message.dart';
 import 'package:equatable/equatable.dart';
@@ -12,14 +13,17 @@ class ChatCubit extends Cubit<ChatState> {
     required SendMessage sendMessage,
     required GetCachedMessages getCachedMessages,
     required ClearCachedMessages clearCachedMessages,
+    required DeleteChatHistory deleteChatHistory,
   })  : _sendMessage = sendMessage,
         _getCachedMessages = getCachedMessages,
         _clearCachedMessages = clearCachedMessages,
+        _deleteChatHistory = deleteChatHistory,
         super(const ChatInitial());
 
   final SendMessage _sendMessage;
   final GetCachedMessages _getCachedMessages;
   final ClearCachedMessages _clearCachedMessages;
+  final DeleteChatHistory _deleteChatHistory;
 
   final List<ChatMessage> _messages = [];
 
@@ -47,6 +51,20 @@ class ChatCubit extends Cubit<ChatState> {
       (failure) => emit(ChatError(failure.errorMessage)),
       (_) {
         _messages.clear();
+        emit(const ChatMessagesUpdated([]));
+      },
+    );
+  }
+
+  Future<void> deleteChatHistory() async {
+    emit(const ChatLoading());
+    final result = await _deleteChatHistory();
+
+    result.fold(
+      (failure) => emit(ChatError(failure.errorMessage)),
+      (_) {
+        _messages.clear();
+        emit(const ChatHistoryDeleted());
         emit(const ChatMessagesUpdated([]));
       },
     );

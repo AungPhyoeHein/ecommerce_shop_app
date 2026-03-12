@@ -15,9 +15,11 @@ abstract class ChatRemoteDataSource {
   const ChatRemoteDataSource();
 
   Future<ChatMessageModel> sendMessage(String message);
+  Future<void> deleteChatHistory();
 }
 
 const ASSISTANT_ENDPOINT = '/assistant';
+const CHAT_HISTORY_ENDPOINT = '/assistant/history';
 
 class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
   const ChatRemoteDataSourceImplementation(this._client);
@@ -47,6 +49,37 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
       }
 
       return ChatMessageModel.fromMap(payload as DataMap, ChatMessageType.ai);
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      debugPrint(e.toString());
+      debugPrintStack(stackTrace: s);
+      throw ServerException(
+        message: 'Error Occurred: It\'s not your fault, it\'s ours',
+        statusCode: 500,
+      );
+    }
+  }
+
+  @override
+  Future<void> deleteChatHistory() async {
+    try {
+      final uri = Uri.parse('${NetworkConstants.baseUrl}$CHAT_HISTORY_ENDPOINT');
+
+      final response = await _client.delete(
+        uri,
+        headers: Cache.instance.sessionToken!.toAuthHeaders,
+      );
+
+      final payload = jsonDecode(response.body);
+
+      if (response.statusCode != 200) {
+        final errorResponse = ErrorResponse.fromMap(payload as DataMap);
+        throw ServerException(
+          message: errorResponse.errorMessage,
+          statusCode: response.statusCode,
+        );
+      }
     } on ServerException {
       rethrow;
     } catch (e, s) {
