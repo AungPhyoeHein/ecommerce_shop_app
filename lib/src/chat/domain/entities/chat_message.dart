@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 enum ChatMessageType { user, ai }
 
-enum ChatResponseType { text, faq, products }
+enum ChatResponseType { text, faq, products, recommend }
 
 class ChatMessage extends Equatable {
   const ChatMessage({

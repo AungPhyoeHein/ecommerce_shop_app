@@ -18,6 +18,8 @@ class ChatMessageModel extends ChatMessage {
       responseType = ChatResponseType.faq;
     } else if (map['type'] == 'products') {
       responseType = ChatResponseType.products;
+    } else if (map['type'] == 'recommend') {
+      responseType = ChatResponseType.recommend;
     }
 
     return ChatMessageModel(

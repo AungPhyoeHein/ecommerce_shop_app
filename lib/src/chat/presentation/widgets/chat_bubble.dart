@@ -47,7 +47,9 @@ class ChatBubble extends StatelessWidget {
               ),
             ),
           ),
-          if (message.responseType == ChatResponseType.products && message.products != null)
+          if ((message.responseType == ChatResponseType.products ||
+                  message.responseType == ChatResponseType.recommend) &&
+              message.products != null)
             SizedBox(
               height: 250,
               child: ListView.builder(
