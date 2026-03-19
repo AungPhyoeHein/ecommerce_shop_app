@@ -20,12 +20,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   final unSelectedIconColor = MyColors.lightThemeSecondaryTextColor;
 
-  // Future<void> _loadProductInitialData() async {
-  //   context.read<CategoryCubit>().getCategory(isRefresh: false);
-
-  //   context.read<ProductCubit>().getProducts(page: 1, isRefresh: false);
-  // }
-
   @override
   Widget build(BuildContext context) {
     final int currentIndex = widget.navigationShell.currentIndex;

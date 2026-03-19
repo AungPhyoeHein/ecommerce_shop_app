@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
+import 'package:ecommerce_shop_app/core/widgets/error_image_widget.dart';
+import 'package:ecommerce_shop_app/core/widgets/shimmer_image_loading_widget.dart';
 import 'package:ecommerce_shop_app/src/product/presentation/widgets/image_indicator_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,11 +53,14 @@ class _ProductImageSliderState extends State<ProductImageSlider> {
         CarouselSlider.builder(
           itemCount: carouselCount,
           carouselController: _carouselSliderController,
-          itemBuilder: (context, index, realIndex) => Image.network(
-            widget.images[index],
+          itemBuilder: (context, index, realIndex) => CachedNetworkImage(
+            imageUrl: widget.images[index],
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
+            placeholder: (context, url) => const ShimmerImageLoadingWidget(),
+            errorWidget: (context, error, stackTrace) =>
+                const ErrorImageWidget(),
           ),
           options: CarouselOptions(
             height: double.infinity,

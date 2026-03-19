@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_shop_app/core/entities/product.dart';
+import 'package:ecommerce_shop_app/core/widgets/error_image_widget.dart';
+import 'package:ecommerce_shop_app/core/widgets/shimmer_image_loading_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart'; // 👈 Shimmer ကို import လုပ်ပါ
 
 class ProductCardImage extends StatelessWidget {
   const ProductCardImage(this.product, this.hero, {super.key});
@@ -17,18 +19,15 @@ class ProductCardImage extends StatelessWidget {
             tag: hero,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                product.image,
+              child: CachedNetworkImage(
+                imageUrl: product.image,
                 width: double.infinity,
                 height: double.infinity,
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return _shimmerImageLoading();
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return _errorImageWidget();
-                },
+                placeholder: (context, url) =>
+                    const ShimmerImageLoadingWidget(),
+                errorWidget: (context, error, stackTrace) =>
+                    const ErrorImageWidget(),
               ),
             ),
           ),
@@ -52,25 +51,4 @@ class ProductCardImage extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _shimmerImageLoading() {
-  return Shimmer.fromColors(
-    baseColor: Colors.grey.shade300,
-    highlightColor: Colors.grey.shade100,
-    child: Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.white,
-    ),
-  );
-}
-
-Widget _errorImageWidget() {
-  return Container(
-    color: Colors.grey.shade200,
-    child: const Center(
-      child: Icon(Icons.broken_image_outlined, color: Colors.grey, size: 30),
-    ),
-  );
 }

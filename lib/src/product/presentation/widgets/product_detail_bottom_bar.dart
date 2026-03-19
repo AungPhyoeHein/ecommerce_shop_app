@@ -6,8 +6,8 @@ class ProductDetailBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
+    return const Padding(
+      padding: EdgeInsets.all(20.0),
       child: RoundedButton(text: "Add to Cart", height: 50),
     );
   }

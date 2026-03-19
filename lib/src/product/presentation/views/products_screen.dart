@@ -30,7 +30,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   void initState() {
     super.initState();
-    _loadInitialData();
+    _loadInitialData(isRefresh: true);
     _scrollController.addListener(_onScroll);
   }
 
@@ -71,7 +71,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Discover Product', style: TextStyles.headingMedium3),
+        title: const Text('Discover Product', style: TextStyles.headingMedium3),
       ),
       body: PullRefreshWidget(
         onRefresh: _refreshData,
@@ -81,11 +81,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
           cacheExtent: 1500,
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-          children: [
-            const CategoriesSelectButtonGroup(),
-            const Gap(20),
-            const ProductsListWidget(),
-            const _PaginationStatus(),
+          children: const [
+            CategoriesSelectButtonGroup(),
+            Gap(20),
+            ProductsListWidget(),
+            _PaginationStatus(),
           ],
         ),
       ),
@@ -101,7 +101,7 @@ class _PaginationStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProductCubit, ProductState>(
       builder: (context, state) {
-        if (state is ProductLoading) {
+        if (state is ProductLoading || state is ProductInitial) {
           return loadingOfProduct();
         }
         if (state is GotProducts && state.isEnd && state.products.isNotEmpty) {

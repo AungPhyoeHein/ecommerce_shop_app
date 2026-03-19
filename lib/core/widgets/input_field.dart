@@ -28,6 +28,7 @@ class InputField extends StatelessWidget {
     this.prefixIconStyle,
     this.focusNode,
     this.onTap,
+    this.fillColor,
   });
 
   final Widget? suffixIcon;
@@ -48,6 +49,7 @@ class InputField extends StatelessWidget {
   final bool expendable;
   final BoxConstraints? suffixIconConstraints;
   final TextStyle? prefixIconStyle;
+  final Color? fillColor;
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +81,11 @@ class InputField extends StatelessWidget {
         prefix: prefix,
         prefixIcon: prefixIcon,
         prefixStyle: prefixIconStyle,
+
         contentPadding:
             contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
         filled: true,
-        fillColor: CoreUtils.adaptiveColor(
+        fillColor: fillColor ?? CoreUtils.adaptiveColor(
           context,
           lightModeColor: MyColors.lightThemeStockColor,
           darkModeColor: MyColors.darkThemeDarkSharpColor,

@@ -18,6 +18,15 @@ class ChatRepositoryImplementation implements ChatRepository {
     try {
       final result = await _remoteDataSource.sendMessage(message);
       final currentMessages = await _localDataSource.getMessages();
+      
+      final userMessage = ChatMessage(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        message: message,
+        type: ChatMessageType.user,
+        timestamp: DateTime.now(),
+      );
+      
+      currentMessages.add(userMessage);
       currentMessages.add(result);
       await _localDataSource.cacheMessages(currentMessages);
       return Right(result);
@@ -29,10 +38,23 @@ class ChatRepositoryImplementation implements ChatRepository {
   @override
   ResultFuture<List<ChatMessage>> getCachedMessages() async {
     try {
-      final result = await _localDataSource.getMessages();
-      return Right(result);
+      final remoteMessages = await _remoteDataSource.getChatHistory();
+      await _localDataSource.cacheMessages(remoteMessages);
+      return Right(remoteMessages);
+    } on ServerException catch (e) {
+      try {
+        final localMessages = await _localDataSource.getMessages();
+        return Right(localMessages);
+      } catch (_) {
+        return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+      }
     } catch (e) {
-      return Left(CacheFailure(message: e.toString()));
+      try {
+        final localMessages = await _localDataSource.getMessages();
+        return Right(localMessages);
+      } catch (_) {
+        return Left(CacheFailure(message: e.toString()));
+      }
     }
   }
 

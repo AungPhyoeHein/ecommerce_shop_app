@@ -1,4 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
+import 'package:ecommerce_shop_app/core/widgets/error_image_widget.dart';
+import 'package:ecommerce_shop_app/core/widgets/shimmer_image_loading_widget.dart';
 import 'package:flutter/material.dart';
 
 class ImageIndicatorWidget extends StatelessWidget {
@@ -11,7 +14,7 @@ class ImageIndicatorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 50,
-      margin: EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         border: Border.all(
           width: 1,
@@ -23,11 +26,15 @@ class ImageIndicatorWidget extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: Image.network(
-          image,
+        child: CachedNetworkImage(
+          imageUrl: image,
           width: double.infinity,
           height: double.infinity,
           fit: BoxFit.cover,
+          placeholder: (context, url) => const ShimmerImageLoadingWidget(),
+          errorWidget: (context, error, stackTrace) {
+            return const ErrorImageWidget();
+          },
         ),
       ),
     );

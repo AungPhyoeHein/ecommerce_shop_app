@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ecommerce_shop_app/core/model/product_model.dart';
+import 'package:ecommerce_shop_app/core/utils/typedef.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/entities/chat_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,6 +29,11 @@ class ChatLocalDataSourceImplementation implements ChatLocalDataSource {
         'type': m.type.name,
         'responseType': m.responseType.name,
         'timestamp': m.timestamp?.toIso8601String(),
+        'products': m.products != null
+            ? m.products!
+                .map((p) => (p as ProductModel).toMap())
+                .toList()
+            : null,
       });
     }).toList();
     await _prefs.setStringList(CACHED_MESSAGES, messagesJson);
@@ -45,6 +52,11 @@ class ChatLocalDataSourceImplementation implements ChatLocalDataSource {
         type: ChatMessageType.values.byName(map['type']),
         responseType: ChatResponseType.values.byName(map['responseType']),
         timestamp: map['timestamp'] != null ? DateTime.parse(map['timestamp']) : null,
+        products: map['products'] != null
+            ? (map['products'] as List)
+                .map((p) => ProductModel.fromMap(p as DataMap))
+                .toList()
+            : null,
       );
     }).toList();
   }

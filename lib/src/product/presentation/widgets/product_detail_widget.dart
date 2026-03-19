@@ -4,10 +4,15 @@ import 'package:ecommerce_shop_app/core/extensions/string_extensions.dart';
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
+import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/review_cubit.dart';
+import 'package:ecommerce_shop_app/src/product/presentation/widgets/review_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:group_button/group_button.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 
 class ProductDetailWidget extends StatefulWidget {
   const ProductDetailWidget({super.key, required this.product});
@@ -20,11 +25,22 @@ class ProductDetailWidget extends StatefulWidget {
 
 class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   void _openBottonSheet() {
+    final reviewCubit = context.read<ReviewCubit>();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: MyColors.darkThemeDarkNavBarColor,
-      builder: (context) => Container(height: 800),
+      useSafeArea: true,
+      isDismissible: true,
+      enableDrag: true,
+      backgroundColor: CoreUtils.adaptiveColor(
+        context,
+        lightModeColor: MyColors.lightThemeTintStockColour,
+        darkModeColor: MyColors.darkThemeDarkNavBarColor,
+      ),
+      builder: (modalContext) => BlocProvider.value(
+        value: reviewCubit,
+        child: ReviewBottomSheet(productId: widget.product.id),
+      ),
     );
   }
 
@@ -37,13 +53,13 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           children: [
             RatingBar.readOnly(
               isHalfAllowed: true,
-              filledIcon: Icons.star,
-              emptyIcon: Icons.star_border,
+              filledIcon: HugeIconsSolid.star,
+              emptyIcon: HugeIconsStroke.star,
               emptyColor: MyColors.lightThemeSecondaryTextColor,
               filledColor: Colors.yellowAccent,
               initialRating: widget.product.rating,
               halfFilledColor: Colors.yellow,
-              halfFilledIcon: Icons.star_half,
+              halfFilledIcon: HugeIconsSolid.starHalf,
               size: 14,
             ),
             Text(
@@ -66,9 +82,9 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           style: TextStyles.headingMedium1.adaptiveColor(context),
         ),
         Text(widget.product.name, style: TextStyles.paragraphRegular.grey),
-        Gap(10),
+        const Gap(10),
         Container(
-          padding: EdgeInsets.all(3),
+          padding: const EdgeInsets.all(3),
           decoration: BoxDecoration(
             color: MyColors.lightThemeSecondaryTextColor,
             borderRadius: BorderRadius.circular(20),
@@ -99,11 +115,9 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           ),
         ),
 
-        Gap(20),
+        const Gap(20),
         GroupButton(
           options: GroupButtonOptions(
-            buttonHeight: 30,
-            buttonWidth: 30,
             borderRadius: BorderRadius.circular(50),
             unselectedTextStyle: TextStyles.paragraphSubTextRegular.grey,
             selectedTextStyle: TextStyles.paragraphSubTextRegular.white,
@@ -114,26 +128,26 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           ),
           buttons: widget.product.sizes,
         ),
-        Gap(20),
+        const Gap(20),
         Text(
           "Description",
           style: TextStyles.headingMedium4.adaptiveColor(context),
         ),
-        Gap(10),
+        const Gap(10),
         SelectableText(
           widget.product.description,
           style: TextStyles.paragraphSubTextRegular2.grey,
         ),
-        Gap(20),
-        Divider(),
-        Gap(20),
+        const Gap(20),
+        const Divider(),
+        const Gap(20),
         ListTile(
           onTap: _openBottonSheet,
           title: Text(
             "Reviews (${widget.product.reviews.length})",
             style: TextStyles.headingMedium4.adaptiveColor(context),
           ),
-          trailing: Icon(CupertinoIcons.forward),
+          trailing: const Icon(CupertinoIcons.forward),
           contentPadding: EdgeInsets.zero,
         ),
       ],

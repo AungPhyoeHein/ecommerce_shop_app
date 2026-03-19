@@ -34,7 +34,7 @@ class _BannerImagesWidgetState extends State<BannerImagesWidget> {
               setState(() => _activeIndex = index);
             },
           ),
-          itemBuilder: (_, index, __) => ClipRRect(
+          itemBuilder: (_, index, _) => ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image.asset(
               'assets/images/carousel.png',
@@ -43,6 +43,7 @@ class _BannerImagesWidgetState extends State<BannerImagesWidget> {
             ),
           ),
         ),
+
         const SizedBox(height: 10),
         AnimatedSmoothIndicator(
           activeIndex: _activeIndex,

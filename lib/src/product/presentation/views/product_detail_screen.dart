@@ -44,28 +44,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return BlocBuilder<ProductCubit, ProductState>(
       builder: (context, state) {
         return Scaffold(
-          body: Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    ProductDetailImageHeader(
-                      hero: widget.hero,
-                      images: state is GotProduct
-                          ? [state.product.image, ...state.product.images]
-                          : [widget.product!.image],
-                    ),
-                    ProductDetailInfoContainer(
-                      child: state is GotProduct
-                          ? ProductDetailWidget(product: state.product)
-                          : const ProductDetailShimmer(),
-                    ),
-                  ],
+          body: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      ProductDetailImageHeader(
+                        hero: widget.hero,
+                        images: state is GotProduct
+                            ? [state.product.image, ...state.product.images]
+                            : [widget.product!.image],
+                      ),
+                      ProductDetailInfoContainer(
+                        child: state is GotProduct
+                            ? ProductDetailWidget(product: state.product)
+                            : const ProductDetailShimmer(),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const ProductDetailBottomBar(),
-            ],
+                const ProductDetailBottomBar(),
+              ],
+            ),
           ),
         );
       },

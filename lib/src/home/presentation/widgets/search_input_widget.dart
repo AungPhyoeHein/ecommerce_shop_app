@@ -29,9 +29,9 @@ class _SearchInputWidgetState extends State<SearchInputWidget> {
   Widget build(BuildContext context) {
     return InputField(
       controller: _controller,
-      prefixIcon: Padding(
-        padding: const EdgeInsets.all(12),
-        child: const SvgIcon(IconConstants.search, size: 20),
+      prefixIcon: const Padding(
+        padding: EdgeInsets.all(12),
+        child: SvgIcon(IconConstants.search, size: 20),
       ),
       suffixIcon: IntrinsicHeight(
         child: Row(

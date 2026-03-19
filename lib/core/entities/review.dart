@@ -15,7 +15,7 @@ class Review extends Equatable {
   final String id;
   final String userId;
   final String userName;
-  final double rating;
+  final int rating;
   final String? comment;
   final DateTime? date;
   final DateTime? createdAt;

@@ -15,6 +15,7 @@ abstract class ChatRemoteDataSource {
   const ChatRemoteDataSource();
 
   Future<ChatMessageModel> sendMessage(String message);
+  Future<List<ChatMessageModel>> getChatHistory();
   Future<void> deleteChatHistory();
 }
 
@@ -38,7 +39,41 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
         headers: Cache.instance.sessionToken!.toAuthHeaders,
       );
 
-      final payload = jsonDecode(response.body);
+      final payload = jsonDecode(utf8.decode(response.bodyBytes));
+
+      // Handle both 200 (success) and 404 (valid AI "not found" response)
+      if (response.statusCode != 200 && response.statusCode != 404) {
+        final errorResponse = ErrorResponse.fromMap(payload as DataMap);
+        throw ServerException(
+          message: errorResponse.errorMessage,
+          statusCode: response.statusCode,
+        );
+      }
+
+      return ChatMessageModel.fromMap(payload as DataMap, ChatMessageType.ai);
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      debugPrint(e.toString());
+      debugPrintStack(stackTrace: s);
+      throw ServerException(
+        message: 'Error Occurred: It\'s not your fault, it\'s ours',
+        statusCode: 500,
+      );
+    }
+  }
+
+  @override
+  Future<List<ChatMessageModel>> getChatHistory() async {
+    try {
+      final uri = Uri.parse('${NetworkConstants.baseUrl}$CHAT_HISTORY_ENDPOINT');
+
+      final response = await _client.get(
+        uri,
+        headers: Cache.instance.sessionToken!.toAuthHeaders,
+      );
+
+      final payload = jsonDecode(utf8.decode(response.bodyBytes));
 
       if (response.statusCode != 200) {
         final errorResponse = ErrorResponse.fromMap(payload as DataMap);
@@ -48,7 +83,13 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
         );
       }
 
-      return ChatMessageModel.fromMap(payload as DataMap, ChatMessageType.ai);
+      final messagesList = payload['messages'] as List<dynamic>? ?? [];
+      return messagesList.map((msg) {
+        final map = msg as DataMap;
+        final role = map['role'] as String?;
+        final type = role == 'ai' ? ChatMessageType.ai : ChatMessageType.user;
+        return ChatMessageModel.fromMap(map, type);
+      }).toList();
     } on ServerException {
       rethrow;
     } catch (e, s) {
@@ -71,7 +112,7 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
         headers: Cache.instance.sessionToken!.toAuthHeaders,
       );
 
-      final payload = jsonDecode(response.body);
+      final payload = jsonDecode(utf8.decode(response.bodyBytes));
 
       if (response.statusCode != 200) {
         final errorResponse = ErrorResponse.fromMap(payload as DataMap);

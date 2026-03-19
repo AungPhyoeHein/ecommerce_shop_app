@@ -1,8 +1,8 @@
 import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
-import 'package:ecommerce_shop_app/core/widgets/product/product_card.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/entities/chat_message.dart';
+import 'package:ecommerce_shop_app/src/chat/presentation/widgets/chat_product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_shop_app/core/extensions/context_extension.dart';
 
@@ -43,26 +43,31 @@ class ChatBubble extends StatelessWidget {
             child: Text(
               message.message,
               style: TextStyles.paragraphSubTextRegular3.copyWith(
-                color: isUser ? Colors.white : context.theme.textTheme.bodyMedium?.color,
+                color: isUser
+                    ? Colors.white
+                    : MyColors.classicAdaptiveTextColor(context),
               ),
             ),
           ),
           if ((message.responseType == ChatResponseType.products ||
                   message.responseType == ChatResponseType.recommend) &&
-              message.products != null)
-            SizedBox(
-              height: 250,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: message.products!.length,
-                itemBuilder: (context, index) {
-                  final product = message.products![index];
-                  return Container(
-                    width: 160,
-                    margin: const EdgeInsets.only(right: 12),
-                    child: ProductCard(product),
-                  );
-                },
+              message.products != null &&
+              message.products!.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+              child: SizedBox(
+                height: 280,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: message.products!.length,
+                  itemBuilder: (context, index) {
+                    final product = message.products![index];
+                    return Container(
+                      margin: const EdgeInsets.only(right: 12),
+                      child: ChatProductCard(product: product),
+                    );
+                  },
+                ),
               ),
             ),
         ],

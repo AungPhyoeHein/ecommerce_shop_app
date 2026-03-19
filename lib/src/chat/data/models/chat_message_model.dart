@@ -23,7 +23,7 @@ class ChatMessageModel extends ChatMessage {
     }
 
     return ChatMessageModel(
-      id: DateTime.now().millisecondsSinceEpoch.toString(), // Generating a temporary ID
+      id: map['_id'] as String? ?? DateTime.now().millisecondsSinceEpoch.toString(), // Generating a temporary ID if missing
       message: map['message'] as String? ?? map['response'] as String? ?? map['response_text'] as String? ?? '',
       type: type,
       responseType: responseType,
@@ -32,7 +32,7 @@ class ChatMessageModel extends ChatMessage {
               .map((e) => ProductModel.fromMap(e as DataMap))
               .toList()
           : null,
-      timestamp: DateTime.now(),
+      timestamp: map['timestamp'] != null ? DateTime.parse(map['timestamp']) : DateTime.now(),
     );
   }
 

@@ -34,7 +34,7 @@ class CategoryListWidget extends StatelessWidget {
         }
 
         if (state is CategoryLoading) {
-          return _CategoryList(state: null);
+          return const _CategoryList(state: null);
         }
 
         return SizedBox(
@@ -64,7 +64,7 @@ class _CategoryList extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: state != null ? state!.categories.length : _shimmerCount,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        separatorBuilder: (_, __) => const SizedBox(width: 15),
+        separatorBuilder: (_, _) => const SizedBox(width: 15),
         itemBuilder: (_, index) {
           return state != null
               ? CategoryItem(category: state!.categories[index])

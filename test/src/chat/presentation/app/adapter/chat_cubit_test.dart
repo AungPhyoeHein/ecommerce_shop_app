@@ -12,11 +12,13 @@ import 'package:mocktail/mocktail.dart';
 class MockSendMessage extends Mock implements SendMessage {}
 class MockGetCachedMessages extends Mock implements GetCachedMessages {}
 class MockClearCachedMessages extends Mock implements ClearCachedMessages {}
+class MockDeleteChatHistory extends Mock implements DeleteChatHistory {}
 
 void main() {
   late SendMessage sendMessage;
   late GetCachedMessages getCachedMessages;
   late ClearCachedMessages clearCachedMessages;
+  late DeleteChatHistory deleteChatHistory;
   late ChatCubit chatCubit;
 
   const tMessage = 'Hello AI';
@@ -33,10 +35,12 @@ void main() {
     sendMessage = MockSendMessage();
     getCachedMessages = MockGetCachedMessages();
     clearCachedMessages = MockClearCachedMessages();
+    deleteChatHistory = MockDeleteChatHistory();
     chatCubit = ChatCubit(
       sendMessage: sendMessage,
       getCachedMessages: getCachedMessages,
       clearCachedMessages: clearCachedMessages,
+      deleteChatHistory: deleteChatHistory,
     );
   });
 
