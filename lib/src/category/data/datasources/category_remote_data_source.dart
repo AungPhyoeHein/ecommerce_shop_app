@@ -29,7 +29,7 @@ class CategoryRemoteDataSourceImplementation
       final uri = Uri.parse('${NetworkConstants.baseUrl}$CATEGORIES_ENDPOINT');
       final response = await _client.get(
         uri,
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
       await NetworkUtils.renewToken(response);
@@ -42,9 +42,14 @@ class CategoryRemoteDataSourceImplementation
         );
       }
 
-      final List<dynamic> data = payload as List<dynamic>;
+      if (payload is! List) {
+        throw ServerException(
+          message: 'Expected a list of categories but got something else.',
+          statusCode: 500,
+        );
+      }
 
-      return data
+      return payload
           .map((category) => CategoryModel.fromMap(category as DataMap))
           .toList();
     } on ServerException {

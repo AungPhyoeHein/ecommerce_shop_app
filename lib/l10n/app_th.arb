@@ -1,0 +1,15 @@
+{
+  "profile": "โปรไฟล์ของฉัน",
+  "settingsAndSupport": "การตั้งค่าและการสนับสนุน",
+  "darkMode": "โหมดกลางคืน",
+  "language": "ภาษา",
+  "on": "เปิด",
+  "off": "ปิด",
+  "notifications": "การแจ้งเตือน",
+  "security": "ความปลอดภัย",
+  "payment": "การชำระเงิน",
+  "logout": "ออกจากระบบ",
+  "accountOverview": "ภาพรวมบัญชี",
+  "guestUser": "ผู้ใช้ทั่วไป",
+  "joinCommunity": "เข้าร่วมชุมชนของเรา!"
+}

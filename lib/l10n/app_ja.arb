@@ -1,0 +1,15 @@
+{
+  "profile": "マイプロフィール",
+  "settingsAndSupport": "設定とサポート",
+  "darkMode": "ダークモード",
+  "language": "言語",
+  "on": "オン",
+  "off": "オフ",
+  "notifications": "通知",
+  "security": "セキュリティ",
+  "payment": "支払い",
+  "logout": "ログアウト",
+  "accountOverview": "アカウントの概要",
+  "guestUser": "ゲストユーザー",
+  "joinCommunity": "コミュニティに参加しよう！"
+}

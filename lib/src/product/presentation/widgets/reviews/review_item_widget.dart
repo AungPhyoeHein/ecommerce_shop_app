@@ -1,6 +1,7 @@
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:ecommerce_shop_app/core/entities/review.dart';
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
+import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -35,10 +36,12 @@ class ReviewItemWidget extends StatelessWidget {
               style: TextStyles.paragraphSubTextRegular.adaptiveColor(context),
             ),
             const Gap(6),
-            Text(
+            Row(children: [Text(
               GetTimeAgo.parse(review.createdAt!),
               style: TextStyles.paragraphSubTextRegular.grey,
             ),
+            const Gap(6),
+            Icon(HugeIconsStroke.delete01,size: 16,color: MyColors.classicAdaptiveTextColor(context),)])
           ],
         ),
       ),

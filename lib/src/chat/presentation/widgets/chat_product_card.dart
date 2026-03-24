@@ -18,6 +18,7 @@ class ChatProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String hero = GoRouterState.of(context).uri.toString() + 'chat_${product.id}';
+    print(product.image);
     return GestureDetector(
       onTap: () {
         context.push(

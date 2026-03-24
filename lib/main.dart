@@ -1,7 +1,12 @@
+import 'package:ecommerce_shop_app/core/common/app/providers/user_provider.dart';
+import 'package:ecommerce_shop_app/core/common/app/providers/theme_provider.dart';
+import 'package:ecommerce_shop_app/core/common/app/providers/locale_provider.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/services/injection_container.dart';
 import 'package:ecommerce_shop_app/core/services/router.dart';
+import 'package:ecommerce_shop_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,13 +40,27 @@ class MyApp extends StatelessWidget {
       ),
       brightness: Brightness.dark,
     );
-    return MaterialApp.router(
-      title: 'ECOMI',
-      themeMode: ThemeMode.system,
-      theme: theme,
-      darkTheme: darkTheme,
-      routerConfig: router,
-      debugShowCheckedModeBanner: false,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => sl<UserProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<ThemeProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<LocaleProvider>()),
+      ],
+      child: Consumer2<ThemeProvider, LocaleProvider>(
+        builder: (context, themeProvider, localeProvider, child) {
+          return MaterialApp.router(
+            title: 'ECOMI',
+            themeMode: themeProvider.themeMode,
+            theme: theme,
+            darkTheme: darkTheme,
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            routerConfig: router,
+            debugShowCheckedModeBanner: false,
+          );
+        },
+      ),
     );
   }
 }

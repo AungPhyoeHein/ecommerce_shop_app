@@ -1,0 +1,15 @@
+{
+  "profile": "My Profile",
+  "settingsAndSupport": "Settings & Support",
+  "darkMode": "Dark Mode",
+  "language": "Language",
+  "on": "On",
+  "off": "Off",
+  "notifications": "Notifications",
+  "security": "Security",
+  "payment": "Payment",
+  "logout": "Logout",
+  "accountOverview": "Account Overview",
+  "guestUser": "Guest User",
+  "joinCommunity": "Join our community!"
+}

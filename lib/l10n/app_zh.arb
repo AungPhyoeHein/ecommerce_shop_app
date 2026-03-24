@@ -1,0 +1,15 @@
+{
+  "profile": "我的档案",
+  "settingsAndSupport": "设置与支持",
+  "darkMode": "深色模式",
+  "language": "语言",
+  "on": "开",
+  "off": "关",
+  "notifications": "通知",
+  "security": "安全",
+  "payment": "支付",
+  "logout": "退出登录",
+  "accountOverview": "账户总览",
+  "guestUser": "访客",
+  "joinCommunity": "加入我们的社区！"
+}

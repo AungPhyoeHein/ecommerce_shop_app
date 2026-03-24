@@ -14,4 +14,7 @@ extension TextStyleExt on TextStyle {
 
   TextStyle adaptiveColor(BuildContext context) =>
       copyWith(color: MyColors.classicAdaptiveTextColor(context));
+
+  TextStyle adaptiveSecondaryColor(BuildContext context) =>
+      copyWith(color: MyColors.adaptiveSecondaryTextColor(context));
 }

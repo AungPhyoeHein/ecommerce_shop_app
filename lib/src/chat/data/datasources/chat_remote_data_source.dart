@@ -36,7 +36,7 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
 
       final response = await _client.get(
         uri,
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
       final payload = jsonDecode(utf8.decode(response.bodyBytes));
@@ -50,7 +50,14 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
         );
       }
 
-      return ChatMessageModel.fromMap(payload as DataMap, ChatMessageType.ai);
+      if (payload is! DataMap) {
+        throw ServerException(
+          message: 'Expected a message map but got something else.',
+          statusCode: 500,
+        );
+      }
+
+      return ChatMessageModel.fromMap(payload, ChatMessageType.ai);
     } on ServerException {
       rethrow;
     } catch (e, s) {
@@ -70,7 +77,7 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
 
       final response = await _client.get(
         uri,
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
       final payload = jsonDecode(utf8.decode(response.bodyBytes));
@@ -80,6 +87,13 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
         throw ServerException(
           message: errorResponse.errorMessage,
           statusCode: response.statusCode,
+        );
+      }
+
+      if (payload is! DataMap) {
+        throw ServerException(
+          message: 'Expected a history map but got something else.',
+          statusCode: 500,
         );
       }
 
@@ -105,11 +119,12 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
   @override
   Future<void> deleteChatHistory() async {
     try {
-      final uri = Uri.parse('${NetworkConstants.baseUrl}$CHAT_HISTORY_ENDPOINT');
+      final uri =
+          Uri.parse('${NetworkConstants.baseUrl}$CHAT_HISTORY_ENDPOINT');
 
       final response = await _client.delete(
         uri,
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
       final payload = jsonDecode(utf8.decode(response.bodyBytes));

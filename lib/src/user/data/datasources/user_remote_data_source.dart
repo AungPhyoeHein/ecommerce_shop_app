@@ -41,16 +41,22 @@ class UserRemoteDataSourceImplementation implements UserRemoteDataSource {
       );
       final response = await _client.get(
         uri,
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
       final payload = jsonDecode(response.body);
       await NetworkUtils.renewToken(response);
 
       if (response.statusCode != 200) {
-        final errorResponse = ErrorResponse.fromMap(payload);
+        final errorResponse = ErrorResponse.fromMap(payload as DataMap);
         throw ServerException(
           message: errorResponse.errorMessage,
           statusCode: response.statusCode,
+        );
+      }
+      if (payload is! DataMap) {
+        throw ServerException(
+          message: 'Expected a user map but got something else.',
+          statusCode: 500,
         );
       }
       return UserModel.fromMap(payload);
@@ -75,15 +81,22 @@ class UserRemoteDataSourceImplementation implements UserRemoteDataSource {
 
       final response = await _client.get(
         uri,
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
-      final payload = jsonDecode(response.body) as DataMap;
+      final payload = jsonDecode(response.body);
       if (response.statusCode != 200) {
-        final errorResponse = ErrorResponse.fromMap(payload);
-        throw ServerFailure(
+        final errorResponse = ErrorResponse.fromMap(payload as DataMap);
+        throw ServerException(
           message: errorResponse.errorMessage,
           statusCode: response.statusCode,
+        );
+      }
+
+      if (payload is! DataMap || payload['url'] is! String) {
+        throw ServerException(
+          message: 'Expected a payment profile url but got something else.',
+          statusCode: 500,
         );
       }
 
@@ -113,15 +126,22 @@ class UserRemoteDataSourceImplementation implements UserRemoteDataSource {
       final response = await _client.patch(
         uri,
         body: jsonEncode(updateData),
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
-      final payload = jsonDecode(response.body) as DataMap;
+      final payload = jsonDecode(response.body);
       if (response.statusCode != 200) {
-        final errorResponse = ErrorResponse.fromMap(payload);
-        throw ServerFailure(
+        final errorResponse = ErrorResponse.fromMap(payload as DataMap);
+        throw ServerException(
           message: errorResponse.errorMessage,
           statusCode: response.statusCode,
+        );
+      }
+
+      if (payload is! DataMap) {
+        throw ServerException(
+          message: 'Expected a user map but got something else.',
+          statusCode: 500,
         );
       }
 

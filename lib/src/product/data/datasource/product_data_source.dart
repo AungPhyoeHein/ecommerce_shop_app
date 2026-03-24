@@ -83,16 +83,23 @@ class ProductDataSourceImplementation implements ProductDataSource {
 
       final response = await _client.get(
         uri,
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
       await NetworkUtils.renewToken(response);
-      final payload = jsonDecode(response.body) as DataMap;
+      final payload = jsonDecode(response.body);
       if (response.statusCode != 200) {
-        final errorResponse = ErrorResponse.fromMap(payload);
+        final errorResponse = ErrorResponse.fromMap(payload as DataMap);
         throw ServerException(
           message: errorResponse.errorMessage,
           statusCode: response.statusCode,
+        );
+      }
+
+      if (payload is! DataMap) {
+        throw ServerException(
+          message: 'Expected a product map but got something else.',
+          statusCode: 500,
         );
       }
 
@@ -140,7 +147,7 @@ class ProductDataSourceImplementation implements ProductDataSource {
 
       final response = await _client.get(
         uri,
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
       await NetworkUtils.renewToken(response);
@@ -207,7 +214,7 @@ class ProductDataSourceImplementation implements ProductDataSource {
 
       final response = await _client.get(
         uri,
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
       final payload = jsonDecode(response.body);
@@ -254,23 +261,28 @@ class ProductDataSourceImplementation implements ProductDataSource {
       final result = await _client.post(
         uri,
         body: jsonEncode({"rating": rating, "comment": comment}),
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
-      final payload = jsonDecode(result.body) as DataMap;
+      final payload = jsonDecode(result.body);
 
       if (result.statusCode != 201) {
-        final errorResponse = ErrorResponse.fromMap(payload);
+        final errorResponse = ErrorResponse.fromMap(payload as DataMap);
         throw ServerException(
           message: errorResponse.errorMessage,
           statusCode: result.statusCode,
         );
       }
 
+      if (payload is! DataMap) {
+        throw ServerException(
+          message: 'Expected a product map but got something else.',
+          statusCode: 500,
+        );
+      }
+
       _reviews.clear();
-      _reviews.addAll(
-        await getProductReviews(page: _reviewPage ?? 1, productId: productId),
-      );
+      await getProductReviews(page: _reviewPage ?? 1, productId: productId);
 
       return ProductModel.fromMap(payload);
     } on ServerException {
@@ -304,7 +316,7 @@ class ProductDataSourceImplementation implements ProductDataSource {
       );
       final result = await _client.get(
         uri,
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
       final payload = jsonDecode(result.body);
@@ -317,8 +329,15 @@ class ProductDataSourceImplementation implements ProductDataSource {
         );
       }
 
+      if (payload is! List) {
+        throw ServerException(
+          message: 'Expected a list of reviews but got something else.',
+          statusCode: 500,
+        );
+      }
+
       _reviews.addAll(
-        (payload as List)
+        payload
             .map((review) => ReviewModel.fromMap(review as DataMap))
             .toList(),
       );
@@ -351,15 +370,22 @@ class ProductDataSourceImplementation implements ProductDataSource {
       final result = await _client.patch(
         uri,
         body: jsonEncode({"rating": rating, "comment": comment}),
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
-      final payload = jsonDecode(result.body) as DataMap;
+      final payload = jsonDecode(result.body);
       if (result.statusCode != 201) {
-        final errorResponse = ErrorResponse.fromMap(payload);
+        final errorResponse = ErrorResponse.fromMap(payload as DataMap);
         throw ServerException(
           message: errorResponse.errorMessage,
           statusCode: result.statusCode,
+        );
+      }
+
+      if (payload is! DataMap) {
+        throw ServerException(
+          message: 'Expected a review map but got something else.',
+          statusCode: 500,
         );
       }
 
@@ -388,7 +414,7 @@ class ProductDataSourceImplementation implements ProductDataSource {
 
       final result = await _client.delete(
         uri,
-        headers: Cache.instance.sessionToken!.toAuthHeaders,
+        headers: Cache.instance.sessionToken?.toAuthHeaders,
       );
 
       final payload = jsonDecode(result.body) as DataMap;

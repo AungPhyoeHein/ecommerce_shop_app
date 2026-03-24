@@ -230,21 +230,27 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
       final uri = Uri.parse(
         '${NetworkConstants.baseUrl}$VERITY_TOKEN_ENDPOINT',
       );
+      final token = sl<CacheHelper>().getSessionToken();
       final response = await _client.post(
         uri,
-        headers: CacheHelper(sl()).getSessionToken().toString().toAuthHeaders,
+        headers: token?.toAuthHeaders,
       );
       final payload = jsonDecode(response.body);
       await NetworkUtils.renewToken(response);
       if (response.statusCode != 200) {
-        payload as DataMap;
-        final errorResponse = ErrorResponse.fromMap(payload);
+        final errorResponse = ErrorResponse.fromMap(payload as DataMap);
         throw ServerException(
           message: errorResponse.errorMessage,
           statusCode: response.statusCode,
         );
       }
-      return payload as bool;
+      if (payload is! bool) {
+        throw ServerException(
+          message: 'Expected a boolean but got something else.',
+          statusCode: 500,
+        );
+      }
+      return payload;
     } on ServerException {
       rethrow;
     } catch (e, s) {

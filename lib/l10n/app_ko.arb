@@ -1,0 +1,15 @@
+{
+  "profile": "내 프로필",
+  "settingsAndSupport": "설정 및 지원",
+  "darkMode": "다크 모드",
+  "language": "언어",
+  "on": "켜짐",
+  "off": "꺼짐",
+  "notifications": "알림",
+  "security": "보안",
+  "payment": "결제",
+  "logout": "로그아웃",
+  "accountOverview": "계정 개요",
+  "guestUser": "게스트 사용자",
+  "joinCommunity": "커뮤니티에 가입하세요!"
+}

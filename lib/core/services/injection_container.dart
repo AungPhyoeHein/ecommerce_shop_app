@@ -47,5 +47,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../common/app/providers/user_provider.dart';
+import '../common/app/providers/theme_provider.dart';
+import '../common/app/providers/locale_provider.dart';
 
 part 'injection_container.main.dart';

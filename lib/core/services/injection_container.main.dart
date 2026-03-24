@@ -67,7 +67,9 @@ Future<void> _cacheInit() async {
 
   sl
     ..registerLazySingleton(() => (CacheHelper(sl())))
-    ..registerLazySingleton(() => prefs);
+    ..registerLazySingleton(() => prefs)
+    ..registerLazySingleton(() => ThemeProvider(sl()))
+    ..registerLazySingleton(() => LocaleProvider(sl()));
 }
 
 Future<void> _categoryInit() async {

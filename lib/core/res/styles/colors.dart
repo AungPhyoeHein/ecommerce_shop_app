@@ -35,4 +35,32 @@ abstract class MyColors {
         lightModeColor: lightThemePrimaryTextColor,
         darkModeColor: lightThemeWhiteColor,
       );
+
+  static Color adaptiveSecondaryTextColor(BuildContext context) =>
+      CoreUtils.adaptiveColor(
+        context,
+        lightModeColor: lightThemeSecondaryTextColor,
+        darkModeColor: lightThemeSecondaryTextColor,
+      );
+
+  static Color adaptiveBackgroundColor(BuildContext context) =>
+      CoreUtils.adaptiveColor(
+        context,
+        lightModeColor: lightThemeTintStockColour,
+        darkModeColor: darkThemeBGDark,
+      );
+
+  static Color adaptiveCardColor(BuildContext context) =>
+      CoreUtils.adaptiveColor(
+        context,
+        lightModeColor: lightThemeWhiteColor,
+        darkModeColor: darkThemeDarkSharpColor,
+      );
+
+  static Color adaptiveDividerColor(BuildContext context) =>
+      CoreUtils.adaptiveColor(
+        context,
+        lightModeColor: lightThemeStockColor,
+        darkModeColor: darkThemeDarkNavBarColor,
+      );
 }

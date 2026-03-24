@@ -20,6 +20,7 @@ class ReviewCommentBox extends StatefulWidget {
 
 class _ReviewCommentBoxState extends State<ReviewCommentBox> {
   final TextEditingController _commentController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int? _rating;
   bool _showRatingError = false;
 
@@ -51,69 +52,89 @@ class _ReviewCommentBoxState extends State<ReviewCommentBox> {
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        child: Container(
-          width: double.infinity,
-          color: CoreUtils.adaptiveColor(
-            context,
-            lightModeColor: MyColors.lightThemeTintStockColour,
-            darkModeColor: MyColors.darkThemeDarkNavBarColor,
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
-          child: Row(
-            children: [
-              const CircleAvatar(),
-              const Gap(10),
-              Expanded(
-                child: InputField(
-                  controller: _commentController,
-                  expendable: true,
-                  fillColor: CoreUtils.adaptiveColor(
-                    context,
-                    lightModeColor: MyColors.lightThemeStockColor,
-                    darkModeColor: MyColors.lightThemePrimaryTextColor,
+        child: Form(
+          key: _formKey,
+          child: Container(
+            width: double.infinity,
+            color: CoreUtils.adaptiveColor(
+              context,
+              lightModeColor: MyColors.lightThemeTintStockColour,
+              darkModeColor: MyColors.darkThemeDarkNavBarColor,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
+            child: Row(
+              children: [
+                const CircleAvatar(),
+                const Gap(10),
+                Expanded(
+                  child: InputField(
+                    controller: _commentController,
+                    expendable: true,
+                    fillColor: CoreUtils.adaptiveColor(
+                      context,
+                      lightModeColor: MyColors.lightThemeStockColor,
+                      darkModeColor: MyColors.lightThemePrimaryTextColor,
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a comment';
+                      }
+                      return null;
+                    },
+                    hintText: "Write a comment...",
                   ),
-                  hintText: "Write a comment...",
                 ),
-              ),
-              Gap(10),
-              IconButton.filled(
-                style: IconButton.styleFrom(
-                  side: _showRatingError
-                      ? const BorderSide(color: Colors.red, width: 2)
-                      : null,
-                ),
-                onPressed: openStarBox,
-                icon: const Icon(HugeIconsStroke.star),
-              ),
-              const Gap(10),
-              IconButton.filled(
-                onPressed: () {
-                  if (_commentController.text.trim().isEmpty) {
-                    // CoreUtils.showSnackBar(
-                    //   context,
-                    //   message: "Comment shouldn't be empty.",
-                    // );
-                    //(TODO) Show error message
-                    return;
-                  }
-                  if (_rating == null) {
+                Gap(10),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton.filled(
+                      style: IconButton.styleFrom(
+                        backgroundColor: _rating != null
+                            ? Colors.amber.withOpacity(0.2)
+                            : null,
+                        side: _showRatingError
+                            ? const BorderSide(color: Colors.redAccent, width: 1.5)
+                            : null,
+                      ),
+                      onPressed: openStarBox,
+                      icon: Icon(
+                         _rating != null ? HugeIconsStroke.star : HugeIconsStroke.star,
+                         color: _rating != null ? Colors.amber : null,
+                       ),
+                     ),
+                   ],
+                 ),
+                const Gap(10),
+                IconButton.filled(
+                  onPressed: () {
+                    if (!_formKey.currentState!.validate()) {
+                      if (_rating == null) {
+                        setState(() => _showRatingError = true);
+                      }
+                      return;
+                    }
+                    if (_rating == null) {
+                      setState(() => _showRatingError = true);
+                      return;
+                    }
+          
+                    context.read<ReviewCubit>().leaveReview(
+                      productId: widget.productId,
+                      rating: _rating!,
+                      comment: _commentController.text.trim(),
+                    );
+                    _commentController.clear();
                     setState(() {
-                      _showRatingError = true;
+                      _rating = null;
+                      _showRatingError = false;
                     });
-                    return;
-                  }
-
-                  context.read<ReviewCubit>().leaveReview(
-                    productId: widget.productId,
-                    rating: _rating!,
-                    comment: _commentController.text.trim(),
-                  );
-                  _commentController.clear();
-                  FocusScope.of(context).unfocus();
-                },
-                icon: const Icon(HugeIconsStroke.sent),
-              ),
-            ],
+                    FocusScope.of(context).unfocus();
+                  },
+                  icon: const Icon(HugeIconsStroke.sent),
+                ),
+              ],
+            ),
           ),
         ),
       ),

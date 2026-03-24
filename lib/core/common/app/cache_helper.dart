@@ -11,6 +11,7 @@ class CacheHelper {
   static const _sessionTokenKey = 'user-session-token';
   static const _userIdKey = 'user-id';
   static const _themeModeKey = 'theme-mode';
+  static const _languageCodeKey = 'language-code';
   static const _firstTimerKey = 'is-user-first-timer';
 
   Future<bool> cacheSessionToken(String token) async {
@@ -46,6 +47,14 @@ class CacheHelper {
     }
   }
 
+  Future<void> cacheLanguageCode(String languageCode) async {
+    try {
+      await _prefs.setString(_languageCodeKey, languageCode);
+    } catch (err) {
+      debugPrint(err.toString());
+    }
+  }
+
   String? getSessionToken() {
     final sessionToken = _prefs.getString(_sessionTokenKey);
     if (sessionToken != null) {
@@ -71,6 +80,10 @@ class CacheHelper {
     Cache.instance.setThemeMode(themeMode);
 
     return themeMode;
+  }
+
+  String? getLanguageCode() {
+    return _prefs.getString(_languageCodeKey);
   }
 
   Future<void> resetSession() async {
