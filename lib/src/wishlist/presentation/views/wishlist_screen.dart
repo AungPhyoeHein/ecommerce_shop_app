@@ -81,10 +81,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
           return ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: wishlist.length,
-            separatorBuilder: (context, index) => const Divider(),
+            separatorBuilder: (context, index) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
               final product = wishlist[index];
-              return WishlistTile(product: product);
+              return WishlistCard(product: product);
             },
           );
         },
@@ -93,57 +93,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
   }
 }
 
-class WishlistTile extends StatelessWidget {
-  const WishlistTile({super.key, required this.product});
+class WishlistCard extends StatelessWidget {
+  const WishlistCard({super.key, required this.product});
 
   final WishlistProduct product;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Image.network(
-          product.productImage,
-          width: 60,
-          height: 60,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => Container(
-            width: 60,
-            height: 60,
-            color: Colors.grey[300],
-            child: const Icon(Icons.error),
-          ),
-        ),
-      ),
-      title: Text(
-        product.productExits
-            ? product.productName
-            : '${product.productName} (Not Available)',
-        style: TextStyles.paragraphSubTextRegular3
-            .adaptiveColor(context)
-            .copyWith(
-              color: product.productExits ? null : Colors.grey,
-              decoration: product.productExits
-                  ? null
-                  : TextDecoration.lineThrough,
-            ),
-      ),
-      subtitle: Text(
-        product.productExits
-            ? '\$${product.productPrice.toStringAsFixed(2)}'
-            : 'This product is no longer available',
-        style: product.productExits
-            ? TextStyles.paragraphSubTextRegular3.orange
-            : TextStyles.paragraphSubTextRegular3.grey,
-      ),
-      trailing: IconButton(
-        icon: const Icon(Icons.delete_outline, color: Colors.red),
-        onPressed: () {
-          context.read<WishlistCubit>().removeFromWishlist(product.productId);
-        },
-      ),
+    return GestureDetector(
       onTap: product.productExits
           ? () {
               context.push(
@@ -152,6 +109,115 @@ class WishlistTile extends StatelessWidget {
               );
             }
           : null,
+      child: Container(
+        height: 100,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: CoreUtils.adaptiveColor(
+            context,
+            lightModeColor: MyColors.lightThemeStockColor,
+            darkModeColor: MyColors.darkThemeDarkNavBarColor,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // Product Image
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    product.productImage,
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      width: 80,
+                      height: 80,
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.error),
+                    ),
+                  ),
+                ),
+                if (!product.productExits)
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'OFF',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(width: 15),
+            // Product Info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    product.productName,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyles.paragraphSubTextRegular3
+                        .adaptiveColor(context)
+                        .copyWith(
+                          fontWeight: FontWeight.bold,
+                          decoration: product.productExits
+                              ? null
+                              : TextDecoration.lineThrough,
+                        ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    product.productExits
+                        ? '\$${product.productPrice.toStringAsFixed(2)}'
+                        : 'Unavailable',
+                    style: product.productExits
+                        ? TextStyles.paragraphSubTextRegular3.orange.copyWith(
+                            fontWeight: FontWeight.w600,
+                          )
+                        : TextStyles.paragraphSubTextRegular3.grey,
+                  ),
+                ],
+              ),
+            ),
+            // Remove Action
+            IconButton(
+              icon: const Icon(
+                Icons.favorite,
+                color: Colors.red,
+                size: 24,
+              ),
+              onPressed: () {
+                context
+                    .read<WishlistCubit>()
+                    .removeFromWishlist(product.productId);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
