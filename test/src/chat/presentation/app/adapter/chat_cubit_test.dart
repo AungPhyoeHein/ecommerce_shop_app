@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:ecommerce_shop_app/core/errors/failures.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/entities/chat_message.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/usecases/clear_cached_messages.dart';
+import 'package:ecommerce_shop_app/src/chat/domain/usecases/delete_chat_history.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/usecases/get_cached_messages.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/usecases/send_message.dart';
 import 'package:ecommerce_shop_app/src/chat/presentation/app/adapter/chat_cubit.dart';
@@ -10,8 +11,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockSendMessage extends Mock implements SendMessage {}
+
 class MockGetCachedMessages extends Mock implements GetCachedMessages {}
+
 class MockClearCachedMessages extends Mock implements ClearCachedMessages {}
+
 class MockDeleteChatHistory extends Mock implements DeleteChatHistory {}
 
 void main() {
@@ -56,7 +60,9 @@ void main() {
     blocTest<ChatCubit, ChatState>(
       'should emit [ChatMessagesUpdated, ChatLoading, ChatMessagesUpdated] when successful',
       build: () {
-        when(() => sendMessage(any())).thenAnswer((_) async => Right(tAiResponse));
+        when(
+          () => sendMessage(any()),
+        ).thenAnswer((_) async => Right(tAiResponse));
         return chatCubit;
       },
       act: (cubit) => cubit.sendMessage(tMessage),

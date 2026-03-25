@@ -9,5 +9,6 @@ class SendMessage extends UsecaseWithParams<ChatMessage, String> {
   final ChatRepository _repository;
 
   @override
-  ResultFuture<ChatMessage> call(String params) => _repository.sendMessage(params);
+  ResultFuture<ChatMessage> call(String params) =>
+      _repository.sendMessage(params);
 }

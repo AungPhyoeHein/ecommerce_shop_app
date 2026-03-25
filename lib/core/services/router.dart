@@ -9,6 +9,8 @@ import 'package:ecommerce_shop_app/src/auth/presentation/views/registration_scre
 import 'package:ecommerce_shop_app/src/auth/presentation/views/reset_password_screen.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/views/splash_screen.dart';
 import 'package:ecommerce_shop_app/src/auth/presentation/views/verify_o_t_p_screen.dart';
+import 'package:ecommerce_shop_app/src/cart/presentation/app/adapter/cart_cubit.dart';
+import 'package:ecommerce_shop_app/src/cart/presentation/views/cart_screen.dart';
 import 'package:ecommerce_shop_app/src/category/presentation/app/adapter/category_cubit.dart';
 import 'package:ecommerce_shop_app/src/chat/presentation/app/adapter/chat_cubit.dart';
 import 'package:ecommerce_shop_app/src/chat/presentation/views/chat_screen.dart';
@@ -21,6 +23,7 @@ import 'package:ecommerce_shop_app/src/product/presentation/views/product_detail
 import 'package:ecommerce_shop_app/src/product/presentation/views/products_screen.dart';
 import 'package:ecommerce_shop_app/src/user/presentation/app/adapter/auth_user_cubit.dart';
 import 'package:ecommerce_shop_app/src/user/presentation/views/profile_screen.dart';
+import 'package:ecommerce_shop_app/src/wishlist/presentation/app/adapter/wishlist_cubit.dart';
 import 'package:ecommerce_shop_app/src/wishlist/presentation/views/wishlist_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -100,7 +100,7 @@ class _ProductImageSliderState extends State<ProductImageSlider> {
           ),
         ),
         Positioned(
-          top: 5,
+          top: MediaQuery.of(context).padding.top + 5,
           left: 5,
           child: Row(
             children: [

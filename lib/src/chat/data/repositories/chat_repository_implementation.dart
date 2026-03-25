@@ -8,7 +8,10 @@ import 'package:ecommerce_shop_app/src/chat/domain/entities/chat_message.dart';
 import 'package:ecommerce_shop_app/src/chat/domain/repositories/chat_repository.dart';
 
 class ChatRepositoryImplementation implements ChatRepository {
-  const ChatRepositoryImplementation(this._remoteDataSource, this._localDataSource);
+  const ChatRepositoryImplementation(
+    this._remoteDataSource,
+    this._localDataSource,
+  );
 
   final ChatRemoteDataSource _remoteDataSource;
   final ChatLocalDataSource _localDataSource;
@@ -18,14 +21,14 @@ class ChatRepositoryImplementation implements ChatRepository {
     try {
       final result = await _remoteDataSource.sendMessage(message);
       final currentMessages = await _localDataSource.getMessages();
-      
+
       final userMessage = ChatMessage(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         message: message,
         type: ChatMessageType.user,
         timestamp: DateTime.now(),
       );
-      
+
       currentMessages.add(userMessage);
       currentMessages.add(result);
       await _localDataSource.cacheMessages(currentMessages);
@@ -46,7 +49,9 @@ class ChatRepositoryImplementation implements ChatRepository {
         final localMessages = await _localDataSource.getMessages();
         return Right(localMessages);
       } catch (_) {
-        return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+        return Left(
+          ServerFailure(message: e.message, statusCode: e.statusCode),
+        );
       }
     } catch (e) {
       try {

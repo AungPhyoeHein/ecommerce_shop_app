@@ -37,7 +37,9 @@ class ProductModel extends Product {
       colors: List<String>.from(map['colors'] ?? []),
       image: (map['image'] as String?) ?? '',
       images: List<String>.from(map['images'] ?? []),
-      reviews: List<String>.from((map['reviews'] as List? ?? []).map((e) => '$e')),
+      reviews: List<String>.from(
+        (map['reviews'] as List? ?? []).map((e) => '$e'),
+      ),
       numberOfReview: (map['numberOfReview'] as num? ?? 0).toInt(),
       sizes: List<String>.from(map['sizes'] ?? []),
       category: category,

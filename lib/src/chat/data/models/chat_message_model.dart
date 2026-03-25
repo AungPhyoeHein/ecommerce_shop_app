@@ -23,16 +23,25 @@ class ChatMessageModel extends ChatMessage {
     }
 
     return ChatMessageModel(
-      id: map['_id'] as String? ?? DateTime.now().millisecondsSinceEpoch.toString(), // Generating a temporary ID if missing
-      message: map['message'] as String? ?? map['response'] as String? ?? map['response_text'] as String? ?? '',
+      id:
+          map['_id'] as String? ??
+          DateTime.now().millisecondsSinceEpoch
+              .toString(), // Generating a temporary ID if missing
+      message:
+          map['message'] as String? ??
+          map['response'] as String? ??
+          map['response_text'] as String? ??
+          '',
       type: type,
       responseType: responseType,
       products: map['data'] != null
           ? (map['data'] as List)
-              .map((e) => ProductModel.fromMap(e as DataMap))
-              .toList()
+                .map((e) => ProductModel.fromMap(e as DataMap))
+                .toList()
           : null,
-      timestamp: map['timestamp'] != null ? DateTime.parse(map['timestamp']) : DateTime.now(),
+      timestamp: map['timestamp'] != null
+          ? DateTime.parse(map['timestamp'])
+          : DateTime.now(),
     );
   }
 

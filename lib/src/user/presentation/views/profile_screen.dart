@@ -2,9 +2,12 @@ import 'package:ecommerce_shop_app/core/common/app/providers/theme_provider.dart
 import 'package:ecommerce_shop_app/core/common/app/providers/locale_provider.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/l10n/app_localizations.dart';
+import 'package:ecommerce_shop_app/core/widgets/cart_badge.dart';
+import 'package:ecommerce_shop_app/src/cart/presentation/views/cart_screen.dart';
 import 'package:ecommerce_shop_app/src/user/presentation/widgets/profile_header.dart';
 import 'package:ecommerce_shop_app/src/user/presentation/widgets/profile_menu_item.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -20,7 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       backgroundColor: MyColors.adaptiveBackgroundColor(context),
       appBar: AppBar(
@@ -36,13 +39,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: MyColors.classicAdaptiveTextColor(context),
           ),
         ),
+        actions: [
+          CartBadge(
+            child: IconButton(
+              onPressed: () => context.push(CartScreen.path),
+              icon: Icon(
+                Icons.shopping_cart_outlined,
+                color: MyColors.classicAdaptiveTextColor(context),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             const ProfileHeader(),
-            
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -89,11 +104,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Consumer<ThemeProvider>(
                       builder: (context, themeProvider, child) {
                         return ProfileMenuItem(
-                          icon: themeProvider.isDarkMode 
-                              ? Icons.dark_mode_rounded 
+                          icon: themeProvider.isDarkMode
+                              ? Icons.dark_mode_rounded
                               : Icons.light_mode_rounded,
                           title: l10n.darkMode,
-                          subtitle: themeProvider.isDarkMode ? l10n.on : l10n.off,
+                          subtitle: themeProvider.isDarkMode
+                              ? l10n.on
+                              : l10n.off,
                           trailing: Switch.adaptive(
                             value: themeProvider.isDarkMode,
                             onChanged: (value) {
@@ -113,7 +130,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         return ProfileMenuItem(
                           icon: Icons.language_rounded,
                           title: l10n.language,
-                          subtitle: _getLanguageName(localeProvider.locale.languageCode),
+                          subtitle: _getLanguageName(
+                            localeProvider.locale.languageCode,
+                          ),
                           onTap: () {
                             _showLanguageBottomSheet(context, localeProvider);
                           },
@@ -183,33 +202,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(Theme.of(context).brightness == Brightness.dark ? 0.2 : 0.03),
+            color: Colors.black.withOpacity(
+              Theme.of(context).brightness == Brightness.dark ? 0.2 : 0.03,
+            ),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
         ],
       ),
       padding: const EdgeInsets.all(8),
-      child: Column(
-        children: children,
-      ),
+      child: Column(children: children),
     );
   }
 
   String _getLanguageName(String code) {
     switch (code) {
-      case 'my': return 'မြန်မာ';
-      case 'zh': return '中文';
-      case 'ja': return '日本語';
-      case 'ko': return '한국어';
-      case 'th': return 'ไทย';
-      case 'hi': return 'हिन्दी';
-      case 'en': 
-      default: return 'English';
+      case 'my':
+        return 'မြန်မာ';
+      case 'zh':
+        return '中文';
+      case 'ja':
+        return '日本語';
+      case 'ko':
+        return '한국어';
+      case 'th':
+        return 'ไทย';
+      case 'hi':
+        return 'हिन्दी';
+      case 'en':
+      default:
+        return 'English';
     }
   }
 
-  void _showLanguageBottomSheet(BuildContext context, LocaleProvider localeProvider) {
+  void _showLanguageBottomSheet(
+    BuildContext context,
+    LocaleProvider localeProvider,
+  ) {
     final languages = [
       {'code': 'en', 'name': 'English'},
       {'code': 'my', 'name': 'မြန်မာ'},
@@ -265,19 +294,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         itemCount: languages.length,
                         itemBuilder: (context, index) {
                           final lang = languages[index];
-                          final isSelected = localeProvider.locale.languageCode == lang['code'];
+                          final isSelected =
+                              localeProvider.locale.languageCode ==
+                              lang['code'];
                           return ListTile(
                             title: Text(
                               lang['name']!,
                               style: TextStyle(
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                color: isSelected 
-                                    ? MyColors.lightThemePrimaryColor 
-                                    : MyColors.classicAdaptiveTextColor(context),
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                                color: isSelected
+                                    ? MyColors.lightThemePrimaryColor
+                                    : MyColors.classicAdaptiveTextColor(
+                                        context,
+                                      ),
                               ),
                             ),
-                            trailing: isSelected 
-                                ? const Icon(Icons.check_circle_rounded, color: MyColors.lightThemePrimaryColor)
+                            trailing: isSelected
+                                ? const Icon(
+                                    Icons.check_circle_rounded,
+                                    color: MyColors.lightThemePrimaryColor,
+                                  )
                                 : null,
                             onTap: () {
                               localeProvider.setLocale(Locale(lang['code']!));

@@ -16,7 +16,8 @@ final router = GoRouter(
     final isAuthed =
         Cache.instance.sessionToken != null && Cache.instance.userId != null;
 
-    final isAuthRoute = path == LoginScreen.path ||
+    final isAuthRoute =
+        path == LoginScreen.path ||
         path == RegistrationScreen.path ||
         path == ForgotPasswordScreen.path ||
         path == VerifyOTPScreen.path ||
@@ -37,6 +38,13 @@ final router = GoRouter(
     return null;
   },
   routes: [
+    GoRoute(
+      path: CartScreen.path,
+      builder: (_, __) => BlocProvider<CartCubit>(
+        create: (_) => sl<CartCubit>(),
+        child: const CartScreen(),
+      ),
+    ),
     GoRoute(
       path: '/',
       redirect: (context, state) {
@@ -117,8 +125,10 @@ final router = GoRouter(
 
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (_) => sl<ProductCubit>()),
-            BlocProvider(create: (_) => sl<ReviewCubit>()),
+            BlocProvider<ProductCubit>(create: (_) => sl<ProductCubit>()),
+            BlocProvider<ReviewCubit>(create: (_) => sl<ReviewCubit>()),
+            BlocProvider<CartCubit>(create: (_) => sl<CartCubit>()),
+            BlocProvider<WishlistCubit>(create: (_) => sl<WishlistCubit>()),
           ],
           child: ProductDetailScreen(
             productId: id.toString(),
@@ -135,6 +145,8 @@ final router = GoRouter(
           providers: [
             BlocProvider<CategoryCubit>(create: (_) => sl<CategoryCubit>()),
             BlocProvider<AuthUserCubit>(create: (_) => sl<AuthUserCubit>()),
+            BlocProvider<CartCubit>(create: (_) => sl<CartCubit>()),
+            BlocProvider<WishlistCubit>(create: (_) => sl<WishlistCubit>()),
           ],
           child: DashboardScreen(navigationShell: navigationShell),
         );

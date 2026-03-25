@@ -374,7 +374,7 @@ class ProductDataSourceImplementation implements ProductDataSource {
       );
 
       final payload = jsonDecode(result.body);
-      if (result.statusCode != 201) {
+      if (result.statusCode != 200) {
         final errorResponse = ErrorResponse.fromMap(payload as DataMap);
         throw ServerException(
           message: errorResponse.errorMessage,
@@ -382,14 +382,14 @@ class ProductDataSourceImplementation implements ProductDataSource {
         );
       }
 
-      if (payload is! DataMap) {
-        throw ServerException(
-          message: 'Expected a review map but got something else.',
-          statusCode: 500,
-        );
-      }
+      // if (payload is! DataMap) {
+      //   throw ServerException(
+      //     message: 'Expected a review map but got something else.',
+      //     statusCode: 500,
+      //   );
+      // }
 
-      return ReviewModel.fromMap(payload);
+      return ReviewModel.fromMap(payload as DataMap);
     } on ServerException {
       rethrow;
     } catch (e, s) {

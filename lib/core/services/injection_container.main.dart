@@ -10,6 +10,53 @@ Future<void> init() async {
   await _productInit();
   await _chatInit();
   await _reviewInit();
+  await _wishlistInit();
+  await _cartInit();
+}
+
+Future<void> _cartInit() async {
+  sl
+    ..registerFactory(
+      () => CartCubit(
+        addToCart: sl(),
+        getCart: sl(),
+        removeFromCart: sl(),
+        modifyProductQuantity: sl(),
+        getCartCount: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => AddToCart(sl()))
+    ..registerLazySingleton(() => GetCart(sl()))
+    ..registerLazySingleton(() => RemoveFromCart(sl()))
+    ..registerLazySingleton(() => ModifyProductQuantity(sl()))
+    ..registerLazySingleton(() => GetCartCount(sl()))
+    ..registerLazySingleton<CartRepository>(
+      () => CartRepositoryImplementation(sl()),
+    )
+    ..registerLazySingleton<CartRemoteDataSource>(
+      () => CartRemoteDataSourceImplementation(sl()),
+    );
+}
+
+Future<void> _wishlistInit() async {
+  sl
+    ..registerFactory(
+      () => WishlistCubit(
+        addToWishlist: sl(),
+        removeFromWishlist: sl(),
+        getWishlist: sl(),
+        userProvider: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => AddToWishlist(sl()))
+    ..registerLazySingleton(() => RemoveFromWishlist(sl()))
+    ..registerLazySingleton(() => GetWishlist(sl()))
+    ..registerLazySingleton<WishlistRepository>(
+      () => WishlistRepositoryImplementation(sl()),
+    )
+    ..registerLazySingleton<WishlistRemoteDataSource>(
+      () => WishlistRemoteDataSourceImplementation(sl()),
+    );
 }
 
 Future<void> _userInit() async {
@@ -127,7 +174,6 @@ Future<void> _chatInit() async {
     ..registerLazySingleton<ChatLocalDataSource>(
       () => ChatLocalDataSourceImplementation(sl()),
     );
-
 }
 
 Future<void> _reviewInit() async {

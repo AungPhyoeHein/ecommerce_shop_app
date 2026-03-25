@@ -30,9 +30,9 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
   @override
   Future<ChatMessageModel> sendMessage(String message) async {
     try {
-      final uri = Uri.parse('${NetworkConstants.baseUrl}$ASSISTANT_ENDPOINT').replace(
-        queryParameters: {'message': message},
-      );
+      final uri = Uri.parse(
+        '${NetworkConstants.baseUrl}$ASSISTANT_ENDPOINT',
+      ).replace(queryParameters: {'message': message});
 
       final response = await _client.get(
         uri,
@@ -73,7 +73,9 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
   @override
   Future<List<ChatMessageModel>> getChatHistory() async {
     try {
-      final uri = Uri.parse('${NetworkConstants.baseUrl}$CHAT_HISTORY_ENDPOINT');
+      final uri = Uri.parse(
+        '${NetworkConstants.baseUrl}$CHAT_HISTORY_ENDPOINT',
+      );
 
       final response = await _client.get(
         uri,
@@ -119,8 +121,9 @@ class ChatRemoteDataSourceImplementation implements ChatRemoteDataSource {
   @override
   Future<void> deleteChatHistory() async {
     try {
-      final uri =
-          Uri.parse('${NetworkConstants.baseUrl}$CHAT_HISTORY_ENDPOINT');
+      final uri = Uri.parse(
+        '${NetworkConstants.baseUrl}$CHAT_HISTORY_ENDPOINT',
+      );
 
       final response = await _client.delete(
         uri,

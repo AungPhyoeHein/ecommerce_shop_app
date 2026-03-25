@@ -71,22 +71,29 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
                     const Gap(20),
                     if (state is GotReviews)
                       state.reviews.isNotEmpty
-                        ? Expanded(
-                            child: ListView.builder(
-                              shrinkWrap: false,
-                              itemCount: state.reviews.length,
-                              controller: scrollController,
-                              physics: const ClampingScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return ReviewItemWidget(state.reviews[index]);
-                              },
+                          ? Expanded(
+                              child: ListView.builder(
+                                shrinkWrap: false,
+                                itemCount: state.reviews.length,
+                                controller: scrollController,
+                                physics: const ClampingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return ReviewItemWidget(state.reviews[index]);
+                                },
+                              ),
+                            )
+                          : Expanded(
+                              child: Center(
+                                child: Text(
+                                  "No reviews yet.",
+                                  style: TextStyle(
+                                    color: MyColors.classicAdaptiveTextColor(
+                                      context,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                          )
-                        : Expanded(
-                            child: Center(
-                              child: Text("No reviews yet.",style: TextStyle(color: MyColors.classicAdaptiveTextColor(context)),),
-                            ),
-                          ),
                     if (state is ReviewLoading)
                       Expanded(
                         child: ListView.builder(

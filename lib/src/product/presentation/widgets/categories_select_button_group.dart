@@ -81,11 +81,17 @@ class _CategoriesSelectButtonGroupState
                 _selectedCategoryIndex = index;
                 if (index == 0) {
                   if (productState is GotProducts) {
-                    return context.read<ProductCubit>().getProducts(
+                    context.read<ProductCubit>().getProducts(
                       page: productState.page,
                       isRefresh: false,
                     );
+                  } else {
+                    context.read<ProductCubit>().getProducts(
+                      page: 1,
+                      isRefresh: true,
+                    );
                   }
+                  return;
                 }
                 _onSelectedCategory(state.categories[index - 1]);
               }

@@ -11,7 +11,7 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = sl<UserProvider>();
     final l10n = AppLocalizations.of(context)!;
-    
+
     return ListenableBuilder(
       listenable: userProvider,
       builder: (context, child) {
@@ -30,7 +30,11 @@ class ProfileHeader extends StatelessWidget {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: MyColors.lightThemePrimaryColor.withOpacity(Theme.of(context).brightness == Brightness.dark ? 0.3 : 0.15),
+                          color: MyColors.lightThemePrimaryColor.withOpacity(
+                            Theme.of(context).brightness == Brightness.dark
+                                ? 0.3
+                                : 0.15,
+                          ),
                           blurRadius: 20,
                           spreadRadius: 5,
                         ),
@@ -41,11 +45,15 @@ class ProfileHeader extends StatelessWidget {
                       backgroundColor: MyColors.adaptiveCardColor(context),
                       child: CircleAvatar(
                         radius: 52,
-                        backgroundColor: MyColors.adaptiveBackgroundColor(context),
+                        backgroundColor: MyColors.adaptiveBackgroundColor(
+                          context,
+                        ),
                         child: Icon(
                           Icons.person_rounded,
                           size: 60,
-                          color: MyColors.lightThemePrimaryColor.withOpacity(0.8),
+                          color: MyColors.lightThemePrimaryColor.withOpacity(
+                            0.8,
+                          ),
                         ),
                       ),
                     ),
@@ -59,7 +67,10 @@ class ProfileHeader extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: MyColors.lightThemePrimaryColor,
                         shape: BoxShape.circle,
-                        border: Border.all(color: MyColors.adaptiveCardColor(context), width: 2),
+                        border: Border.all(
+                          color: MyColors.adaptiveCardColor(context),
+                          width: 2,
+                        ),
                       ),
                       child: const Icon(
                         Icons.camera_alt_rounded,

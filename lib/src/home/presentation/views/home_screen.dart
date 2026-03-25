@@ -6,6 +6,9 @@ import 'package:ecommerce_shop_app/core/widgets/ecomi_logo.dart';
 import 'package:ecommerce_shop_app/core/widgets/products_list_widget.dart';
 import 'package:ecommerce_shop_app/core/widgets/pull_refresh_widget.dart';
 import 'package:ecommerce_shop_app/core/widgets/svg_icon.dart';
+import 'package:ecommerce_shop_app/core/widgets/cart_badge.dart';
+import 'package:ecommerce_shop_app/src/cart/presentation/app/adapter/cart_cubit.dart';
+import 'package:ecommerce_shop_app/src/cart/presentation/views/cart_screen.dart';
 import 'package:ecommerce_shop_app/src/category/presentation/app/adapter/category_cubit.dart';
 import 'package:ecommerce_shop_app/src/home/presentation/widgets/category_list_widget.dart';
 import 'package:ecommerce_shop_app/src/home/presentation/widgets/banner_images_widget.dart';
@@ -15,6 +18,7 @@ import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -37,6 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
       criteria: "popular",
       isRefresh: false,
     );
+
+    context.read<CartCubit>().getCart();
   }
 
   @override
@@ -89,9 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const SvgIcon(IconConstants.shoppingCart),
+          CartBadge(
+            child: IconButton(
+              onPressed: () => context.push(CartScreen.path),
+              icon: const SvgIcon(IconConstants.shoppingCart),
+            ),
           ),
           IconButton(
             onPressed: () {},

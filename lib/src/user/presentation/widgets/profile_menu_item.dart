@@ -33,7 +33,8 @@ class ProfileMenuItem extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: (iconColor ?? MyColors.lightThemePrimaryColor).withOpacity(0.1),
+                color: (iconColor ?? MyColors.lightThemePrimaryColor)
+                    .withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -52,7 +53,9 @@ class ProfileMenuItem extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: textColor ?? MyColors.classicAdaptiveTextColor(context),
+                      color:
+                          textColor ??
+                          MyColors.classicAdaptiveTextColor(context),
                     ),
                   ),
                   if (subtitle != null) ...[
@@ -74,7 +77,9 @@ class ProfileMenuItem extends StatelessWidget {
               Icon(
                 Icons.chevron_right_rounded,
                 size: 24,
-                color: MyColors.adaptiveSecondaryTextColor(context).withOpacity(0.5),
+                color: MyColors.adaptiveSecondaryTextColor(
+                  context,
+                ).withOpacity(0.5),
               ),
           ],
         ),

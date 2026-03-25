@@ -36,12 +36,20 @@ class ReviewItemWidget extends StatelessWidget {
               style: TextStyles.paragraphSubTextRegular.adaptiveColor(context),
             ),
             const Gap(6),
-            Row(children: [Text(
-              GetTimeAgo.parse(review.createdAt!),
-              style: TextStyles.paragraphSubTextRegular.grey,
+            Row(
+              children: [
+                Text(
+                  GetTimeAgo.parse(review.createdAt!),
+                  style: TextStyles.paragraphSubTextRegular.grey,
+                ),
+                const Gap(6),
+                Icon(
+                  HugeIconsStroke.delete01,
+                  size: 16,
+                  color: MyColors.classicAdaptiveTextColor(context),
+                ),
+              ],
             ),
-            const Gap(6),
-            Icon(HugeIconsStroke.delete01,size: 16,color: MyColors.classicAdaptiveTextColor(context),)])
           ],
         ),
       ),

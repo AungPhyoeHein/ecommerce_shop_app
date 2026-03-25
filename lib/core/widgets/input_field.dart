@@ -94,11 +94,13 @@ class InputField extends StatelessWidget {
         contentPadding:
             contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
         filled: true,
-        fillColor: fillColor ?? CoreUtils.adaptiveColor(
-          context,
-          lightModeColor: MyColors.lightThemeStockColor,
-          darkModeColor: MyColors.darkThemeDarkSharpColor,
-        ),
+        fillColor:
+            fillColor ??
+            CoreUtils.adaptiveColor(
+              context,
+              lightModeColor: MyColors.lightThemeStockColor,
+              darkModeColor: MyColors.darkThemeDarkSharpColor,
+            ),
       ),
       inputFormatters: inputFormatter,
       validator: defaultValidation

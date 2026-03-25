@@ -4,11 +4,14 @@ import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
 import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
 import 'package:ecommerce_shop_app/core/widgets/input_field.dart';
+import 'package:ecommerce_shop_app/core/widgets/cart_badge.dart';
+import 'package:ecommerce_shop_app/src/cart/presentation/views/cart_screen.dart';
 import 'package:ecommerce_shop_app/src/chat/presentation/app/adapter/chat_cubit.dart';
 import 'package:ecommerce_shop_app/src/chat/presentation/widgets/chat_bubble.dart';
 import 'package:ecommerce_shop_app/src/chat/presentation/widgets/delete_chat_history_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -68,6 +71,12 @@ class _ChatScreenState extends State<ChatScreen> {
           style: TextStyles.headingMedium3.adaptiveColor(context),
         ),
         actions: [
+          CartBadge(
+            child: IconButton(
+              onPressed: () => context.push(CartScreen.path),
+              icon: const Icon(Icons.shopping_cart_outlined),
+            ),
+          ),
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'delete') {
@@ -81,7 +90,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: [
                     Icon(Icons.delete_outline, color: Colors.red),
                     SizedBox(width: 8),
-                    Text('Delete Chat History', style: TextStyle(color: Colors.red)),
+                    Text(
+                      'Delete Chat History',
+                      style: TextStyle(color: Colors.red),
+                    ),
                   ],
                 ),
               ),
@@ -98,7 +110,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   _scrollToBottom();
                 }
                 if (state is ChatHistoryDeleted) {
-                  CoreUtils.showSnackBar(context, message: 'Chat history deleted successfully.');
+                  CoreUtils.showSnackBar(
+                    context,
+                    message: 'Chat history deleted successfully.',
+                  );
                 }
                 if (state is ChatError) {
                   CoreUtils.showSnackBar(context, message: state.message);
@@ -114,7 +129,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         Icon(
                           Icons.chat_bubble_outline,
                           size: 64,
-                          color: MyColors.lightThemeSecondaryColor.withOpacity(0.5),
+                          color: MyColors.lightThemeSecondaryColor.withOpacity(
+                            0.5,
+                          ),
                         ),
                         const SizedBox(height: 16),
                         Text(

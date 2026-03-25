@@ -33,7 +33,8 @@ class WishlistProductModel extends WishlistProduct {
         productName: map['productName'] as String,
         productImage: map['productImage'] as String,
         productPrice: (map['productPrice'] as num).toDouble(),
-        productExits: map['productExits'] as bool,
-        productOutOfStock: map['productOutOfStock'] as bool,
+        productExits: (map['productExists'] ?? map['productExits']) == true,
+        productOutOfStock:
+            (map['productOutofStock'] ?? map['productOutOfStock']) == true,
       );
 }

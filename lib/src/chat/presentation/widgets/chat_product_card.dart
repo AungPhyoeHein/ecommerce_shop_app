@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_shop_app/core/entities/product.dart';
 import 'package:ecommerce_shop_app/core/extensions/context_extension.dart';
+import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/colors.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
 import 'package:ecommerce_shop_app/core/utils/core_utils.dart';
@@ -17,8 +18,8 @@ class ChatProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String hero = GoRouterState.of(context).uri.toString() + 'chat_${product.id}';
-    print(product.image);
+    final String hero =
+        GoRouterState.of(context).uri.toString() + 'chat_${product.id}';
     return GestureDetector(
       onTap: () {
         context.push(
@@ -54,15 +55,19 @@ class ChatProductCard extends StatelessWidget {
             Expanded(
               flex: 4,
               child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(14),
+                ),
                 child: Hero(
                   tag: hero,
                   child: CachedNetworkImage(
                     imageUrl: product.image,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => const ShimmerImageLoadingWidget(),
-                    errorWidget: (context, error, stackTrace) => const ErrorImageWidget(),
+                    placeholder: (context, url) =>
+                        const ShimmerImageLoadingWidget(),
+                    errorWidget: (context, error, stackTrace) =>
+                        const ErrorImageWidget(),
                   ),
                 ),
               ),
@@ -80,9 +85,9 @@ class ChatProductCard extends StatelessWidget {
                       product.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyles.paragraphSubTextRegular2.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: TextStyles.paragraphSubTextRegular2
+                          .copyWith(fontWeight: FontWeight.w600)
+                          .adaptiveColor(context),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,10 +98,12 @@ class ChatProductCard extends StatelessWidget {
                           children: [
                             Text(
                               'Price',
-                              style: TextStyles.paragraphSubTextRegular.copyWith(
-                                color: MyColors.lightThemeSecondaryTextColor,
-                                fontSize: 10,
-                              ),
+                              style: TextStyles.paragraphSubTextRegular
+                                  .copyWith(
+                                    color:
+                                        MyColors.lightThemeSecondaryTextColor,
+                                    fontSize: 10,
+                                  ),
                             ),
                             Text(
                               '\$${product.price.toStringAsFixed(2)}',
@@ -107,7 +114,10 @@ class ChatProductCard extends StatelessWidget {
                           ],
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
                             color: context.theme.primaryColor,
                             borderRadius: BorderRadius.circular(8),

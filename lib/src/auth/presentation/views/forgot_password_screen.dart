@@ -38,9 +38,12 @@ class ForgotPasswordScreen extends StatelessWidget {
                       'Confirm Email',
                       style: TextStyles.headingBold3.adaptiveColor(context),
                     ),
-                    Text('Enter the email address associated with your account.',style: TextStyles.paragraphSubTextRegular1.grey,),
+                    Text(
+                      'Enter the email address associated with your account.',
+                      style: TextStyles.paragraphSubTextRegular1.grey,
+                    ),
                     const Gap(40),
-                    const ForgotPasswordForm()
+                    const ForgotPasswordForm(),
                   ],
                 ),
               ),

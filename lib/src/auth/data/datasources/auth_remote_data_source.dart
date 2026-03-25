@@ -231,10 +231,7 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
         '${NetworkConstants.baseUrl}$VERITY_TOKEN_ENDPOINT',
       );
       final token = sl<CacheHelper>().getSessionToken();
-      final response = await _client.post(
-        uri,
-        headers: token?.toAuthHeaders,
-      );
+      final response = await _client.post(uri, headers: token?.toAuthHeaders);
       final payload = jsonDecode(response.body);
       await NetworkUtils.renewToken(response);
       if (response.statusCode != 200) {

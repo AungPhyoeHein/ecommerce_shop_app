@@ -24,3 +24,20 @@ class ProductDetailShimmer extends StatelessWidget {
     );
   }
 }
+
+class ProductDetailImageHeaderShimmer extends StatelessWidget {
+  const ProductDetailImageHeaderShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: Container(
+        height: 380,
+        width: double.infinity,
+        color: Colors.white,
+      ),
+    );
+  }
+}

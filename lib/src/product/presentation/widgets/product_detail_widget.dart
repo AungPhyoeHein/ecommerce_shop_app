@@ -15,15 +15,42 @@ import 'package:group_button/group_button.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 
 class ProductDetailWidget extends StatefulWidget {
-  const ProductDetailWidget({super.key, required this.product});
+  const ProductDetailWidget({
+    super.key,
+    required this.product,
+    this.onColorSelected,
+    this.onSizeSelected,
+    this.onQuantityChanged,
+    this.initialQuantity = 1,
+  });
 
   final Product product;
+  final ValueChanged<String>? onColorSelected;
+  final ValueChanged<String>? onSizeSelected;
+  final ValueChanged<int>? onQuantityChanged;
+  final int initialQuantity;
 
   @override
   State<ProductDetailWidget> createState() => _ProductDetailWidgetState();
 }
 
 class _ProductDetailWidgetState extends State<ProductDetailWidget> {
+  String? selectedColor;
+  String? selectedSize;
+  late int quantity;
+
+  @override
+  void initState() {
+    super.initState();
+    quantity = widget.initialQuantity;
+    if (widget.product.colors.isNotEmpty) {
+      selectedColor = widget.product.colors.first;
+    }
+    if (widget.product.sizes.isNotEmpty) {
+      selectedSize = widget.product.sizes.first;
+    }
+  }
+
   void _openBottonSheet() {
     final reviewCubit = context.read<ReviewCubit>();
     showModalBottomSheet(
@@ -38,7 +65,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
         darkModeColor: MyColors.darkThemeDarkNavBarColor,
       ),
       builder: (modalContext) => BlocProvider.value(
-        value: reviewCubit,
+        value: reviewCubit as StateStreamableSource<Object?>,
         child: ReviewBottomSheet(productId: widget.product.id),
       ),
     );
@@ -95,6 +122,15 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
               buttonWidth: 20,
               borderRadius: BorderRadius.circular(50),
             ),
+            onSelected: (color, index, isSelected) {
+              if (isSelected) {
+                setState(() => selectedColor = color);
+                widget.onColorSelected?.call(color);
+              }
+            },
+            controller: GroupButtonController(
+              selectedIndex: widget.product.colors.indexOf(selectedColor ?? ""),
+            ),
             buttons: widget.product.colors,
             buttonBuilder: (selected, color, context) {
               return Container(
@@ -126,7 +162,66 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
             selectedColor: MyColors.lightThemePrimaryColor,
             unselectedColor: Colors.transparent,
           ),
+          onSelected: (size, index, isSelected) {
+            if (isSelected) {
+              setState(() => selectedSize = size);
+              widget.onSizeSelected?.call(size);
+            }
+          },
+          controller: GroupButtonController(
+            selectedIndex: widget.product.sizes.indexOf(selectedSize ?? ""),
+          ),
           buttons: widget.product.sizes,
+        ),
+        const Gap(20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Quantity",
+              style: TextStyles.headingMedium4.adaptiveColor(context),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                border: Border.all(color: MyColors.lightThemeStockColor),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.remove, size: 18),
+                    onPressed: quantity > 1
+                        ? () {
+                            setState(() => quantity--);
+                            widget.onQuantityChanged?.call(quantity);
+                          }
+                        : null,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Text(
+                      quantity.toString(),
+                      style: TextStyles.paragraphRegular.adaptiveColor(context),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.add, size: 18),
+                    onPressed: quantity < widget.product.countInStock
+                        ? () {
+                            setState(() => quantity++);
+                            widget.onQuantityChanged?.call(quantity);
+                          }
+                        : null,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
         const Gap(20),
         Text(

@@ -6,8 +6,10 @@ class ErrorResponse extends Equatable {
 
   factory ErrorResponse.fromMap(DataMap map) {
     var errorMessages = (map['errors'] as List?)
-        ?.cast<DataMap>()
-        .map((error) => error['message'] as String)
+        ?.map(
+          (error) =>
+              Map<String, dynamic>.from(error as Map)['message'] as String,
+        )
         .toList();
     if (errorMessages != null && errorMessages.isEmpty) errorMessages = null;
 

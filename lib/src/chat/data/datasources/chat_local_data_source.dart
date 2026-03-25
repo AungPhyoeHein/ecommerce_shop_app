@@ -30,9 +30,7 @@ class ChatLocalDataSourceImplementation implements ChatLocalDataSource {
         'responseType': m.responseType.name,
         'timestamp': m.timestamp?.toIso8601String(),
         'products': m.products != null
-            ? m.products!
-                .map((p) => (p as ProductModel).toMap())
-                .toList()
+            ? m.products!.map((p) => (p as ProductModel).toMap()).toList()
             : null,
       });
     }).toList();
@@ -51,11 +49,13 @@ class ChatLocalDataSourceImplementation implements ChatLocalDataSource {
         message: map['message'],
         type: ChatMessageType.values.byName(map['type']),
         responseType: ChatResponseType.values.byName(map['responseType']),
-        timestamp: map['timestamp'] != null ? DateTime.parse(map['timestamp']) : null,
+        timestamp: map['timestamp'] != null
+            ? DateTime.parse(map['timestamp'])
+            : null,
         products: map['products'] != null
             ? (map['products'] as List)
-                .map((p) => ProductModel.fromMap(p as DataMap))
-                .toList()
+                  .map((p) => ProductModel.fromMap(p as DataMap))
+                  .toList()
             : null,
       );
     }).toList();

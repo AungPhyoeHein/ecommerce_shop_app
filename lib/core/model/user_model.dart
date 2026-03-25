@@ -58,8 +58,8 @@ class UserModel extends User {
       id: (map['id'] ?? map['_id']) as String,
       name: map['name'] as String,
       email: map['email'] as String,
-      isAdmin: map['isAdmin'] as bool,
-      wishList: (map['wishList'] as List? ?? [])
+      isAdmin: map['isAdmin'] == true,
+      wishList: ((map['wishList'] ?? map['wishlist']) as List? ?? [])
           .map((item) => WishlistProductModel.fromMap(item as DataMap))
           .toList(),
       address: address as Address,

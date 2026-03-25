@@ -94,17 +94,22 @@ class _ReviewCommentBoxState extends State<ReviewCommentBox> {
                             ? Colors.amber.withOpacity(0.2)
                             : null,
                         side: _showRatingError
-                            ? const BorderSide(color: Colors.redAccent, width: 1.5)
+                            ? const BorderSide(
+                                color: Colors.redAccent,
+                                width: 1.5,
+                              )
                             : null,
                       ),
                       onPressed: openStarBox,
                       icon: Icon(
-                         _rating != null ? HugeIconsStroke.star : HugeIconsStroke.star,
-                         color: _rating != null ? Colors.amber : null,
-                       ),
-                     ),
-                   ],
-                 ),
+                        _rating != null
+                            ? HugeIconsStroke.star
+                            : HugeIconsStroke.star,
+                        color: _rating != null ? Colors.amber : null,
+                      ),
+                    ),
+                  ],
+                ),
                 const Gap(10),
                 IconButton.filled(
                   onPressed: () {
@@ -118,7 +123,7 @@ class _ReviewCommentBoxState extends State<ReviewCommentBox> {
                       setState(() => _showRatingError = true);
                       return;
                     }
-          
+
                     context.read<ReviewCubit>().leaveReview(
                       productId: widget.productId,
                       rating: _rating!,

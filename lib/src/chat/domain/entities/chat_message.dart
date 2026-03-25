@@ -23,5 +23,12 @@ class ChatMessage extends Equatable {
   final DateTime? timestamp;
 
   @override
-  List<Object?> get props => [id, message, type, responseType, products, timestamp];
+  List<Object?> get props => [
+    id,
+    message,
+    type,
+    responseType,
+    products,
+    timestamp,
+  ];
 }

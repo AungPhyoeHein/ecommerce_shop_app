@@ -14,11 +14,11 @@ class ChatCubit extends Cubit<ChatState> {
     required GetCachedMessages getCachedMessages,
     required ClearCachedMessages clearCachedMessages,
     required DeleteChatHistory deleteChatHistory,
-  })  : _sendMessage = sendMessage,
-        _getCachedMessages = getCachedMessages,
-        _clearCachedMessages = clearCachedMessages,
-        _deleteChatHistory = deleteChatHistory,
-        super(const ChatInitial());
+  }) : _sendMessage = sendMessage,
+       _getCachedMessages = getCachedMessages,
+       _clearCachedMessages = clearCachedMessages,
+       _deleteChatHistory = deleteChatHistory,
+       super(const ChatInitial());
 
   final SendMessage _sendMessage;
   final GetCachedMessages _getCachedMessages;
@@ -33,41 +33,32 @@ class ChatCubit extends Cubit<ChatState> {
     emit(const ChatLoading());
     final result = await _getCachedMessages();
 
-    result.fold(
-      (failure) => emit(ChatError(failure.errorMessage)),
-      (messages) {
-        _messages.clear();
-        _messages.addAll(messages);
-        emit(ChatMessagesUpdated(List.from(_messages)));
-      },
-    );
+    result.fold((failure) => emit(ChatError(failure.errorMessage)), (messages) {
+      _messages.clear();
+      _messages.addAll(messages);
+      emit(ChatMessagesUpdated(List.from(_messages)));
+    });
   }
 
   Future<void> clearMessages() async {
     emit(const ChatLoading());
     final result = await _clearCachedMessages();
 
-    result.fold(
-      (failure) => emit(ChatError(failure.errorMessage)),
-      (_) {
-        _messages.clear();
-        emit(const ChatMessagesUpdated([]));
-      },
-    );
+    result.fold((failure) => emit(ChatError(failure.errorMessage)), (_) {
+      _messages.clear();
+      emit(const ChatMessagesUpdated([]));
+    });
   }
 
   Future<void> deleteChatHistory() async {
     emit(const ChatLoading());
     final result = await _deleteChatHistory();
 
-    result.fold(
-      (failure) => emit(ChatError(failure.errorMessage)),
-      (_) {
-        _messages.clear();
-        emit(const ChatHistoryDeleted());
-        emit(const ChatMessagesUpdated([]));
-      },
-    );
+    result.fold((failure) => emit(ChatError(failure.errorMessage)), (_) {
+      _messages.clear();
+      emit(const ChatHistoryDeleted());
+      emit(const ChatMessagesUpdated([]));
+    });
   }
 
   Future<void> sendMessage(String message) async {

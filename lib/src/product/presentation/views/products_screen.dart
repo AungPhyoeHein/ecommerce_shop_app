@@ -1,14 +1,19 @@
 import 'package:ecommerce_shop_app/core/extensions/text_style_extension.dart';
 import 'package:ecommerce_shop_app/core/res/styles/text.dart';
+import 'package:ecommerce_shop_app/core/utils/constants/icon_constants.dart';
 import 'package:ecommerce_shop_app/core/widgets/drawer_widget.dart';
 import 'package:ecommerce_shop_app/core/widgets/products_list_widget.dart';
 import 'package:ecommerce_shop_app/core/widgets/pull_refresh_widget.dart';
+import 'package:ecommerce_shop_app/core/widgets/svg_icon.dart';
+import 'package:ecommerce_shop_app/core/widgets/cart_badge.dart';
+import 'package:ecommerce_shop_app/src/cart/presentation/views/cart_screen.dart';
 import 'package:ecommerce_shop_app/src/category/presentation/app/adapter/category_cubit.dart';
 import 'package:ecommerce_shop_app/src/product/presentation/app/adapter/product_cubit.dart';
 import 'package:ecommerce_shop_app/src/product/presentation/widgets/categories_select_button_group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -72,6 +77,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Discover Product', style: TextStyles.headingMedium3),
+        actions: [
+          CartBadge(
+            child: IconButton(
+              onPressed: () => context.push(CartScreen.path),
+              icon: const SvgIcon(IconConstants.shoppingCart),
+            ),
+          ),
+        ],
       ),
       body: PullRefreshWidget(
         onRefresh: _refreshData,
